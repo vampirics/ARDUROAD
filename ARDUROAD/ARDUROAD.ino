@@ -24,6 +24,7 @@ void setup() {
   arduboy.boot();
   arduboy.flashlight();
   arduboy.systemButtons();
+  arduboy.audio.begin();
   arduboy.initRandomSeed();
   arduboy.setFrameRate(60);
 
@@ -138,27 +139,26 @@ void splashScreen()
   { 
     font4x6.print("ARDX 89.9");
     arduboy.drawLine(103, 25, 103, 28, WHITE);
-    sound.tone(NOTE_C4,50, NOTE_C3,100, NOTE_C2,50);
   }
     else if (radioStation == 1)
     { 
       font4x6.print("ROCK 94.6");
-      arduboy.drawLine(113, 25, 113, 28, WHITE);
-      sound.tone(NOTE_C4,50, NOTE_C3,100, NOTE_C2,50);
+      arduboy.drawLine(113, 25, 113, 28, WHITE);;
     }
       else if (radioStation == 2)
       { 
         font4x6.print("RADIO OFF");
-        sound.tone(NOTE_C4,50, NOTE_C3,100, NOTE_C2,50);
       }
 
 if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0)
 {
   radioStation--;
+  sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
 }
 
 if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2)
 {
   radioStation++;
+  sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
 }
 }
