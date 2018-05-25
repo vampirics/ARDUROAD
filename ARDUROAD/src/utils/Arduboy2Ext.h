@@ -19,4 +19,7 @@ class Arduboy2Ext : public Arduboy2 {
     
     void drawHorizontalDottedLine(uint8_t x1, uint8_t x2, uint8_t y, uint8_t spacing);
     void drawVerticalDottedLine(uint8_t y1, uint8_t y2, uint8_t x, uint8_t spacing);
+    void fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t color = WHITE);
+
+
 };

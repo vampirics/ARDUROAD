@@ -30,9 +30,19 @@ void playGame() {
 
 
 
-    RenderScreen();
+    //RenderScreen();
 
+    arduboy.drawPixel(10,8);
+    arduboy.drawPixel(15,8);
+    arduboy.drawPixel(30,8);
+    arduboy.drawPixel(45,8);
 
+    arduboy.drawPixel(10,42);
+    arduboy.drawPixel(15,42);
+    arduboy.drawPixel(30,42);
+    arduboy.drawPixel(45,42);
+
+    arduboy.fillTrapezoid(10,10, 30,10, 15,40, 45,40);
 
 
 
