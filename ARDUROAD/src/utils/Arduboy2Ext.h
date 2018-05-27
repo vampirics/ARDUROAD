@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduboy2.h>
+#define GREY 2
 
 class Arduboy2Ext : public Arduboy2 {
 
@@ -19,7 +20,7 @@ class Arduboy2Ext : public Arduboy2 {
     
     void drawHorizontalDottedLine(uint8_t x1, uint8_t x2, uint8_t y, uint8_t spacing);
     void drawVerticalDottedLine(uint8_t y1, uint8_t y2, uint8_t x, uint8_t spacing);
-    void fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t color = WHITE);
+    void fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t color, uint8_t backgroundColor, uint8_t drawBorder, uint8_t drawBorderWidth);
 
-
+    void drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2 = WHITE);
 };

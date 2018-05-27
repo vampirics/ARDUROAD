@@ -30,23 +30,17 @@ void playGame() {
 
 
 
-    //RenderScreen();
+  // Turn ?
 
-    arduboy.drawPixel(10,8);
-    arduboy.drawPixel(15,8);
-    arduboy.drawPixel(30,8);
-    arduboy.drawPixel(45,8);
+  if (level.getTurn() == 0) {
 
-    arduboy.drawPixel(10,42);
-    arduboy.drawPixel(15,42);
-    arduboy.drawPixel(30,42);
-    arduboy.drawPixel(45,42);
+    level.setTurn(random(12, 60), random(0, 3));
 
-    arduboy.fillTrapezoid(10,10, 30,10, 15,40, 45,40);
+  }
 
 
-
-  // Handle players actions ..
+    RenderScreen();
+    level.turn();
 
   //if (player.getStatus() == PlayerStatus::Active && gameState != GameState::Paused) {
 

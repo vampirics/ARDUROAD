@@ -21,6 +21,12 @@
         "utility": "cpp",
         "vector": "cpp",
         "rope": "cpp",
-        "slist": "cpp"
+        "slist": "cpp",
+        "chrono": "cpp",
+        "limits": "cpp",
+        "ratio": "cpp",
+        "algorithm": "cpp",
+        "__locale": "cpp",
+        "__string": "cpp"
     }
 }
