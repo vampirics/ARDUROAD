@@ -8,7 +8,7 @@
 
 static const uint8_t HORIZON_COL_COUNT                    = 7;
 static const uint8_t HORIZON_ROW_COUNT                    = 5;
-static const uint8_t HORIZON_OFFSET                       = 8;
+static const uint8_t HORIZON_OFFSET                       = 9;
 
 
 static const uint8_t FRAME_RATE_1                         = 1;

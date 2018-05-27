@@ -113,7 +113,7 @@ void Arduboy2Ext::fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, 
 
     if (color != backgroundColor) { 
 
-      if (y < 64 && d - a + 1 >= 0 ) {
+      if (y < 64 && d - a + 1 > 0 ) {
 
         drawFastHLine2( a, y, d - a + 1, color); 
   
@@ -193,19 +193,17 @@ void Arduboy2Ext::drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2
   // pixel mask
   register uint8_t mask = 1 << (y & 7);
 
-  switch (color)
-  {
+  switch (color) {
+
     case WHITE:
-      while (w--)
-      {
+      while (w--) {
         *pBuf++ |= mask;
       }
       break;
 
     case BLACK:
       mask = ~mask;
-      while (w--)
-      {
+      while (w--) {
         *pBuf++ &= mask;
       }
       break;
@@ -216,10 +214,9 @@ void Arduboy2Ext::drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2
       alt = ((x ) % 2 == 0);// + (y%2 == 0);
       alt = (y%2==0 ? alt : !alt);
 
-      while (w--)
-      {
+      while (w--) {
         if (!alt) {
-        *pBuf++ &= mask2;
+        *pBuf++ &= ~mask;
         }
         else {
           *pBuf++ |= mask;
