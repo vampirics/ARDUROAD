@@ -2,6 +2,13 @@
 
 #include <Arduboy2.h>
 #define GREY 2
+#define BORDER_NONE 0
+#define BORDER_LEFT 1
+#define BORDER_RIGHT 2
+#define DIRECTION_STRAIGHT 0
+#define DIRECTION_LEFT 1
+#define DIRECTION_RIGHT 2
+
 
 class Arduboy2Ext : public Arduboy2 {
 

@@ -110,7 +110,6 @@ void Arduboy2Ext::fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, 
     if (c > d) { swap(c, d); }
 
 
-
     if (color != backgroundColor) { 
 
       if (y < 64 && d - a + 1 > 0 ) {
@@ -123,10 +122,10 @@ void Arduboy2Ext::fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, 
 
     switch (drawBorder) {
 
-      case 0:
+      case BORDER_NONE:
         break;
 
-      case 1:  // left
+      case BORDER_LEFT:
         {
           int16_t tempWidth = a + drawBorderWidth;
           if (y != y0) {
@@ -136,7 +135,7 @@ void Arduboy2Ext::fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, 
         }
         break;
 
-      case 2:  // right
+      case BORDER_RIGHT: 
         {
           int16_t tempD = d + 1 - drawBorderWidth;
           int16_t tempWidth = drawBorderWidth;
@@ -156,7 +155,6 @@ void Arduboy2Ext::fillTrapezoid(int16_t x0, int16_t y0, int16_t x1, int16_t y1, 
     dOld = d;
 
   }
-  //Serial.println("\n\n");
 
 }
 
@@ -167,22 +165,18 @@ void Arduboy2Ext::drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2
   bool alt = false;
 
   // Do y bounds checks
-  if (y < 0 || y >= HEIGHT)
-    return;
+  if (y < 0 || y >= HEIGHT) return;
 
   xEnd = x + w;
 
   // Check if the entire line is not on the display
-  if (xEnd <= 0 || x >= WIDTH)
-    return;
+  if (xEnd <= 0 || x >= WIDTH) return;
 
   // Don't start before the left edge
-  if (x < 0)
-    x = 0;
+  if (x < 0) x = 0;
 
   // Don't end past the right edge
-  if (xEnd > WIDTH)
-    xEnd = WIDTH;
+  if (xEnd > WIDTH) xEnd = WIDTH;
 
   // calculate actual width (even if unchanged)
   w = xEnd - x;
@@ -209,21 +203,21 @@ void Arduboy2Ext::drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2
       break;
 
     case GREY:
-    {
-      register uint8_t mask2 = ~(1 << (y & 7));
-      alt = ((x ) % 2 == 0);// + (y%2 == 0);
-      alt = (y%2==0 ? alt : !alt);
+      {
+        alt = (x % 2 == 0);
+        alt = (y % 2 == 0 ? alt : !alt);
 
-      while (w--) {
-        if (!alt) {
-        *pBuf++ &= ~mask;
+        while (w--) {
+          if (!alt) {
+            *pBuf++ &= ~mask;
+          }
+          else {
+            *pBuf++ |= mask;
+          }
+          alt = !alt;
         }
-        else {
-          *pBuf++ |= mask;
-        }
-        alt = !alt;
+
       }
-    }
       break;
 
   }
