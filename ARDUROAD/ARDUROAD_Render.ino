@@ -153,6 +153,22 @@ void RenderScreen(/*Player *player, Enemy *enemies*/) {
       arduboy.drawLine(x5, y1, x6, y2);
       arduboy.drawLine(x7, y1, x8, y2);
 
+      switch (col) {
+
+        case 4 ... 5:
+
+          arduboy.drawLine(x5, y1, x6 + 1, y2);
+          arduboy.drawLine(x7, y1, x8 + 1, y2);
+          break;
+
+        case 6 ... 7:
+
+          arduboy.drawLine(x5 + 1, y1, x6 + 1, y2);
+          arduboy.drawLine(x7 + 1, y1, x8 + 1, y2);
+          break;
+
+      }
+
     }
 
   }
