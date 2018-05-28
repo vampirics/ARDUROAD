@@ -193,15 +193,15 @@ void Level::decTurn() {
 }
 
 void Level::turn() {
-  Serial.print("Turn: ");
-  Serial.print(_turnDirection);
-  Serial.print(" ");
-for (uint8_t x = 0; x < 8; x++) {
-  Serial.print(_curves[x]);
-  Serial.print(" ");
+//   Serial.print("Turn: ");
+//   Serial.print(_turnDirection);
+//   Serial.print(" ");
+// for (uint8_t x = 0; x < 8; x++) {
+//   Serial.print(_curves[x]);
+//   Serial.print(" ");
   
-}
-  Serial.println("");
+// }
+//   Serial.println("");
 
   
 

@@ -145,8 +145,8 @@ void RenderScreen(/*Player *player, Enemy *enemies*/) {
     uint8_t backgroundColour = BLACK;
     uint8_t colour = (col % 2 == level.getBand() ? BLACK : GREY );
 
-    arduboy.fillTrapezoid(0,y1, x1,y1, 0,y2, x2,y2, colour, backgroundColour, 2, 2);
-    arduboy.fillTrapezoid(x3,y1, WIDTH,y1, x4,y2, WIDTH,y2, colour, backgroundColour, 1, 2);
+    arduboy.fillTrapezoidLH(0,x1,y1, 0,x2,y2, colour, backgroundColour, 2, 2);
+    arduboy.fillTrapezoidRH(x3,WIDTH,y1, x4,WIDTH,y2, colour, backgroundColour, 1, 2);
 
     if (col > 0 && (col % 2 == level.getBand())) {
 
