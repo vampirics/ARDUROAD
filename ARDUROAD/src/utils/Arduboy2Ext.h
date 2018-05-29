@@ -9,7 +9,6 @@
 #define DIRECTION_LEFT 1
 #define DIRECTION_RIGHT 2
 
-
 class Arduboy2Ext : public Arduboy2 {
 
   public:

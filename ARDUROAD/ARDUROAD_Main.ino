@@ -21,7 +21,7 @@ void playGame() {
 
     if (horizonIncrement == speed) {
 
-      level.incHorizon(player.getYDelta() > 0 ? 1 : -1);
+      level.incHorizonY(player.getYDelta() > 0 ? 1 : -1);
       horizonIncrement = 0;
       
     }
@@ -32,33 +32,25 @@ void playGame() {
 
   // Turn ?
 
-  if (level.getTurn() == 0) {
-
-    level.setTurn(random(12, 60), random(0, 3));
-
-  }
 
 
     RenderScreen();
-    Sprites::drawExternalMask(playerx, 40, mainCar, mainCarMask, mainCarFrame, 0);
-    level.turn();
+
+    if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X)) {
+      level.move(&arduboy);
+    }
 
   //if (player.getStatus() == PlayerStatus::Active && gameState != GameState::Paused) {
 
     if (arduboy.pressed(B_BUTTON))     { if (player.decYDelta()) horizonIncrement = 0; }
-    if (arduboy.pressed(A_BUTTON))       { 
-                                            if (player.incYDelta()) horizonIncrement = 0; 
-                                            if(arduboy.everyXFrames(2)) // when running at 60fps
-                                            {
-                                              ++mainCarFrame; // Add 1
-                                              if(mainCarFrame > 1)
-                                              {
-                                                mainCarFrame = 0; 
-                                              }
-                                            }
-                                         }
-    if (arduboy.pressed(LEFT_BUTTON)&& playerx > 5)     { playerx--; }
-    if (arduboy.pressed(RIGHT_BUTTON)&& playerx < 82)    { playerx++; }
+    if (arduboy.pressed(A_BUTTON))     { 
+                                          if (player.incYDelta()) horizonIncrement = 0; 
+                                          if (arduboy.everyXFrames(2)) {// when running at 60fps
+                                            mainCarFrame = !mainCarFrame;
+                                          }
+                                        }
+    if (arduboy.pressed(LEFT_BUTTON))      { player.decX(); }
+    if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
 
     if (!arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { player.decelerate(); }
 

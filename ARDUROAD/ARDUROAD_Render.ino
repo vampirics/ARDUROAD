@@ -1,10 +1,13 @@
 #include "src/utils/Arduboy2Ext.h"
 
-uint8_t bander = 0;
+
 
 void RenderScreen(/*Player *player, Enemy *enemies*/) {
 
-  Sprites::drawOverwrite(0, 0, horizon_dawn, 0);
+
+
+  Sprites::drawOverwrite(level.getHorizonX(), 0, horizon_dawn, 0);
+  Sprites::drawOverwrite(level.getHorizonX() + 128, 0, horizon_dawn, 0);
 
   // Render the horizon ..
 
@@ -48,23 +51,24 @@ void RenderScreen(/*Player *player, Enemy *enemies*/) {
                                             { 67, 68, 70, 73, 76, 80, 85, 90 },
                                             };
 
-  uint8_t row = level.getHorizon();
-  
+  uint8_t row = level.getHorizonY();
+  int8_t xPlayerOffset = player.getXOffset();
+
   for (uint8_t col = 0; col < HORIZON_COL_COUNT; col++) {
 
-    int16_t x1 = road_outside_left[row][col] +  level.getCurve(col) + HORIZON_OFFSET;
+    int16_t x1 = road_outside_left[row][col] + level.getCurve(col) + xPlayerOffset;
     uint8_t y1 = horizon[row][col] + HORIZON_OFFSET;
     
-    int16_t x2 = road_outside_left[row][col + 1] +  level.getCurve(col + 1) + HORIZON_OFFSET;
+    int16_t x2 = road_outside_left[row][col + 1] + level.getCurve(col + 1) + xPlayerOffset;
     uint8_t y2 = horizon[row][col + 1] + HORIZON_OFFSET;
 
-    int16_t x3 = road_outside_right[row][col] +  level.getCurve(col) + HORIZON_OFFSET;
-    int16_t x4 = road_outside_right[row][col + 1] +  level.getCurve(col + 1) + HORIZON_OFFSET;
+    int16_t x3 = road_outside_right[row][col] + level.getCurve(col) + xPlayerOffset;
+    int16_t x4 = road_outside_right[row][col + 1] + level.getCurve(col + 1) + xPlayerOffset;
 
-    int16_t x5 = road_marking_left[row][col] +  level.getCurve(col) + HORIZON_OFFSET;
-    int16_t x6 = road_marking_left[row][col + 1] +  level.getCurve(col + 1) + HORIZON_OFFSET;
-    int16_t x7 = road_marking_right[row][col] +  level.getCurve(col) + HORIZON_OFFSET;
-    int16_t x8 = road_marking_right[row][col + 1] +  level.getCurve(col + 1) + HORIZON_OFFSET;
+    int16_t x5 = road_marking_left[row][col] + level.getCurve(col) + xPlayerOffset;
+    int16_t x6 = road_marking_left[row][col + 1] + level.getCurve(col + 1) + xPlayerOffset;
+    int16_t x7 = road_marking_right[row][col] + level.getCurve(col) + xPlayerOffset;
+    int16_t x8 = road_marking_right[row][col + 1] + level.getCurve(col + 1) + xPlayerOffset;
 
     uint8_t backgroundColour = BLACK;
     uint8_t colour = (col % 2 == level.getBand() ? BLACK : GREY );
@@ -94,6 +98,9 @@ void RenderScreen(/*Player *player, Enemy *enemies*/) {
       }
 
     }
+
+    Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+
 
   }
 

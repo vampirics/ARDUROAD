@@ -14,7 +14,6 @@ Sprites sprite;
 
 uint8_t fadeWidth;
 uint8_t radioStation = 0;
-uint8_t playerx = 44;
 uint8_t mainCarFrame = 0;
 
 Level level;
@@ -35,7 +34,7 @@ void setup() {
   arduboy.systemButtons();
   arduboy.audio.begin();
   arduboy.initRandomSeed();
-  arduboy.setFrameRate(60);
+  arduboy.setFrameRate(75);
 
   game.setState(GameState::VSBoot);
 

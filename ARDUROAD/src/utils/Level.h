@@ -11,32 +11,38 @@ class Level {
   
     // Properties ..
 
-    uint8_t getHorizon();
+    int16_t getHorizonX();
+    uint8_t getHorizonY();
     uint8_t getBand();
-    uint8_t getTurn();
+    uint8_t getTurnLength();
     uint8_t getTurnDirection();
 
-    void setHorizon(uint8_t val);
+    void setHorizonX(int16_t val);
+    void setHorizonY(uint8_t val);
     void setTurn(uint8_t length, uint8_t direction);
 
 
     // Methods ..
 
-    void incHorizon(int8_t val);
+    void incHorizonY(int8_t val);
     int8_t getCurve(uint8_t index);
     void turnLeft();
     void turnRight();
     void turnStraight();
     void decTurn();
-    void turn();
+    void move(Arduboy2Ext *arduboy);
 
   private:
 
-    uint8_t _horizon;
+    int16_t _horizonX;
+    uint8_t _horizonY;
     uint8_t _band = 0;
     int8_t _curves[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    uint8_t _turn = 0;
+    uint8_t _turnLength = 0;
     uint8_t _turnDirection = 0;
+
+    uint8_t _turnLengthMin = 10;
+    uint8_t _turnLengthMax = 50;
 //    int8_t _curves[8] = { -14, -14, -14, -8, -4, -2, -1, 0 };
 
 };
@@ -46,24 +52,36 @@ class Level {
 // Properties ..
 
 
-uint8_t Level::getHorizon() {
-  return _horizon;
+int16_t Level::getHorizonX() {
+  return _horizonX;
+}
+
+uint8_t Level::getHorizonY() {
+  return _horizonY;
 }
 
 uint8_t Level::getBand() {
   return _band;
 }
 
-uint8_t Level::getTurn() {
-  return _turn;
+uint8_t Level::getTurnLength() {
+  return _turnLength;
 }
 
-void Level::setHorizon(uint8_t val) {
-  _horizon = val;
+uint8_t Level::getTurnDirection() {
+  return _turnDirection;
+}
+
+void Level::setHorizonX(int16_t val) {
+  _horizonX = val;
+}
+
+void Level::setHorizonY(uint8_t val) {
+  _horizonY = val;
 }
 
 void Level::setTurn(uint8_t length, uint8_t direction) {
-  _turn = length;
+  _turnLength = length;
   _turnDirection = direction;
 }
 
@@ -71,11 +89,11 @@ void Level::setTurn(uint8_t length, uint8_t direction) {
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
 
-void Level::incHorizon(int8_t val) {
+void Level::incHorizonY(int8_t val) {
 
-  _horizon = (_horizon + val);
-  if (_horizon >= HORIZON_ROW_COUNT) _band = (_band == 0 ? 1 : 0);
-  _horizon = _horizon % HORIZON_ROW_COUNT;
+  _horizonY = (_horizonY + val);
+  if (_horizonY >= HORIZON_ROW_COUNT) _band = (_band == 0 ? 1 : 0);
+  _horizonY = _horizonY % HORIZON_ROW_COUNT;
 
 }
 
@@ -85,13 +103,26 @@ int8_t Level::getCurve(uint8_t index) {
 
 void Level::turnStraight() {
 
-  for (uint8_t x = 7; x > 0; x--) {
+  int8_t prvCurve = _curves[0];
 
-    int8_t curve = _curves[x];
+  for (uint8_t x = 0; x < HORIZON_COL_COUNT; x++) {
 
-    if (curve > 0) { turnLeft();    break; }
-    if (curve < 0) { turnRight();   break; }
+    if (_curves[x + 1] != prvCurve) {
 
+      prvCurve = _curves[x + 1];
+      break;
+        
+    }
+
+    prvCurve = _curves[x]; 
+      
+  }
+
+  for (uint8_t x = 0; x < HORIZON_COL_COUNT; x++) {
+    
+    if (_curves[x] == prvCurve) break;
+    _curves[x] = prvCurve;
+      
   }
 
 }
@@ -99,9 +130,9 @@ void Level::turnStraight() {
 void Level::turnLeft() {
 
   int8_t min = 0;
-  uint8_t index = 7;
+  uint8_t index = HORIZON_COL_COUNT;
 
-  for (uint8_t x = 7; x > 0; x--) {
+  for (uint8_t x = HORIZON_COL_COUNT; x > 0; x--) {
 
     if (_curves[x] < min) {
       
@@ -143,9 +174,9 @@ void Level::turnLeft() {
 void Level::turnRight() {
   
   int8_t max = 0;
-  uint8_t index = 7;
+  uint8_t index = HORIZON_COL_COUNT;
 
-  for (uint8_t x = 7; x > 0; x--) {
+  for (uint8_t x = HORIZON_COL_COUNT; x > 0; x--) {
 
     if (_curves[x] > max) {
       
@@ -188,27 +219,55 @@ void Level::turnRight() {
 
 void Level::decTurn() {
 
-  if (_turn > 0) _turn--;
+  if (_turnLength > 0) _turnLength--;
 
 }
 
-void Level::turn() {
-//   Serial.print("Turn: ");
-//   Serial.print(_turnDirection);
-//   Serial.print(" ");
-// for (uint8_t x = 0; x < 8; x++) {
-//   Serial.print(_curves[x]);
-//   Serial.print(" ");
-  
-// }
-//   Serial.println("");
+void Level::move(Arduboy2Ext *arduboy) {
 
-  
+//Serial.println(_curves[0]);
+  switch (_curves[0]) {
 
+    case -32 ... -22:     _horizonX += 1;  break;
+    case -14 ...  -8:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 2)) { _horizonX += 1;  } break;
+    case  -4 ...  -1:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 3)) { _horizonX += 1;  } break;
+    case   1 ...   4:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 3)) { _horizonX -= 1;  } break;
+    case   8 ...  14:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 2)) { _horizonX -= 1;  } break;
+    case  22 ...  32:     _horizonX -= 1;  break;
+    
+  }
+
+  if (_horizonX < -128) _horizonX += 128;
+  if (_horizonX > 0)    _horizonX -= 128;
 
   if (_turnDirection == DIRECTION_STRAIGHT) turnStraight();
   if (_turnDirection == DIRECTION_LEFT)     turnLeft();
   if (_turnDirection == DIRECTION_RIGHT)    turnRight();
+
   decTurn();
+
+  if (_turnLength == 0) {
+
+    switch (_turnDirection) {
+
+      case DIRECTION_STRAIGHT:
+        _turnDirection = random(DIRECTION_STRAIGHT, DIRECTION_LEFT + 1);
+        _turnLength = random(_turnLengthMin, _turnLengthMax);
+        break;
+
+      case DIRECTION_LEFT:
+        _turnDirection = random(DIRECTION_STRAIGHT, DIRECTION_RIGHT + 1);
+        _turnLength = random(_turnLengthMin, _turnLengthMax);
+        break;
+
+      case DIRECTION_RIGHT:
+        _turnDirection = random(DIRECTION_STRAIGHT, DIRECTION_LEFT + 1);
+        if (_turnDirection == DIRECTION_LEFT) _turnDirection++; 
+        _turnLength = random(_turnLengthMin, _turnLengthMax);
+        break;
+
+    }
+
+  }
 
 }

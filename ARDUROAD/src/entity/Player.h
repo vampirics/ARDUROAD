@@ -14,10 +14,12 @@ class Player {
     uint8_t getY();
     int8_t getXDelta();
     int8_t getYDelta();
+    int8_t getXOffset();
 
     void setX(uint8_t val);
     void setXDelta(int8_t val);
     void setYDelta(int8_t val);
+    void setXOffset(int8_t val);
 
 
     // Methods ..
@@ -32,6 +34,7 @@ class Player {
   private:
 
     uint8_t _x;
+    int8_t _xOffset;
     int8_t _xDelta;
     int8_t _yDelta;
 
@@ -53,6 +56,10 @@ int8_t Player::getXDelta() {
   return _xDelta;
 }
 
+int8_t Player::getXOffset() {
+  return _xOffset;
+}
+
 int8_t Player::getYDelta() {
   return _yDelta;
 }
@@ -65,6 +72,10 @@ void Player::setXDelta(int8_t val) {
   _xDelta = val;
 }
 
+void Player::setXOffset(int8_t val) {
+  _xOffset = val;
+}
+
 void Player::setYDelta(int8_t val) {
   _yDelta = val;
 }
@@ -75,13 +86,17 @@ void Player::setYDelta(int8_t val) {
 
 void Player::incX() {
 
-  if (_x < 102) _x++;
+  if (_x < 82) _x++;
+  if (_x > 67) _xOffset = -(92-_x);
+  else _xOffset = 0;
 
 }
 
 void Player::decX() {
 
-  if (_x > 0) _x--;
+  if (_x > 5) _x--;
+  if (_x < 15) _xOffset = 15-_x;
+  else _xOffset = 0;
 
 }
 

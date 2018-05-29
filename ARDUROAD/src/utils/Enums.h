@@ -19,6 +19,7 @@ static const uint8_t FRAME_RATE_8                         = 8;
 static const uint8_t FRAME_RATE_12                        = 12;
 static const uint8_t FRAME_RATE_16                        = 16;
 
+static const uint8_t FRAME_COUNT_HORIZON_X                = 3;
 
 
 
