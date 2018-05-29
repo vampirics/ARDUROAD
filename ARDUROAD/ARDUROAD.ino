@@ -6,15 +6,20 @@
 #include "src/utils/Level.h"
 #include "src/entity/Player.h"
 #include <ArduboyTones.h>
+#include "song.h"
+#include <ATMlib.h>
  
 Arduboy2Ext arduboy;
-ArduboyTones sound(arduboy.audio.enabled);
 Font4x6 font4x6 = Font4x6();
 Sprites sprite;
+ATMsynth ATM;
+ArduboyTones sound(arduboy.audio.enabled);
 
 uint8_t fadeWidth;
 uint8_t radioStation = 0;
 uint8_t mainCarFrame = 0;
+uint8_t station = 0;
+uint8_t previousRadioStation;
 
 Level level;
 Game game;
@@ -34,7 +39,7 @@ void setup() {
   arduboy.systemButtons();
   arduboy.audio.begin();
   arduboy.initRandomSeed();
-  arduboy.setFrameRate(75);
+  arduboy.setFrameRate(60);
 
   game.setState(GameState::VSBoot);
 
