@@ -107,13 +107,17 @@ void splashScreen()
   if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0)
   {
     radioStation--;
+    #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
+    #endif
   }
 
   if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2)
   {
     radioStation++;
+    #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
+    #endif
   }
 
   if (arduboy.justPressed(A_BUTTON)) { game.setState(GameState::PlayGame); }
@@ -125,15 +129,21 @@ void radioMusic()
   {
     if (radioStation == 1)
     {
+      #ifdef USE_ATMLIB
       ATM.play(music1);
+      #endif
     }
     if (radioStation == 2)
     {
+      #ifdef USE_ATMLIB
       ATM.play(music2);
+      #endif
     }
     if (radioStation == 0)
     {
+      #ifdef USE_ATMLIB
       ATM.stop();
+      #endif
     }
     previousRadioStation = radioStation;
   }

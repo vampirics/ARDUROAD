@@ -4,6 +4,8 @@
 
 // How fast should the ground move ?  1 = Slow, 2 = Medium, 3 = Fast - I think 2 is the most appropriate.
 
+#define _USE_ATMLIB
+#define USE_ARDUBOYTONES
 #define GROUND_SPEED 3
 
 static const uint8_t HORIZON_COL_COUNT                    = 7;

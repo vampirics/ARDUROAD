@@ -5,15 +5,27 @@
 #include "src/utils/Enums.h"
 #include "src/utils/Level.h"
 #include "src/entity/Player.h"
+
+#ifdef USE_ARDUBOYTONES
 #include <ArduboyTones.h>
+#endif
+
+#ifdef USE_ATMLIB
 #include "song.h"
 #include <ATMlib.h>
- 
+#endif
+
 Arduboy2Ext arduboy;
 Font4x6 font4x6 = Font4x6();
 Sprites sprite;
-ATMsynth ATM;
+
+#ifdef USE_ARDUBOYTONES
 ArduboyTones sound(arduboy.audio.enabled);
+#endif
+
+#ifdef USE_ATMLIB
+ATMsynth ATM;
+#endif
 
 uint8_t fadeWidth;
 uint8_t radioStation = 0;
@@ -39,7 +51,7 @@ void setup() {
   arduboy.systemButtons();
   arduboy.audio.begin();
   arduboy.initRandomSeed();
-  arduboy.setFrameRate(60);
+  arduboy.setFrameRate(75);
 
   game.setState(GameState::VSBoot);
 
