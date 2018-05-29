@@ -160,7 +160,7 @@ void Level::turnLeft() {
       case 4:    _curves[x] = 2;      break;
       case 8:    _curves[x] = 4;      break;
       case 14:   _curves[x] = 8;      break;
-      case 22:   _curves[x] = 4;      break;
+      case 22:   _curves[x] = 14;     break;
       case 32:   _curves[x] = 22;     break;
 
 
