@@ -5,9 +5,6 @@
 #define BORDER_NONE 0
 #define BORDER_LEFT 1
 #define BORDER_RIGHT 2
-#define DIRECTION_STRAIGHT 0
-#define DIRECTION_LEFT 1
-#define DIRECTION_RIGHT 2
 
 class Arduboy2Ext : public Arduboy2 {
 
@@ -19,6 +16,7 @@ class Arduboy2Ext : public Arduboy2 {
     uint8_t pressedButtons() const;
     uint16_t getFrameCount() const;
     uint8_t getFrameCount(uint8_t mod) const;
+    
     bool isFrameCount(uint8_t mod) const;
     bool isFrameCount(uint8_t mod, uint8_t val) const;
 

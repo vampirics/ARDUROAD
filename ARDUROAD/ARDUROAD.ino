@@ -5,6 +5,8 @@
 #include "src/utils/Enums.h"
 #include "src/utils/Level.h"
 #include "src/entity/Player.h"
+#include "src/entity/OtherCars.h"
+#include "src/entity/OtherCar.h"
 
 #ifdef USE_ARDUBOYTONES
 #include <ArduboyTones.h>
@@ -38,8 +40,10 @@ Game game;
 Player player;
 
 uint8_t horizonIncrement = 0;
+OtherCars otherCars;
 
 void RenderScreen(/*Player *player, Enemy *enemies*/);
+
 
 // ----------------------------------------------------------------------------
 //  Setup
