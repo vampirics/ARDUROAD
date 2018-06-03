@@ -4,6 +4,7 @@
 
 // How fast should the ground move ?  1 = Slow, 2 = Medium, 3 = Fast - I think 2 is the most appropriate.
 
+//#define DEBUG_CURVES
 #define _USE_ATMLIB
 #define USE_ARDUBOYTONES
 #define GROUND_SPEED 3
@@ -62,7 +63,6 @@ enum class ImageSize : uint8_t {
   Large,
 
 };
-
 
 enum class Direction : int8_t {
 

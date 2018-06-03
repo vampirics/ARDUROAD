@@ -122,6 +122,7 @@ boolean Player::incYDelta() {
       _yDelta = 1;
       return true;
 
+#ifndef DEBUG_CURVES
     case 1:
       _yDelta = 2;
       return true;
@@ -129,7 +130,7 @@ boolean Player::incYDelta() {
     case 2:
       _yDelta = 4;
       return true;
-
+#endif
   }
 
   return false;
