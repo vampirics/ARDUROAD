@@ -54,25 +54,10 @@
     };
 
 
-
-// // 4 > 7
-// 106,8 99,10 
-// 99,10 96,14 
-// 96,14 97,20 
-// 97,20 102,28 
-// 102,28 112,38 
-// 112,38 126,50 
-// 126,50 142,64 
-
 void RenderScreen(/*Player *player, Enemy *enemies*/) {
  
 
   uint8_t row = level.getHorizonY();
-Serial.println("");
-Serial.print(row);
-Serial.print(" > ");
-Serial.print(level.getCurve(0));
-Serial.println("");
   int8_t xPlayerOffset = player.getXOffset();
 
   for (uint8_t col = 0; col < HORIZON_COL_COUNT; col++) {
@@ -180,15 +165,6 @@ Serial.println("");
 
   Direction direction = level.getTurnDirection();
 
-    // const int8_t curve_offset[5][8] = {
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    // };
-
-
   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
 //    OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
@@ -204,20 +180,6 @@ Serial.println("");
       int8_t curveIndex = level.getCurve(colIndex);
       int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curveIndex)];
       int16_t x = 64 + ((otherCarX + xPlayerOffset) * otherCarY / 67) + offset;
-
-      // Serial.print(otherCarX);
-      // Serial.print(" ");
-      // Serial.print(otherCarY);
-      // Serial.print(" ");
-      Serial.print(colIndex);
-      Serial.print(" ");
-      Serial.print(curveIndex);
-      Serial.print(" ");
-      Serial.print(curve_offset[row][HORIZON_COL_COUNT - absT(curveIndex)]);
-      Serial.print(" ");
-      Serial.print(offset);
-      Serial.print(" ");
-      Serial.println(x);
 
       switch (otherCar->getImageSize()) {
 
@@ -240,23 +202,15 @@ Serial.println("");
   }
 
 
-
   // Render player car last ..
 
   Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
 
 }
 
-//determineOtherCarArrayIndex(otherCar.getY())
 uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {
 
   uint8_t index = 0;
-
-// Serial.print("determineOtherCarArrayIndex row=");
-// Serial.print(row);
-// Serial.print(", otherCar->getY() ");
-// Serial.print(otherCar->getY());
-// Serial.print(", ");
 
   for (uint8_t i = 0; i < HORIZON_COL_COUNT; i ++) {
 
@@ -266,18 +220,9 @@ uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {
       break;
 
     }
-//     else {
-// Serial.print(i);
-// Serial.print(",");
-// Serial.print(horizon[row][i] + HORIZON_OFFSET);
-// Serial.print(" ");
-     
-//     }
 
   }
 
-
-//  Serial.println(index);
   return index;
 
 }
