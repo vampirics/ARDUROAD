@@ -40,6 +40,24 @@ void playGame() {
       level.move(&arduboy);
     }
 
+
+
+
+  // Launch another car?
+
+  if (random(0, 12) == 0 && otherCars.getActiveCars() < NUMBER_OF_OTHER_CARS) {
+
+    OtherCar *otherCar = otherCars.getInactiveCar();
+//Serial.println("launch");
+    otherCar->setActive(true);
+    otherCar->setX(random(-20,20));
+    otherCar->setY(0);
+    otherCar->setYDelta(randomSFixed<7,8>(1, 2));
+
+  }
+
+
+
   //if (player.getStatus() == PlayerStatus::Active && gameState != GameState::Paused) {
 
     if (arduboy.pressed(B_BUTTON))     { if (player.decYDelta()) horizonIncrement = 0; }

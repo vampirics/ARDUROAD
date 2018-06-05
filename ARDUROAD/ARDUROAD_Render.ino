@@ -5,7 +5,7 @@
 
   // Render the horizon ..
 
-  const uint8_t horizon[5][8] = {
+  const uint8_t horizon[5][8] = {//w g  w   g   w   g   w   g
                                 { 0, 2,  6, 12, 20, 30, 42, 56 },
                                 { 0, 2,  7, 13, 22, 33, 45, 59 },
                                 { 0, 3,  8, 14, 24, 35, 48, 62 },
@@ -57,6 +57,12 @@
 void RenderScreen(/*Player *player, Enemy *enemies*/) {
  
   uint8_t row = level.getHorizonY();
+
+// Serial.print("Row: ");
+// Serial.print(row);
+// Serial.print(", Band: ");
+// Serial.print(level.getBand());
+
 
 #ifdef DEBUG_CURVES
 
@@ -204,6 +210,15 @@ return;
 
 #endif
 
+// arduboy.fillRect(48,50, 24, 64, BLACK);
+// font4x6.setCursor(51, 51);
+// font4x6.print(row);
+// font4x6.print(" ");
+// font4x6.print(level.getBand());
+
+
+
+uint16_t m = micros();
 // Serial.println("");
 // Serial.print(row);
 // Serial.print(" > ");
@@ -253,6 +268,27 @@ return;
 // Serial.println("        ");
 
 
+    // uint8_t colour = GREY;
+
+    // if (col % 2 == level.getBand()) {
+
+    //   switch (level.getTimeOfDay()) {
+
+    //     case TimeOfDay::Dawn:
+    //     case TimeOfDay::Day:
+    //       colour = WHITE;
+    //       break;
+
+    //     case TimeOfDay::Night:
+    //       colour = BLACK;
+    //       break;
+
+    //   }
+    
+    // }
+
+    // arduboy.fillTrapezoidLH(0,x1,y1, 0,x2,y2, colour, backgroundColour, 2, 2);
+    // arduboy.fillTrapezoidRH(x3,WIDTH,y1, x4,WIDTH,y2, colour, backgroundColour, 1, 2);
     uint8_t colour = GREY;
 
     if (col % 2 == level.getBand()) {
@@ -300,6 +336,47 @@ return;
 
   }
 
+
+  uint16_t n = micros();
+
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[0]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 2]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 3]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 4]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 5]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 6]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 7]);
+
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[1]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[129]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 2 + 1]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 3 + 1]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 4 + 1]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 5 + 1]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 6 + 1]);
+// Serial.print(" ");
+// Serial.print(arduboy.getBuffer()[128 * 7 + 1]);
+
+  // Serial.print(", time:");
+  Serial.println(n - m);
+
+
   // Render horizon
 
   switch (level.getTimeOfDay()) {
@@ -328,52 +405,50 @@ return;
   }
 
 
-  // Render other cars ..
+  // // Render other cars ..
 
-  otherCars.sortCars();
+  // otherCars.sortCars();
 
-  Direction direction = level.getTurnDirection();
+  // Direction direction = level.getTurnDirection();
 
-  for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+  // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
-//    OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
-    OtherCar *otherCar = otherCars.getCar(i);
-    // int16_t roadOutsideRight = road_outside_right[row][colIndex] - 64;
+  //   OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
 
-    if (otherCar->isActive()) {
+  //   if (otherCar->isActive()) {
 
-      uint8_t colIndex = determineOtherCarArrayIndex(row, otherCar);
-      uint8_t otherCarY = otherCar->getY();
-      int8_t otherCarX = otherCar->getX();
-      uint8_t w = otherCar->getImageWidth();
-      int8_t curveIndex = level.getCurve(colIndex);
-      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curveIndex)];
-      int16_t x = 64 + ((otherCarX + xPlayerOffset) * otherCarY / 67) + offset;
+  //     uint8_t colIndex = determineOtherCarArrayIndex(row, otherCar);
+  //     uint8_t otherCarY = otherCar->getY().getInteger();
+  //     int8_t otherCarX = otherCar->getX();
+  //     uint8_t w = otherCar->getImageWidth();
+  //     int8_t curveIndex = level.getCurve(colIndex);
+  //     int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curveIndex)];
+  //     int16_t x = 64 + ((otherCarX + xPlayerOffset) * otherCarY / 67) + offset;
 
-      switch (otherCar->getImageSize()) {
+  //     switch (otherCar->getImageSize()) {
 
-        case ImageSize::Small:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_small, opp_car_small_mask, 0, 0);
-          break;
+  //       case ImageSize::Small:
+  //         Sprites::drawExternalMask(x - w, otherCarY, opp_car_small, opp_car_small_mask, 0, 0);
+  //         break;
 
-        case ImageSize::Medium:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_medium, opp_car_medium_mask, 0, 0);
-          break;
+  //       case ImageSize::Medium:
+  //         Sprites::drawExternalMask(x - w, otherCarY, opp_car_medium, opp_car_medium_mask, 0, 0);
+  //         break;
 
-        case ImageSize::Large:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_large, opp_car_large_mask, 0, 0);
-          break;
+  //       case ImageSize::Large:
+  //         Sprites::drawExternalMask(x - w, otherCarY, opp_car_large, opp_car_large_mask, 0, 0);
+  //         break;
           
-      }
+  //     }
 
-    }
+  //   }
 
-  }
+  // }
 
 
-  // Render player car last ..
+  // // Render player car last ..
 
-  Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+  // Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
 
 }
 

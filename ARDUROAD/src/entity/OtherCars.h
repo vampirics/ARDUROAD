@@ -8,9 +8,9 @@ class OtherCars {
   public: 
 
     OtherCars() {
-      _otherCars[0].setActive(true);
-      _otherCars[0].setX(0);
-      _otherCars[0].setY(12);
+      // _otherCars[0].setActive(true);
+      // _otherCars[0].setX(0);
+      // _otherCars[0].setY(12);
     };
 
   
@@ -25,11 +25,13 @@ class OtherCars {
     // Methods ..
 
     void sortCars();
+    uint8_t getActiveCars();
+    OtherCar* getInactiveCar();
 
   private:
 
     OtherCar _otherCars[NUMBER_OF_OTHER_CARS];
-    uint8_t _order[NUMBER_OF_OTHER_CARS] = { 1, 2, 3, 4, 5 };
+    uint8_t _order[NUMBER_OF_OTHER_CARS] = { 0, 1, 2, 3, 4 };
 
 };
 
@@ -53,10 +55,32 @@ void OtherCars::setCar(uint8_t index, OtherCar val) {
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
 
+uint8_t OtherCars::getActiveCars() {
+
+  uint8_t active = 0;
+
+  for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
+    if (_otherCars[x].isActive()) active++;
+  }
+
+  return active;
+
+}
+
+OtherCar* OtherCars::getInactiveCar() {
+
+  for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
+    if (!_otherCars[x].isActive()) return &_otherCars[x];
+  }
+
+  return nullptr;
+
+}
+
 void OtherCars::sortCars() {
 
   for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
-    _order[x] = x + 1;
+    _order[x] = x;
   }
 
   uint8_t n = NUMBER_OF_OTHER_CARS;

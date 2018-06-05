@@ -28,4 +28,11 @@ class Arduboy2Ext : public Arduboy2 {
     void fillTrapezoidRH(int16_t x0, int16_t x1, int16_t yTop, int16_t x2, int16_t x3, int16_t yBottom, uint8_t color, uint8_t backgroundColor, uint8_t drawBorder, uint8_t drawBorderWidth);
 
     void drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2 = WHITE);
+
+    void displayWithBackground(uint8_t index, uint8_t band);
+    void paintScreenWithBackground(uint8_t image[], uint8_t index, uint8_t band);
+  
+  	static byte flicker;
+
+
 };
