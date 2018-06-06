@@ -281,19 +281,19 @@ Serial.println(otherCarY);
   switch (speed) {
 
     case 0 ... 1: 
-      arduboy.fillRect(110, 49, 2, 2);
+      Sprites::drawExternalMask(108, 46, ShiftStickKnob, ShiftStickKnobMask, 0, 0);
       break;
 
     case 2: 
-      arduboy.fillRect(110, 60, 2, 2);
+      Sprites::drawExternalMask(108, 58, ShiftStickKnob, ShiftStickKnobMask, 0, 0);
       break;
 
     case 3: 
-      arduboy.fillRect(116, 49, 2, 2);
+      Sprites::drawExternalMask(114, 46, ShiftStickKnob, ShiftStickKnobMask, 0, 0);
       break;
 
     case 4: 
-      arduboy.fillRect(116, 60, 2, 2);
+      Sprites::drawExternalMask(114, 58, ShiftStickKnob, ShiftStickKnobMask, 0, 0);
       break;
 
   }
