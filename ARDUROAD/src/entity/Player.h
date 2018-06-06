@@ -110,6 +110,10 @@ boolean Player::incYDelta() {
       _yDelta = -2;
       return true;
 
+    case -3:      
+      _yDelta = -2;
+      return true;
+
     case -2:      
       _yDelta = -1;
       return true;
@@ -122,13 +126,17 @@ boolean Player::incYDelta() {
       _yDelta = 1;
       return true;
 
-    // case 1:
-    //   _yDelta = 2;
-    //   return true;
+    case 1:
+      _yDelta = 2;
+      return true;
 
-    // case 2:
-    //   _yDelta = 4;
-    //   return true;
+    case 2:
+      _yDelta = 3;
+      return true;
+
+    case 3:
+      _yDelta = 4;
+      return true;
 
   }
 
@@ -162,8 +170,12 @@ boolean Player::decYDelta() {
       _yDelta = 1;
       return true;
 
-    case 4:
+    case 3:
       _yDelta = 2;
+      return true;
+
+    case 4:
+      _yDelta = 3;
       return true;
 
   }

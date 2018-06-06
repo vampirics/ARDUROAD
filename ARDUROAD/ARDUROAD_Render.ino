@@ -45,17 +45,7 @@
                                             { 67, 68, 70, 73, 76, 80, 85, 90 },
                                             };
 
-    // const int8_t curve_offset[5][8] = {
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    //     { 32, 22, 14, 8, 4, 2, 1, 0 },
-    // };
-
     const int8_t curve_offset[5][8] = {
-//        { 54, 46, 30, 16, 8, 4, 1, 0 },
-//        { 50, 43, 30, 17, 8, 4, 1, 0 },
         { 32, 22, 14, 8, 4, 2, 1, 0 },
         { 32, 22, 14, 8, 4, 2, 1, 0 },
         { 32, 22, 14, 8, 4, 2, 1, 0 },
@@ -63,17 +53,11 @@
         { 32, 22, 14, 8, 4, 2, 1, 0 },
     };
 
-void RenderScreen(/*Player *player, Enemy *enemies*/) {
+void RenderScreen(uint8_t speed) {
  
   uint8_t row = level.getHorizonY();
 
-uint16_t m = micros();
-// Serial.println("");
-// Serial.print(row);
-// Serial.print(" > ");
-// Serial.print(level.getCurve(0));
-// Serial.println("");  
-
+//uint16_t m = micros();
 
   int8_t xPlayerOffset = player.getXOffset();
 
@@ -102,29 +86,7 @@ uint16_t m = micros();
     int16_t x8 = road_marking_right[0][col + 1] + curveOffset1;
     uint8_t y7 = horizon[0][col + 1] + HORIZON_OFFSET;
 
-    uint8_t backgroundColour = BLACK;
-
-Serial.print("Row: ");
-Serial.print(row);
-Serial.print(", Col: ");
-Serial.print(col);
-Serial.print(", Curve: ");
-Serial.print(curve0);
-Serial.print(", ");
-Serial.print(curve1);
-Serial.print(", CurveOffset: ");
-Serial.print(curveOffset0);
-Serial.print(", ");
-Serial.print(curveOffset1);
-Serial.print(" - ");
-Serial.print(x5);
-Serial.print(",");
-Serial.print(y5);
-Serial.print(" ");
-Serial.print(x6);
-Serial.print(",");
-Serial.print(y7);
-Serial.println("        ");
+    // uint8_t backgroundColour = BLACK;
 
 
     // uint8_t colour = GREY;
@@ -145,27 +107,6 @@ Serial.println("        ");
     //   }
     
     // }
-
-    // arduboy.fillTrapezoidLH(0,x1,y1, 0,x2,y2, colour, backgroundColour, 2, 2);
-    // arduboy.fillTrapezoidRH(x3,WIDTH,y1, x4,WIDTH,y2, colour, backgroundColour, 1, 2);
-    uint8_t colour = GREY;
-
-    if (col % 2 == level.getBand()) {
-
-      switch (level.getTimeOfDay()) {
-
-        case TimeOfDay::Dawn:
-        case TimeOfDay::Day:
-          colour = WHITE;
-          break;
-
-        case TimeOfDay::Night:
-          colour = BLACK;
-          break;
-
-      }
-    
-    }
 
 
     drawRoadSegment(x1, y1, x3, y1, x2, y2, x4, y2);
@@ -196,12 +137,8 @@ Serial.println("        ");
 
   }
 
-  arduboy.fillRect(50,50, 20, 64, BLACK);
-font4x6.setCursor(52,52);
-font4x6.print(row);
 
-
-  uint16_t n = micros();
+  // uint16_t n = micros();
 
   // Serial.print(", time:");
   // Serial.println(n - m);
@@ -237,49 +174,131 @@ font4x6.print(row);
 
   // Render other cars ..
 
-  // otherCars.sortCars();
+  otherCars.sortCars();
 
-  // Direction direction = level.getTurnDirection();
+  Direction direction = level.getTurnDirection();
 
   // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
-
-  //   OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
-
+  //   OtherCar *otherCar = otherCars.getCar(i);
   //   if (otherCar->isActive()) {
-
-  //     uint8_t colIndex = determineOtherCarArrayIndex(row, otherCar);
-  //     uint8_t otherCarY = otherCar->getY().getInteger();
-  //     int8_t otherCarX = otherCar->getX();
-  //     uint8_t w = otherCar->getImageWidth();
-  //     int8_t curveIndex = level.getCurve(colIndex);
-  //     int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curveIndex)];
-  //     int16_t x = 64 + ((otherCarX + xPlayerOffset) * otherCarY / 67) + offset;
-
-  //     switch (otherCar->getImageSize()) {
-
-  //       case ImageSize::Small:
-  //         Sprites::drawExternalMask(x - w, otherCarY, opp_car_small, opp_car_small_mask, 0, 0);
-  //         break;
-
-  //       case ImageSize::Medium:
-  //         Sprites::drawExternalMask(x - w, otherCarY, opp_car_medium, opp_car_medium_mask, 0, 0);
-  //         break;
-
-  //       case ImageSize::Large:
-  //         Sprites::drawExternalMask(x - w, otherCarY, opp_car_large, opp_car_large_mask, 0, 0);
-  //         break;
-          
-  //     }
-
+  //   Serial.print("i: ");
+  //   Serial.print(i);
+  //   Serial.print(" ");
+  //   Serial.print(otherCar->isActive());
+  //   Serial.print(" ");
+  //   Serial.print(otherCar->getX());
+  //   Serial.print(", ");
+  //   Serial.print(otherCar->getY().getInteger());
+  //   Serial.print(" ");
   //   }
-
+    
   // }
+  // Serial.println(" ");
+  // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+  //   uint8_t s = otherCars.getSortedIndex(i);
+  //   Serial.print("  i: ");
+  //   Serial.print(i);
+  //   Serial.print(",");
+  //   Serial.print(s);
+  //   Serial.print(" ");
+    
+  // }
+  // Serial.println(" ");
 
 
-  // // Render player car last ..
+  for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
-  // Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+    OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
 
+    if (otherCar->isActive() && otherCar->isVisible()) {
+      uint8_t colIndex = determineOtherCarArrayIndex(0, otherCar);
+//      uint8_t otherCarY = otherCar->getY().getInteger() + otherCar->getYOffset();
+      uint8_t otherCarY = otherCar->getYDisplay();
+      int8_t otherCarX = otherCar->getX();
+      uint8_t w = otherCar->getImageWidthHalf();
+      int8_t curveIndex = level.getCurve(colIndex);
+      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curveIndex)];
+      int16_t x = 64 + (((otherCarX * otherCarY) / 67) + offset + xPlayerOffset);
+Serial.print("colIndex=");
+Serial.print(colIndex);
+Serial.print(" otherCarY=");
+Serial.print(otherCarY);
+Serial.print(" w=");
+Serial.print(w);
+Serial.print(" ci=");
+Serial.print(curveIndex);
+Serial.print(" offset=");
+Serial.print(offset);
+Serial.print(" x=");
+Serial.print(x);
+Serial.println("");
+
+Serial.print(otherCar->getYOffset());
+Serial.print(" ");
+Serial.println(otherCarY);
+      switch (otherCar->getImageSize()) {
+
+        case ImageSize::Disappearing:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_6, opp_car_6_mask, 0, 0);
+          break;
+
+        case ImageSize::Minute:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_5, opp_car_5_mask, 0, 0);
+          break;
+
+        case ImageSize::Tiny:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_4, opp_car_4_mask, 0, 0);
+          break;
+
+        case ImageSize::Small:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_3, opp_car_3_mask, 0, 0);
+          break;
+
+        case ImageSize::Medium:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_2, opp_car_2_mask, 0, 0);
+          break;
+
+        case ImageSize::Large:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_1, opp_car_1_mask, 0, 0);
+          break;
+          
+      }
+
+    }
+
+  }
+
+
+  // Render player car last ..
+
+  Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+
+
+  #ifdef GEARBOX
+
+  Sprites::drawExternalMask(108, 47, gearbox, gearbox_mask, 0, 0);
+
+  switch (speed) {
+
+    case 0 ... 1: 
+      arduboy.fillRect(110, 49, 2, 2);
+      break;
+
+    case 2: 
+      arduboy.fillRect(110, 60, 2, 2);
+      break;
+
+    case 3: 
+      arduboy.fillRect(116, 49, 2, 2);
+      break;
+
+    case 4: 
+      arduboy.fillRect(116, 60, 2, 2);
+      break;
+
+  }
+
+  #endif
 }
 
 uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {

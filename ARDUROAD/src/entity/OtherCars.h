@@ -27,6 +27,7 @@ class OtherCars {
     void sortCars();
     uint8_t getActiveCars();
     OtherCar* getInactiveCar();
+    void updatePositions(uint8_t speed);
 
   private:
 
@@ -97,6 +98,31 @@ void OtherCars::sortCars() {
   
     }
   
+  }
+
+}
+
+void OtherCars::updatePositions(uint8_t speed) {
+
+  for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
+
+    OtherCar *otherCar = &_otherCars[x];
+
+    if (otherCar->isActive()) {
+
+// Serial.print((float)otherCar->getY());
+// Serial.print(" ");
+// Serial.print((float)otherCar->getYDelta());
+// Serial.print(" ");
+// Serial.print(speed);
+// Serial.println(" ");
+
+      SQ7x8 newY = otherCar->getY() - otherCar->getYDelta() + (speed / 2);
+      otherCar->setY(newY);
+
+
+    }
+
   }
 
 }
