@@ -122,15 +122,14 @@ boolean Player::incYDelta() {
       _yDelta = 1;
       return true;
 
-#ifndef DEBUG_CURVES
-    case 1:
-      _yDelta = 2;
-      return true;
+    // case 1:
+    //   _yDelta = 2;
+    //   return true;
 
-    case 2:
-      _yDelta = 4;
-      return true;
-#endif
+    // case 2:
+    //   _yDelta = 4;
+    //   return true;
+
   }
 
   return false;

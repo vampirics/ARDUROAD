@@ -14,6 +14,9 @@ void playGame() {
 #if GROUND_SPEED == 3
   const uint8_t speedLookup[] = {0, 8, 4, 0, 2};
 #endif
+#if GROUND_SPEED == 4
+  const uint8_t speedLookup[] = {0, 6, 3, 0, 1};
+#endif
 
 //  if (gameState != GameState::Paused) {
 

@@ -7,7 +7,7 @@
 //#define DEBUG_CURVES
 #define _USE_ATMLIB
 #define USE_ARDUBOYTONES
-#define GROUND_SPEED 3
+#define GROUND_SPEED 4
 
 static const uint8_t HORIZON_COL_COUNT                    = 7;
 static const uint8_t HORIZON_ROW_COUNT                    = 5;
