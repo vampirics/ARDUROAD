@@ -220,7 +220,7 @@ void Level::move(Arduboy2Ext *arduboy) {
 
       case Direction::Straight:
         {
-        uint8_t turn = random(0, 3);
+        uint8_t turn = random(1, 2);// 2,3// SJH(0, 3);
         _turnDirection = static_cast<Direction>(turn - 1);
         _turnLength = random(_turnLengthMin, _turnLengthMax);
         }
@@ -236,7 +236,7 @@ void Level::move(Arduboy2Ext *arduboy) {
 
       case Direction::Right:
         {
-        uint8_t turn = random(0, 2);
+        uint8_t turn = random(0, 2); //2,3// SJH(0, 2);
         _turnDirection = static_cast<Direction>(turn);
         _turnLength = random(_turnLengthMin, _turnLengthMax);
         }

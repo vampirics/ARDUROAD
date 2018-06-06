@@ -7,6 +7,8 @@
 #include "src/entity/Player.h"
 #include "src/entity/OtherCars.h"
 #include "src/entity/OtherCar.h"
+#include "FixedPoints.h"
+#include "FixedPointsCommon.h"
 
 #ifdef USE_ARDUBOYTONES
 #include <ArduboyTones.h>
@@ -55,7 +57,7 @@ void setup() {
   arduboy.systemButtons();
   arduboy.audio.begin();
   arduboy.initRandomSeed();
-  arduboy.setFrameRate(75);
+  arduboy.setFrameRate(60);
 
   game.setState(GameState::VSBoot);
 
@@ -67,25 +69,28 @@ void loop() {
 
   if (!arduboy.nextFrameDEV()) return;
 
-  arduboy.clear();
   arduboy.pollButtons();
 
   switch (game.getState()) {
 
     case GameState::VSBoot:
+      arduboy.clear();
       vsBoot();
+      arduboy.display();
       break;
 
     case GameState::SplashScreen:
+      arduboy.clear();
       splashScreen();
+      arduboy.display();
       break;
 
     case GameState::PlayGame:
       playGame();
+      arduboy.displayWithBackground(level.getHorizonY(), level.getBand());
       break;
 
   }
 
-  arduboy.display();
 
 }

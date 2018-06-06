@@ -5,7 +5,7 @@
 
   // Render the horizon ..
 
-  const uint8_t horizon[5][8] = {
+  const uint8_t horizon[5][8] = {//w g  w   g   w   g   w   g
                                 { 0, 2,  6, 12, 20, 30, 42, 56 },
                                 { 0, 2,  7, 13, 22, 33, 45, 59 },
                                 { 0, 3,  8, 14, 24, 35, 48, 62 },
@@ -53,245 +53,82 @@
         { 32, 22, 14, 8, 4, 2, 1, 0 },
     };
 
-
-void RenderScreen(/*Player *player, Enemy *enemies*/) {
+void RenderScreen(uint8_t speed) {
  
   uint8_t row = level.getHorizonY();
 
-#ifdef DEBUG_CURVES
+//uint16_t m = micros();
 
-font4x6.setCursor(60,50);
-font4x6.print(row);
-
-// 0 > 7
-// 85,8 73,10        106,8 100,10        
-// 73,10 60,14        100,10 96,14        
-// 60,14 46,20        96,14 97,20        
-// 46,20 33,28        97,20 102,28        
-// 33,28 19,38        102,28 112,38        
-// 19,38 3,50        112,38 126,50        
-// 3,50 -14,64        126,50 142,64        
-
-if (row == 0) {
-//                        x1, x2, yTop, x3,   x4, yBottom
-  arduboy.fillTrapezoidLH(0,  85,    8,   0,  73,  10, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0,  73,   10,   0,  60,  14, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0,  60,   14,   0,  46,  20, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0,  46,   20,   0,  33,  28, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0,  33,   28,   0,  19,  38, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0,  19,   38,   0,   3,  50, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0,   3,   50,   0, -14,  64, BLACK, BLACK, 2, 2);
-
-//                         x1,    x2, yTop,  x3 ,   x4, yBottom
-  arduboy.fillTrapezoidRH(106, WIDTH,    8, 101, WIDTH, 10, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(101, WIDTH,   10,  96, WIDTH, 14, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH( 96, WIDTH,   14,  97, WIDTH, 20, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH( 97, WIDTH,   20, 102, WIDTH, 28, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(102, WIDTH,   28, 112, WIDTH, 38, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(112, WIDTH,   38, 126, WIDTH, 50, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(126, WIDTH,   50, 142, WIDTH, 64, BLACK, BLACK, 1, 2);
-}
-
-// 1 > 7
-// 85,8 72,10        106,8 99,10        
-// 72,10 58,15        99,10 97,15        
-// 58,15 45,21        97,15 98,21        
-// 45,21 30,30        98,21 105,30        
-// 30,30 15,41        105,30 116,41        
-// 15,41 0,53        116,41 129,53        
-// 0,53 -19,67        129,53 146,67  
-
-if (row == 1) {
-  arduboy.fillTrapezoidLH(0, 85, 8, 0, 72, 10, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 72, 10, 0, 58, 15, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 58, 15, 0, 44, 21, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 45, 21, 0, 30, 30, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 30, 30, 0, 15, 41, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 15, 41, 0, 0, 53, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 0, 53, 0, -19, 67, BLACK, BLACK, 2, 2);
-  
-  arduboy.fillTrapezoidRH(106, WIDTH,8, 99,WIDTH,10, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(99, WIDTH,10, 97,WIDTH,15, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(97, WIDTH,15, 98,WIDTH,21, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(98, WIDTH,21, 105,WIDTH,30, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(105, WIDTH,30, 116,WIDTH,41, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(116, WIDTH,41, 129,WIDTH,53, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(129, WIDTH,53, 146,WIDTH,67, BLACK, BLACK, 1, 2);
-}
-
-// 2 > 7
-// 85,8 71,11        107,8 100,11        
-// 71,11 57,16        100,11 98,16        
-// 57,16 44,22        98,16 100,22        
-// 44,22 28,32        100,22 107,32        
-// 28,32 13,43        107,32 118,43        
-// 13,43 -4,56        118,43 133,56        
-// -4,56 -22,70        133,56 149,70  
-
-if (row == 2) {
-  arduboy.fillTrapezoidLH(0, 85, 8, 0, 71, 11, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 71, 11, 0, 57, 16, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 57, 16, 0, 44, 22, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 44, 22, 0, 28, 32, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 28, 32, 0, 13, 43, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 13, 43, 0, -4, 56, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, -4, 56, 0, -22, 70, BLACK, BLACK, 2, 2);
-  
-  arduboy.fillTrapezoidRH(107, WIDTH,8, 100,WIDTH,11, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(100, WIDTH,11, 98,WIDTH,16, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(98, WIDTH,16, 100,WIDTH,22, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(100, WIDTH,22, 107,WIDTH,32, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(107, WIDTH,32, 118,WIDTH,43, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(118, WIDTH,43, 133,WIDTH,56, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(133, WIDTH,56, 146,WIDTH,70, BLACK, BLACK, 1, 2);
-}
-
-// 3 > 7
-// 84,9 71,11        108,9 100,11        
-// 71,11 56,17        100,11 99,17        
-// 56,17 42,24        99,17 102,24        
-// 42,24 26,34        102,24 110,34        
-// 26,34 9,46        110,34 122,46        
-// 9,46 -7,59        122,46 137,59        
-// -7,59 -26,74        137,59 154,74  
-
-if (row == 3) {
-  arduboy.fillTrapezoidLH(0, 84, 9, 0, 71, 11, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 71, 11, 0, 56, 17, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 56, 17, 0, 42, 24, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 42, 24, 0, 26, 34, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 26, 34, 0, 9, 46, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 9, 46, 0, -7, 59, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, -7, 59, 0, -26, 74, BLACK, BLACK, 2, 2);
-  
-  arduboy.fillTrapezoidRH(108, WIDTH, 9, 100,WIDTH,11, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(100, WIDTH, 11, 99,WIDTH,17, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(99, WIDTH, 17, 102,WIDTH,24, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(102, WIDTH,24, 110,WIDTH,34, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(110, WIDTH,34, 122,WIDTH,46, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(122, WIDTH,46, 137,WIDTH,59, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(137, WIDTH,59, 154,WIDTH,74, BLACK, BLACK, 1, 2);
-}
-
-// 4 > 7
-// 84,9 70,12        108,9 101,12        
-// 70,12 55,18        101,12 100,18        
-// 55,18 39,26        100,18 104,26        
-// 39,26 23,36        104,26 112,36        
-// 23,36 7,48        112,36 124,48        
-// 7,48 -11,62        124,48 140,62        
-// -11,62 -31,78        140,62 158,78  
-
-if (row == 4) {
-  arduboy.fillTrapezoidLH(0, 84, 9, 0, 70, 12, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 70, 12, 0, 55, 18, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 55, 18, 0, 39, 26, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 39, 26, 0, 23, 36, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 23, 36, 0, 7, 48, BLACK, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, 7, 48, 0, -11, 62, GREY, BLACK, 2, 2);
-  arduboy.fillTrapezoidLH(0, -11, 62, 0, -31, 78, BLACK, BLACK, 2, 2);
-  
-  arduboy.fillTrapezoidRH(108, WIDTH, 9, 101,WIDTH,12, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(101, WIDTH, 12, 100,WIDTH,18, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(100, WIDTH, 18, 104,WIDTH,26, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(104, WIDTH,26, 112,WIDTH,36, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(112, WIDTH,36, 124,WIDTH,48, BLACK, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(124, WIDTH,48, 140,WIDTH,62, GREY, BLACK, 1, 2);
-  arduboy.fillTrapezoidRH(140, WIDTH,62, 158,WIDTH,78, BLACK, BLACK, 1, 2);
-}
-
-return;
-
-#endif
-
-// Serial.println("");
-// Serial.print(row);
-// Serial.print(" > ");
-// Serial.print(level.getCurve(0));
-// Serial.println("");  
   int8_t xPlayerOffset = player.getXOffset();
 
   for (uint8_t col = 0; col < HORIZON_COL_COUNT; col++) {
 
+
     int8_t curve0 = level.getCurve(col);
     int8_t curve1 = level.getCurve(col + 1);
 
-    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curve0)] + xPlayerOffset;
-    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curve1)] + xPlayerOffset;
+    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curve0)] + xPlayerOffset;
+    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curve1)] + xPlayerOffset;
 
-    int16_t x1 = road_outside_left[row][col] + curveOffset0;
-    uint8_t y1 = horizon[row][col] + HORIZON_OFFSET;
+    int16_t x1 = road_outside_left[0][col] + curveOffset0;
+    uint8_t y1 = horizon[0][col] + HORIZON_OFFSET;
     
-    int16_t x2 = road_outside_left[row][col + 1] + curveOffset1;
-    uint8_t y2 = horizon[row][col + 1] + HORIZON_OFFSET;
+    int16_t x2 = road_outside_left[0][col + 1] + curveOffset1;
+    uint8_t y2 = horizon[0][col + 1] + HORIZON_OFFSET;
 
-    int16_t x3 = road_outside_right[row][col] + curveOffset0;
-    int16_t x4 = road_outside_right[row][col + 1] + curveOffset1;
+    int16_t x3 = road_outside_right[0][col] + curveOffset0;
+    int16_t x4 = road_outside_right[0][col + 1] + curveOffset1;
 
-    int16_t x5 = road_marking_left[row][col] + curveOffset0;
-    int16_t x6 = road_marking_left[row][col + 1] + curveOffset1;
-    int16_t x7 = road_marking_right[row][col] + curveOffset0;
-    int16_t x8 = road_marking_right[row][col + 1] + curveOffset1;
+    int16_t x5 = road_marking_left[0][col] + curveOffset0;
+    int16_t x6 = road_marking_left[0][col + 1] + curveOffset1;
+    uint8_t y5 = horizon[0][col] + HORIZON_OFFSET;
+    int16_t x7 = road_marking_right[0][col] + curveOffset0;
+    int16_t x8 = road_marking_right[0][col + 1] + curveOffset1;
+    uint8_t y7 = horizon[0][col + 1] + HORIZON_OFFSET;
 
-    uint8_t backgroundColour = BLACK;
-
-// Serial.print(x1);
-// Serial.print(",");
-// Serial.print(y1);
-// Serial.print(" ");
-// Serial.print(x2);
-// Serial.print(",");
-// Serial.print(y2);
-// Serial.print("        ");
-// Serial.print(x3);
-// Serial.print(",");
-// Serial.print(y1);
-// Serial.print(" ");
-// Serial.print(x4);
-// Serial.print(",");
-// Serial.print(y2);
-// Serial.println("        ");
+    // uint8_t backgroundColour = BLACK;
 
 
-    uint8_t colour = GREY;
+    // uint8_t colour = GREY;
 
-    if (col % 2 == level.getBand()) {
+    // if (col % 2 == level.getBand()) {
 
-      switch (level.getTimeOfDay()) {
+    //   switch (level.getTimeOfDay()) {
 
-        case TimeOfDay::Dawn:
-        case TimeOfDay::Day:
-          colour = WHITE;
-          break;
+    //     case TimeOfDay::Dawn:
+    //     case TimeOfDay::Day:
+    //       colour = WHITE;
+    //       break;
 
-        case TimeOfDay::Night:
-          colour = BLACK;
-          break;
+    //     case TimeOfDay::Night:
+    //       colour = BLACK;
+    //       break;
 
-      }
+    //   }
     
-    }
+    // }
 
-    arduboy.fillTrapezoidLH(0,x1,y1, 0,x2,y2, colour, backgroundColour, 2, 2);
-    arduboy.fillTrapezoidRH(x3,WIDTH,y1, x4,WIDTH,y2, colour, backgroundColour, 1, 2);
+
+    drawRoadSegment(x1, y1, x3, y1, x2, y2, x4, y2);
+
 
     if (col > 0 && (col % 2 == level.getBand())) {
 
-      arduboy.drawLine(x5, y1, x6, y2);
-      arduboy.drawLine(x7, y1, x8, y2);
-
       switch (col) {
 
-        case 4 ... 5:
+        case 2 ... 3:
+          arduboy.drawLine(x5, y5, x6, y7);
+          arduboy.drawLine(x7, y5, x8, y7);
+          break;
 
-          arduboy.drawLine(x5, y1, x6 + 1, y2);
-          arduboy.drawLine(x7, y1, x8 + 1, y2);
+        case 4 ... 5:
+          arduboy.drawLine(x5, y5, x6 + 1, y7);
+          arduboy.drawLine(x7, y5, x8 + 1, y7);
           break;
 
         case 6 ... 7:
-
-          arduboy.drawLine(x5 + 1, y1, x6 + 1, y2);
-          arduboy.drawLine(x7 + 1, y1, x8 + 1, y2);
+          arduboy.drawLine(x5 + 1, y5, x6 + 1, y7);
+          arduboy.drawLine(x7 + 1, y5, x8 + 1, y7);
           break;
 
       }
@@ -299,6 +136,13 @@ return;
     }
 
   }
+
+
+  // uint16_t n = micros();
+
+  // Serial.print(", time:");
+  // Serial.println(n - m);
+
 
   // Render horizon
 
@@ -334,34 +178,88 @@ return;
 
   Direction direction = level.getTurnDirection();
 
+  // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+  //   OtherCar *otherCar = otherCars.getCar(i);
+  //   if (otherCar->isActive()) {
+  //   Serial.print("i: ");
+  //   Serial.print(i);
+  //   Serial.print(" ");
+  //   Serial.print(otherCar->isActive());
+  //   Serial.print(" ");
+  //   Serial.print(otherCar->getX());
+  //   Serial.print(", ");
+  //   Serial.print(otherCar->getY().getInteger());
+  //   Serial.print(" ");
+  //   }
+    
+  // }
+  // Serial.println(" ");
+  // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+  //   uint8_t s = otherCars.getSortedIndex(i);
+  //   Serial.print("  i: ");
+  //   Serial.print(i);
+  //   Serial.print(",");
+  //   Serial.print(s);
+  //   Serial.print(" ");
+    
+  // }
+  // Serial.println(" ");
+
+
   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
-//    OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
-    OtherCar *otherCar = otherCars.getCar(i);
-    // int16_t roadOutsideRight = road_outside_right[row][colIndex] - 64;
+    OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
 
-    if (otherCar->isActive()) {
-
-      uint8_t colIndex = determineOtherCarArrayIndex(row, otherCar);
-      uint8_t otherCarY = otherCar->getY();
+    if (otherCar->isActive() && otherCar->isVisible()) {
+      uint8_t colIndex = determineOtherCarArrayIndex(0, otherCar);
+//      uint8_t otherCarY = otherCar->getY().getInteger() + otherCar->getYOffset();
+      uint8_t otherCarY = otherCar->getYDisplay();
       int8_t otherCarX = otherCar->getX();
-      uint8_t w = otherCar->getImageWidth();
+      uint8_t w = otherCar->getImageWidthHalf();
       int8_t curveIndex = level.getCurve(colIndex);
-      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[row][HORIZON_COL_COUNT - absT(curveIndex)];
-      int16_t x = 64 + ((otherCarX + xPlayerOffset) * otherCarY / 67) + offset;
+      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curveIndex)];
+      int16_t x = 64 + (((otherCarX * otherCarY) / 67) + offset + xPlayerOffset);
+Serial.print("colIndex=");
+Serial.print(colIndex);
+Serial.print(" otherCarY=");
+Serial.print(otherCarY);
+Serial.print(" w=");
+Serial.print(w);
+Serial.print(" ci=");
+Serial.print(curveIndex);
+Serial.print(" offset=");
+Serial.print(offset);
+Serial.print(" x=");
+Serial.print(x);
+Serial.println("");
 
+Serial.print(otherCar->getYOffset());
+Serial.print(" ");
+Serial.println(otherCarY);
       switch (otherCar->getImageSize()) {
 
+        case ImageSize::Disappearing:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_6, opp_car_6_mask, 0, 0);
+          break;
+
+        case ImageSize::Minute:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_5, opp_car_5_mask, 0, 0);
+          break;
+
+        case ImageSize::Tiny:
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_4, opp_car_4_mask, 0, 0);
+          break;
+
         case ImageSize::Small:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_small, opp_car_small_mask, 0, 0);
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_3, opp_car_3_mask, 0, 0);
           break;
 
         case ImageSize::Medium:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_medium, opp_car_medium_mask, 0, 0);
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_2, opp_car_2_mask, 0, 0);
           break;
 
         case ImageSize::Large:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_large, opp_car_large_mask, 0, 0);
+          Sprites::drawExternalMask(x - w, otherCarY, opp_car_1, opp_car_1_mask, 0, 0);
           break;
           
       }
@@ -375,6 +273,32 @@ return;
 
   Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
 
+
+  #ifdef GEARBOX
+
+  Sprites::drawExternalMask(108, 47, gearbox, gearbox_mask, 0, 0);
+
+  switch (speed) {
+
+    case 0 ... 1: 
+      arduboy.fillRect(110, 49, 2, 2);
+      break;
+
+    case 2: 
+      arduboy.fillRect(110, 60, 2, 2);
+      break;
+
+    case 3: 
+      arduboy.fillRect(116, 49, 2, 2);
+      break;
+
+    case 4: 
+      arduboy.fillRect(116, 60, 2, 2);
+      break;
+
+  }
+
+  #endif
 }
 
 uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {
@@ -396,3 +320,31 @@ uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {
 
 }
 
+void drawRoadSegment(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3) {
+		
+ 	const int8_t dy02 = y2 - y0;
+ 	const int8_t dy13 = y3 - y1;
+ 	const int8_t dx02 = x2 - x0;
+ 	const int8_t dx13 = x3 - x1;
+	const int8_t yDiff = y0 - y1;
+	
+	int16_t sb = 0;
+	int16_t sc = dx13 * yDiff;
+
+	for (int16_t y = y0; y <= y2; ++y) {
+
+		if (y >= 64) break;
+	
+		int16_t a = x0 + sb / dy02;
+		int16_t d = x1 + sc / dy13;
+
+		arduboy.drawFastHLine(a, y, 2, WHITE);  
+		arduboy.drawFastHLine(a + 2, y, d - a - 3, BLACK);  
+		arduboy.drawFastHLine(d - 1, y, 2, WHITE);  
+
+		sb += dx02;
+		sc += dx13;
+	
+	}
+
+}

@@ -5,43 +5,80 @@ void playGame() {
 
     // Update the ground's position ..
 
-#if GROUND_SPEED == 1
-  const uint8_t speedLookup[] = {0, 16, 8, 0, 4};
-#endif
-#if GROUND_SPEED == 2
-  const uint8_t speedLookup[] = {0, 12, 6, 0, 3};
-#endif
-#if GROUND_SPEED == 3
-  const uint8_t speedLookup[] = {0, 8, 4, 0, 2};
-#endif
+    const uint8_t speedLookup[] = {12, 6, 4, 2, 1};
+    uint8_t playerYDelta = player.getYDelta();
+
 
 //  if (gameState != GameState::Paused) {
 
-    uint8_t speed = speedLookup[absT(player.getYDelta())];
+    uint8_t speed = speedLookup[absT(playerYDelta)];
 
+
+    if (speed > 0) { 
     if (horizonIncrement == speed) {
 
-      level.incHorizonY(player.getYDelta() > 0 ? 1 : -1);
+      level.incHorizonY(playerYDelta > 0 ? 1 : -1);
       horizonIncrement = 0;
       
     }
 
     horizonIncrement++;
+    }
 
+    if (arduboy.isFrameCount(3, 0)) {
 
+      otherCars.updatePositions(playerYDelta);
+
+    }
 
   // Turn ?
 
 
 
-    RenderScreen();
+    RenderScreen(playerYDelta);
 
     if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X)) {
       level.move(&arduboy);
     }
 
+
+
+
+  // Launch another car?
+
+  if (random(0, 10) == 0 && otherCars.getActiveCars() < 1){//NUMBER_OF_OTHER_CARS) {
+
+    if (horizonIncrement > 3) {
+
+      OtherCar *otherCar = otherCars.getInactiveCar();
+      otherCar->setActive(true);
+//      otherCar->setX(random(-20,20));
+      otherCar->setX(0);
+      otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+      otherCar->setY(DIST_6_BEGIN);
+
+    }
+    else {
+
+      OtherCar *otherCar = otherCars.getInactiveCar();
+      otherCar->setActive(true);
+//      otherCar->setX(random(-20,20));
+      otherCar->setX(0);
+      otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+      otherCar->setY(80);
+
+    }
+
+
+
+
+  }
+
+
+
   //if (player.getStatus() == PlayerStatus::Active && gameState != GameState::Paused) {
 
+    #ifndef GEARBOX
     if (arduboy.pressed(B_BUTTON))     { if (player.decYDelta()) horizonIncrement = 0; }
     if (arduboy.pressed(A_BUTTON))     { 
                                           if (player.incYDelta()) horizonIncrement = 0; 
@@ -51,9 +88,27 @@ void playGame() {
                                         }
     if (arduboy.pressed(LEFT_BUTTON))      { player.decX(); }
     if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
+    if (arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; }
+    if (arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; }
 
     if (!arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { player.decelerate(); }
+    #endif
 
+    #ifdef GEARBOX
+
+    if (arduboy.pressed(A_BUTTON))     { 
+                                          if (arduboy.everyXFrames(2)) {// when running at 60fps
+                                            mainCarFrame = !mainCarFrame;
+                                          }
+                                        }
+    if (arduboy.pressed(LEFT_BUTTON))      { player.decX(); }
+    if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
+    if (!arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; }
+    if (!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; }
+
+    if (!arduboy.pressed(A_BUTTON) && !arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { player.decelerate(); }
+
+    #endif
   //}
 
 
