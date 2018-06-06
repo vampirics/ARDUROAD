@@ -272,6 +272,7 @@ Serial.println(otherCarY);
   // Render player car last ..
 
   Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+  Sprites::drawExternalMask(103, 12, CarCounter, CarCounterMask, 0, 0);
 
 
   #ifdef GEARBOX
