@@ -110,16 +110,8 @@ void OtherCars::updatePositions(uint8_t speed) {
 
     if (otherCar->isActive()) {
 
-// Serial.print((float)otherCar->getY());
-// Serial.print(" ");
-// Serial.print((float)otherCar->getYDelta());
-// Serial.print(" ");
-// Serial.print(speed);
-// Serial.println(" ");
-
       SQ7x8 newY = otherCar->getY() - otherCar->getYDelta() + (speed / 2);
       otherCar->setY(newY);
-
 
     }
 

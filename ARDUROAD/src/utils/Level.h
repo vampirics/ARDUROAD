@@ -32,7 +32,7 @@ class Level {
     void turnLeft();
     void turnRight();
     void turnStraight();
-    void decTurn();
+    void decTurnLength();
     void move(Arduboy2Ext *arduboy);
 
   private:
@@ -108,6 +108,13 @@ void Level::incHorizonY(int8_t val) {
 }
 
 int8_t Level::getCurve(uint8_t index) {
+  //SJH
+  // if (index > 4) return 5;
+  // if (index == 4) return 4;
+  // if (index == 3) return 3;
+  // if (index == 2) return 2;
+  // if (index == 1) return 1;
+  // if (index == 0) return 0;
   return _curves[index];
 }
 
@@ -186,7 +193,7 @@ void Level::turnRight() {
 
 }
 
-void Level::decTurn() {
+void Level::decTurnLength() {
 
   if (_turnLength > 0) _turnLength--;
 
@@ -212,7 +219,7 @@ void Level::move(Arduboy2Ext *arduboy) {
   if (_turnDirection == Direction::Left)     turnLeft();
   if (_turnDirection == Direction::Right)    turnRight();
 
-  decTurn();
+  decTurnLength();
 
   if (_turnLength == 0) {
 
@@ -220,7 +227,7 @@ void Level::move(Arduboy2Ext *arduboy) {
 
       case Direction::Straight:
         {
-        uint8_t turn = random(1, 2);// 2,3// SJH(0, 3);
+        uint8_t turn = random(0, 3);// 2,3// SJH(0, 3);
         _turnDirection = static_cast<Direction>(turn - 1);
         _turnLength = random(_turnLengthMin, _turnLengthMax);
         }
@@ -228,7 +235,7 @@ void Level::move(Arduboy2Ext *arduboy) {
 
       case Direction::Left:
         {
-        uint8_t turn = random(0, 2);
+        uint8_t turn = random(0, 2); // 0,2
         _turnDirection = static_cast<Direction>(turn - 1);
         _turnLength = random(_turnLengthMin, _turnLengthMax);
         }
@@ -236,7 +243,7 @@ void Level::move(Arduboy2Ext *arduboy) {
 
       case Direction::Right:
         {
-        uint8_t turn = random(0, 2); //2,3// SJH(0, 2);
+        uint8_t turn = random(0, 2); 
         _turnDirection = static_cast<Direction>(turn);
         _turnLength = random(_turnLengthMin, _turnLengthMax);
         }

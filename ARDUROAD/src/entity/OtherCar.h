@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../utils/Enums.h"
-#include "FixedPoints.h"
-#include "FixedPointsCommon.h"
+#include <FixedPoints.h>
+#include <FixedPointsCommon.h>
 
 class OtherCar {
 
@@ -70,7 +70,6 @@ void OtherCar::setY(SQ7x8 val) {
 
   int8_t y = _y.getInteger();
   if (y < OTHER_CAR_Y_MIN || y > OTHER_CAR_Y_MAX) {
-    Serial.println(y);
     _active = false;
   }
 
@@ -110,8 +109,8 @@ uint8_t OtherCar::getImageWidthHalf() {
     case DIST_6_BEGIN ... DIST_6_END:   return 4;
     case DIST_5_BEGIN ... DIST_5_END:   return 6;
     case DIST_4_BEGIN ... DIST_4_END:   return 8;
-    case DIST_3_BEGIN ... DIST_3_END:   return 11;
-    case DIST_2_BEGIN ... DIST_2_END:   return 16;
+    case DIST_3_BEGIN ... DIST_3_END:   return 12;
+    case DIST_2_BEGIN ... DIST_2_END:   return 15;
     default:                            return 20;
 
   }
@@ -142,6 +141,6 @@ uint8_t OtherCar::getYDisplay() {
 
 bool OtherCar::isVisible() {
 
-  return (_y.getInteger() > DIST_6_BEGIN);
+  return (_y.getInteger() > DIST_6_BEGIN && _y.getInteger() < 64);
 
 }

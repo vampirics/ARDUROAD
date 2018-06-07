@@ -3,55 +3,106 @@
 
 
 
-  // Render the horizon ..
+// Render the horizon ..
 
-  const uint8_t horizon[5][8] = {//w g  w   g   w   g   w   g
-                                { 0, 2,  6, 12, 20, 30, 42, 56 },
-                                { 0, 2,  7, 13, 22, 33, 45, 59 },
-                                { 0, 3,  8, 14, 24, 35, 48, 62 },
-                                { 1, 3,  9, 16, 26, 38, 51, 66 },
-                                { 1, 4, 10, 18, 28, 40, 54, 70 }
-                                };
+const uint8_t horizon[8] = { 0, 2, 6, 12, 20, 30, 42, 56 };
+const int16_t road_outside_left[8] =  { 53, 50, 46, 38, 29, 17, 2, -14 };
+const int16_t road_outside_right[8] = { 74, 77, 82, 89, 98, 110, 125, 142 };
+const int16_t road_marking_left[8] =  { 61, 60, 59, 57, 54, 51, 47, 42 };
+const int16_t road_marking_right[8] = { 67, 67, 69, 71, 73, 77, 81, 85 };
+const int8_t curve_offset[8] = { 32, 22, 14, 8, 4, 2, 1, 0 };
 
-  const int16_t road_outside_left[5][8] =  {
-                                            { 53, 50, 46, 38, 29, 17,   2, -14 },
-                                            { 53, 50, 44, 37, 26, 13,  -1, -19 },
-                                            { 53, 49, 43, 36, 24, 11,  -5, -22 },
-                                            { 52, 49, 42, 34, 22,  7,  -8, -26 },
-                                            { 52, 48, 41 ,31, 19,  5, -12, -31 },
-                                            };
-  
-    const int16_t road_outside_right[5][8] = {
-                                            { 74, 77, 82, 89,  98, 110, 125, 142 },
-                                            { 74, 77, 83, 90, 101, 114, 128, 146 },
-                                            { 75, 78, 84, 92, 103, 116, 132, 149 },
-                                            { 76, 78, 85, 94, 106, 120, 136, 154 },
-                                            { 76, 79, 86, 96, 108, 122, 139, 158 },
-                                            };
-  
-    const int16_t road_marking_left[5][8] =  {
-                                            { 61, 60, 59, 57, 54, 51, 47, 42 },
-                                            { 61, 60, 58, 56, 53, 50, 46, 41 },
-                                            { 61, 60, 58, 56, 53, 49, 45, 40 },
-                                            { 60, 60, 58, 55, 52, 48, 44, 39 },
-                                            { 60, 59, 57, 55, 51, 47, 43, 37 },
-                                            };
-  
-    const int16_t road_marking_right[5][8] = {
-                                            { 67, 67, 69, 71, 73, 77, 81, 85 },
-                                            { 67, 67, 69, 71, 74, 78, 82, 87 },
-                                            { 67, 68, 69, 71, 75, 78, 83, 87 },
-                                            { 67, 68, 70, 72, 75, 79, 84, 89 },
-                                            { 67, 68, 70, 73, 76, 80, 85, 90 },
-                                            };
+const int8_t curve_offset1[8][32] = { 
+  //0
+{ 
+  0,0,0,0,   //0-7
+  0,0,0,0,   //8-15
+  0,0,0,0,   //16-23
+  0,0,0,0,           //24-31
+  0,0,0,0,           //32-39
+  0,0,0,0,           //40-47
+  0,0,0,0,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //1
+{ 
+  1,1,1,1,   //0-7
+  1,1,1,2,   //8-15
+  0,0,0,0,   //16-23
+  0,0,0,0,           //24-31
+  0,0,0,0,           //32-39
+  0,0,0,0,           //40-47
+  0,0,0,0,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //2
+ { 
+  1,1,1,1,   //0-7
+  1,1,1,1,   //8-15
+  0,0,0,0,   //16-23
+  0,0,0,0,           //24-31
+  0,0,0,0,           //32-39
+  0,0,0,0,           //40-47
+  0,0,0,0,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //3
+ { 
+  2,2,2,2,   //0-7
+  2,2,2,2,   //8-15
+  2,2,0,0,   //16-23
+  0,0,0,0,           //24-31
+  0,0,0,0,           //32-39
+  0,0,0,0,           //40-47
+  0,0,0,0,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //4
+ { 
+  25,23,21,18,   //0-7
+  16,14,12,11,   //8-15
+  9,8,7,6,   //16-23
+  5,5,4,4,           //24-31
+  4,4,3,3,           //32-39
+  3,2,2,2,           //40-47
+  2,2,2,1,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //5
+{ 
+  25,23,21,18,   //0-7
+  16,14,12,11,   //8-15
+  9,8,7,6,   //16-23
+  5,5,4,4,           //24-31
+  3,3,3,3,           //32-39
+  3,2,2,2,           //40-47
+  2,2,2,1,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //6
+{ 
+  25,23,21,18,   //0-7
+  16,14,12,11,   //8-15
+  9,8,7,6,   //16-23
+  5,5,4,4,           //24-31
+  3,3,3,3,           //32-39
+  3,2,2,2,           //40-47
+  2,2,2,1,           //48-55
+  0,0,0,0,           //56-63
+  },
+  //7
+{ 
+  25,23,21,18,   //0-7
+  16,14,12,11,   //8-15
+  9,8,7,6,   //16-23
+  5,5,4,4,           //24-31
+  3,3,3,3,           //32-39
+  3,2,2,2,           //40-47
+  2,2,2,1,           //48-55
+  0,0,0,0,           //56-63
+  }
+};
 
-    const int8_t curve_offset[5][8] = {
-        { 32, 22, 14, 8, 4, 2, 1, 0 },
-        { 32, 22, 14, 8, 4, 2, 1, 0 },
-        { 32, 22, 14, 8, 4, 2, 1, 0 },
-        { 32, 22, 14, 8, 4, 2, 1, 0 },
-        { 32, 22, 14, 8, 4, 2, 1, 0 },
-    };
 
 void RenderScreen(uint8_t speed) {
  
@@ -67,24 +118,24 @@ void RenderScreen(uint8_t speed) {
     int8_t curve0 = level.getCurve(col);
     int8_t curve1 = level.getCurve(col + 1);
 
-    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curve0)] + xPlayerOffset;
-    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curve1)] + xPlayerOffset;
+    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * curve_offset[HORIZON_COL_COUNT - absT(curve0)] + xPlayerOffset;
+    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * curve_offset[HORIZON_COL_COUNT - absT(curve1)] + xPlayerOffset;
 
-    int16_t x1 = road_outside_left[0][col] + curveOffset0;
-    uint8_t y1 = horizon[0][col] + HORIZON_OFFSET;
+    int16_t x1 = road_outside_left[col] + curveOffset0;
+    uint8_t y1 = horizon[col] + HORIZON_OFFSET;
     
-    int16_t x2 = road_outside_left[0][col + 1] + curveOffset1;
-    uint8_t y2 = horizon[0][col + 1] + HORIZON_OFFSET;
+    int16_t x2 = road_outside_left[col + 1] + curveOffset1;
+    uint8_t y2 = horizon[col + 1] + HORIZON_OFFSET;
 
-    int16_t x3 = road_outside_right[0][col] + curveOffset0;
-    int16_t x4 = road_outside_right[0][col + 1] + curveOffset1;
+    int16_t x3 = road_outside_right[col] + curveOffset0;
+    int16_t x4 = road_outside_right[col + 1] + curveOffset1;
 
-    int16_t x5 = road_marking_left[0][col] + curveOffset0;
-    int16_t x6 = road_marking_left[0][col + 1] + curveOffset1;
-    uint8_t y5 = horizon[0][col] + HORIZON_OFFSET;
-    int16_t x7 = road_marking_right[0][col] + curveOffset0;
-    int16_t x8 = road_marking_right[0][col + 1] + curveOffset1;
-    uint8_t y7 = horizon[0][col + 1] + HORIZON_OFFSET;
+    int16_t x5 = road_marking_left[col] + curveOffset0;
+    int16_t x6 = road_marking_left[col + 1] + curveOffset1;
+    uint8_t y5 = horizon[col] + HORIZON_OFFSET;
+    int16_t x7 = road_marking_right[col] + curveOffset0;
+    int16_t x8 = road_marking_right[col + 1] + curveOffset1;
+    uint8_t y7 = horizon[col + 1] + HORIZON_OFFSET;
 
     // uint8_t backgroundColour = BLACK;
 
@@ -175,67 +226,23 @@ void RenderScreen(uint8_t speed) {
   // Render other cars ..
 
   otherCars.sortCars();
-
   Direction direction = level.getTurnDirection();
-
-  // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
-  //   OtherCar *otherCar = otherCars.getCar(i);
-  //   if (otherCar->isActive()) {
-  //   Serial.print("i: ");
-  //   Serial.print(i);
-  //   Serial.print(" ");
-  //   Serial.print(otherCar->isActive());
-  //   Serial.print(" ");
-  //   Serial.print(otherCar->getX());
-  //   Serial.print(", ");
-  //   Serial.print(otherCar->getY().getInteger());
-  //   Serial.print(" ");
-  //   }
-    
-  // }
-  // Serial.println(" ");
-  // for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
-  //   uint8_t s = otherCars.getSortedIndex(i);
-  //   Serial.print("  i: ");
-  //   Serial.print(i);
-  //   Serial.print(",");
-  //   Serial.print(s);
-  //   Serial.print(" ");
-    
-  // }
-  // Serial.println(" ");
-
 
   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
     OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
 
     if (otherCar->isActive() && otherCar->isVisible()) {
-      uint8_t colIndex = determineOtherCarArrayIndex(0, otherCar);
-//      uint8_t otherCarY = otherCar->getY().getInteger() + otherCar->getYOffset();
+
       uint8_t otherCarY = otherCar->getYDisplay();
       int8_t otherCarX = otherCar->getX();
-      uint8_t w = otherCar->getImageWidthHalf();
+      uint8_t colIndex = determineOtherCarArrayIndex(0, otherCar);
       int8_t curveIndex = level.getCurve(colIndex);
-      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset[0][HORIZON_COL_COUNT - absT(curveIndex)];
-      int16_t x = 64 + (((otherCarX * otherCarY) / 67) + offset + xPlayerOffset);
-Serial.print("colIndex=");
-Serial.print(colIndex);
-Serial.print(" otherCarY=");
-Serial.print(otherCarY);
-Serial.print(" w=");
-Serial.print(w);
-Serial.print(" ci=");
-Serial.print(curveIndex);
-Serial.print(" offset=");
-Serial.print(offset);
-Serial.print(" x=");
-Serial.print(x);
-Serial.println("");
 
-Serial.print(otherCar->getYOffset());
-Serial.print(" ");
-Serial.println(otherCarY);
+      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset1[absT(curveIndex)][otherCarY / 2];
+      uint8_t w = otherCar->getImageWidthHalf();
+      int16_t x = 64 + ((otherCarX * otherCarY) / 56) + offset + xPlayerOffset;
+
       switch (otherCar->getImageSize()) {
 
         case ImageSize::Disappearing:
@@ -274,49 +281,53 @@ Serial.println(otherCarY);
   Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
 
 
-  #ifdef GEARBOX
+  // Render gearbox ..
 
   Sprites::drawExternalMask(108, 47, gearbox, gearbox_mask, 0, 0);
+  {
+    uint8_t xPos = 0;
+    uint8_t yPos = 0;
 
-  switch (speed) {
+    switch (speed) {
 
-    case 0 ... 1: 
-      arduboy.fillRect(110, 49, 2, 2);
-      break;
+      case 0:
 
-    case 2: 
-      arduboy.fillRect(110, 60, 2, 2);
-      break;
+        switch (arduboy.getFrameCount(16)) {
 
-    case 3: 
-      arduboy.fillRect(116, 49, 2, 2);
-      break;
+          case 0 ... 3:     xPos = 110; yPos = 53; break;
+          case 4 ... 7:     xPos = 111; yPos = 53; break;
+          case 8 ... 11:    xPos = 112; yPos = 53; break;
+          case 12 ... 15:   xPos = 111; yPos = 53; break;
+            
+        }
+        break;
+      
+      case 1:               xPos = 108; yPos = 47; break;
+      case 2:               xPos = 108; yPos = 58; break;
+      case 3:               xPos = 114; yPos = 47; break;
+      case 4:               xPos = 114; yPos = 58; break;
 
-    case 4: 
-      arduboy.fillRect(116, 60, 2, 2);
-      break;
+    }
+
+    Sprites::drawExternalMask(xPos, yPos, gearbox_knob, gearbox_knob_mask, 0, 0);
 
   }
 
-  #endif
 }
 
 uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {
 
-  uint8_t index = 0;
-
   for (uint8_t i = 0; i < HORIZON_COL_COUNT; i ++) {
 
-    if (otherCar->getY() < horizon[row][i] + HORIZON_OFFSET) {
+    if (otherCar->getY() < horizon[i] + HORIZON_OFFSET) {
 
-      index = i;
-      break;
+      return i;
 
     }
 
   }
 
-  return index;
+  return 0;
 
 }
 
