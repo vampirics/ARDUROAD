@@ -106,21 +106,21 @@ boolean Player::incYDelta() {
 
   switch(_yDelta) {
 
-    case -4:      
-      _yDelta = -2;
-      return true;
+    // case -4:      
+    //   _yDelta = -2;
+    //   return true;
 
-    case -3:      
-      _yDelta = -2;
-      return true;
+    // case -3:      
+    //   _yDelta = -2;
+    //   return true;
 
-    case -2:      
-      _yDelta = -1;
-      return true;
+    // case -2:      
+    //   _yDelta = -1;
+    //   return true;
 
-    case -1:      
-      _yDelta = 0;
-      return true;
+    // case -1:      
+    //   _yDelta = 0;
+    //   return true;
       
     case 0:
       _yDelta = 1;

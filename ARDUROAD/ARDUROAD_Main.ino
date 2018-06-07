@@ -1,5 +1,9 @@
 #include "src/utils/Arduboy2Ext.h"
 
+#ifdef GEARBOX
+bool allowChangeGears = true;
+#endif
+
 void playGame() {
 
 
@@ -11,18 +15,20 @@ void playGame() {
 
 //  if (gameState != GameState::Paused) {
 
-    uint8_t speed = speedLookup[absT(playerYDelta)];
+    uint8_t gear = speedLookup[absT(playerYDelta)];
 
 
-    if (speed > 0) { 
-    if (horizonIncrement == speed) {
+    if (gear > 1 || (gear == 1 && arduboy.pressed(A_BUTTON))) { 
 
-      level.incHorizonY(playerYDelta > 0 ? 1 : -1);
-      horizonIncrement = 0;
-      
-    }
+      if (horizonIncrement == gear) {
 
-    horizonIncrement++;
+        if (playerYDelta >= 1)  level.incHorizonY(1);
+        horizonIncrement = 0;
+        
+      }
+
+      horizonIncrement++;
+
     }
 
     if (arduboy.isFrameCount(3, 0)) {
@@ -53,7 +59,7 @@ void playGame() {
       OtherCar *otherCar = otherCars.getInactiveCar();
       otherCar->setActive(true);
 //      otherCar->setX(random(-20,20));
-      otherCar->setX(0);
+      otherCar->setX(70);
       otherCar->setYDelta(randomSFixed<7,8>(1, 3));
       otherCar->setY(DIST_6_BEGIN);
 
@@ -63,7 +69,7 @@ void playGame() {
       OtherCar *otherCar = otherCars.getInactiveCar();
       otherCar->setActive(true);
 //      otherCar->setX(random(-20,20));
-      otherCar->setX(0);
+      otherCar->setX(70);
       otherCar->setYDelta(randomSFixed<7,8>(1, 3));
       otherCar->setY(80);
 
@@ -100,11 +106,12 @@ void playGame() {
                                           if (arduboy.everyXFrames(2)) {// when running at 60fps
                                             mainCarFrame = !mainCarFrame;
                                           }
+                                          allowChangeGears = true;
                                         }
-    if (arduboy.pressed(LEFT_BUTTON))      { player.decX(); }
+    if (arduboy.pressed(LEFT_BUTTON))     { player.decX(); }
     if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
-    if (!arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; }
-    if (!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; }
+    if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; allowChangeGears = false; }
+    if (allowChangeGears && !!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; allowChangeGears = false; }
 
     if (!arduboy.pressed(A_BUTTON) && !arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { player.decelerate(); }
 

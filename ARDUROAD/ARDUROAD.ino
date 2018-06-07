@@ -7,8 +7,8 @@
 #include "src/entity/Player.h"
 #include "src/entity/OtherCars.h"
 #include "src/entity/OtherCar.h"
-#include "FixedPoints.h"
-#include "FixedPointsCommon.h"
+#include <FixedPoints.h>
+#include <FixedPointsCommon.h>
 
 #ifdef USE_ARDUBOYTONES
 #include <ArduboyTones.h>
