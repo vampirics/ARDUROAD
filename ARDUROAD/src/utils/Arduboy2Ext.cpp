@@ -1,4 +1,5 @@
 #include "Arduboy2Ext.h"
+#include "Enums.h"
 
 Arduboy2Ext::Arduboy2Ext() : Arduboy2() { }
 
@@ -68,8 +69,8 @@ void Arduboy2Ext::drawVerticalDottedLine(uint8_t y1, uint8_t y2, uint8_t x, uint
 }
 
 
-void Arduboy2Ext::displayWithBackground(uint8_t index, uint8_t band) {
-  paintScreenWithBackground(sBuffer, index, band);
+void Arduboy2Ext::displayWithBackground(TimeOfDay timeOfDay, uint8_t index, uint8_t band) {
+  paintScreenWithBackground(sBuffer, timeOfDay, index, band);
 }
 
 // paint from a memory buffer, this should be FAST as it's likely what
@@ -132,9 +133,38 @@ void Arduboy2Ext::displayWithBackground(uint8_t index, uint8_t band) {
 																 0, 94, 253, 87, 245, 255, 85, 245, 				// Row 4, Band 0 
 																 0, 174, 254, 171, 250, 255, 170, 250,
 																 0, 244, 87, 253, 95, 85, 255, 255, 				// Row 4, Band 1
-																 0, 250, 171, 254, 175, 170, 255, 255
+																 0, 250, 171, 254, 175, 170, 255, 255,
+
+          
+																// Night ..
+
+																 0, 20, 80, 5, 64, 85, 1, 0, 		 						// Row 0, Band 0 
+																 0, 40, 160, 10, 128, 170, 2, 0,
+																 0, 65, 5, 80, 21, 0, 84, 85, 							// Row 0, Band 1
+																 0, 128, 10, 160, 42, 0, 168, 170, 
+
+																 0, 87, 64, 21, 0, 84, 21, 0, 							// Row 1, Band 0 
+																 0, 43, 160, 42, 0, 170, 10, 0, 
+																 0, 1, 21, 64, 85, 1, 64, 85, 							// Row 1, Band 1 
+																 0, 130, 10, 128, 170, 0, 160, 170, 
+
+																 0, 80, 64, 85, 0, 80, 85, 0, 							// Row 2, Band 0 
+																 0, 168, 128, 170, 0, 168, 170, 0, 
+																 0, 5, 21, 0, 85, 5, 0, 85, 								// Row 2, Band 1 
+																 0, 2, 42, 0, 170, 2, 0, 170, 
+
+																 0, 80, 1, 85, 1, 64, 85, 5, 								// Row 3, Band 0 
+																 0, 168, 0, 170, 2, 128, 170, 2, 
+																 0, 4, 84, 0, 84, 21, 0, 80, 								// Row 3, Band 1 
+																 0, 2, 170, 0, 168, 42, 0, 168, 
+
+																 0, 80, 1, 84, 5, 0, 85, 5, 								// Row 4, Band 0 
+																 0, 160, 2, 168, 10, 0, 170, 10, 
+																 0, 4, 84, 1, 80, 85, 0, 0, 								// Row 4, Band 1 
+																 0, 10, 168, 2, 160, 170, 0, 0, 
 
                                };
+
 // Row: 0, Band: 0 0 215 95 245 127 85 253 63 0 235 175 250 191 170 254 31, time:8752
 // Row: 0, Band: 1 0 125 245 95 213 255 87 53 0 190 250 175 234 255 171 26, time:8648
 
@@ -151,14 +181,14 @@ void Arduboy2Ext::displayWithBackground(uint8_t index, uint8_t band) {
 // Row: 4, Band: 1 0 244 87 253 95 85 255 95 0 250 171 254 175 170 255 15, time:8416
 
 
-void Arduboy2Ext::paintScreenWithBackground(uint8_t image[], uint8_t index, uint8_t band) {
+void Arduboy2Ext::paintScreenWithBackground(uint8_t image[], TimeOfDay timeOfDay, uint8_t index, uint8_t band) {
 
 	bool alternate = false;
 
 	for (uint8_t y = 0; y < 8; y++) {
 
-		uint8_t mask1 = pgm_read_byte(&masks[(((index * 4) + (band * 2)) * 8) + y]);
-		uint8_t mask2 = pgm_read_byte(&masks[(((index * 4) + (band * 2) + 1) * 8) + y]);
+		uint8_t mask1 = pgm_read_byte(&masks[(((index * 4) + (band * 2)) * 8) + y + (timeOfDay == TimeOfDay::Night ? 160 : 0) ]);
+		uint8_t mask2 = pgm_read_byte(&masks[(((index * 4) + (band * 2) + 1) * 8) + y + (timeOfDay == TimeOfDay::Night ? 160 : 0) ]);
 
 		for (uint8_t x = 0; x < WIDTH; x++) {
 

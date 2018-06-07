@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduboy2.h>
+#include "Enums.h"
 #define GREY 2
 #define BORDER_NONE 0
 #define BORDER_LEFT 1
@@ -26,8 +27,7 @@ class Arduboy2Ext : public Arduboy2 {
     void drawVerticalDottedLine(uint8_t y1, uint8_t y2, uint8_t x, uint8_t spacing);
     void drawFastHLine2(int16_t x, int16_t y, uint8_t w, uint8_t color2 = WHITE);
 
-    void displayWithBackground(uint8_t index, uint8_t band);
-    void paintScreenWithBackground(uint8_t image[], uint8_t index, uint8_t band);
-
+    void displayWithBackground(TimeOfDay timeOfDay, uint8_t index, uint8_t band);
+    void paintScreenWithBackground(uint8_t image[], TimeOfDay timeOfDay, uint8_t index, uint8_t band);
 
 };

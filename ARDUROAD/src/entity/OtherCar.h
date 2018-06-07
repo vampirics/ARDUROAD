@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils/Arduboy2Ext.h"
 #include "../utils/Enums.h"
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
@@ -30,6 +31,7 @@ class OtherCar {
     uint8_t getImageWidthHalf();
     uint8_t getYOffset();
     uint8_t getYDisplay();
+    int8_t incY(SQ7x8 val);
 
   private:
 
@@ -69,6 +71,7 @@ void OtherCar::setY(SQ7x8 val) {
   _y = val;
 
   int8_t y = _y.getInteger();
+
   if (y < OTHER_CAR_Y_MIN || y > OTHER_CAR_Y_MAX) {
     _active = false;
   }
@@ -83,6 +86,19 @@ void OtherCar::setActive(bool val) {
   _active = val;
 }
 
+int8_t OtherCar::incY(SQ7x8 val) {
+
+  _y = _y + val;
+
+  int8_t y = _y.getInteger();
+
+  if (y < OTHER_CAR_Y_MIN || y > OTHER_CAR_Y_MAX) {
+    _active = false;
+  }
+
+  return y;
+
+}
 
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..

@@ -87,7 +87,7 @@ void loop() {
 
     case GameState::PlayGame:
       playGame();
-      arduboy.displayWithBackground(level.getHorizonY(), level.getBand());
+      arduboy.displayWithBackground(level.getTimeOfDay(), level.getHorizonY(), level.getBand());
       break;
 
   }

@@ -67,6 +67,7 @@ enum class TimeOfDay : uint8_t {
 
   Dawn,
   Day,
+  Dusk,
   Night,
 
 };

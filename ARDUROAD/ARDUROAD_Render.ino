@@ -104,7 +104,7 @@ const int8_t curve_offset1[8][32] = {
 };
 
 
-void RenderScreen(uint8_t speed) {
+void RenderScreen(uint8_t gear) {
  
   uint8_t row = level.getHorizonY();
 
@@ -279,7 +279,20 @@ void RenderScreen(uint8_t speed) {
   // Render player car last ..
 
   Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
-  Sprites::drawExternalMask(103, 12, CarCounter, CarCounterMask, 0, 0);
+
+
+
+  // Render car counter ..
+
+  Sprites::drawExternalMask(104, 11, CarCounter, CarCounterMask, 0, 0);
+  {
+    uint8_t carsPassed = player.getCarsPassed();
+
+    Sprites::drawExternalMask(107, 14, numbers_white, numbers_white_mask, carsPassed / 100, 0);                           
+    carsPassed = carsPassed % 100;
+    Sprites::drawExternalMask(113, 14, numbers_white, numbers_white_mask, carsPassed / 10, 0);                           
+    Sprites::drawExternalMask(119, 14, numbers_white, numbers_white_mask, carsPassed % 10, 0);
+  }
 
 
   // Render gearbox ..
@@ -289,7 +302,7 @@ void RenderScreen(uint8_t speed) {
     uint8_t xPos = 0;
     uint8_t yPos = 0;
 
-    switch (speed) {
+    switch (gear) {
 
       case 0:
 
@@ -313,6 +326,8 @@ void RenderScreen(uint8_t speed) {
     Sprites::drawExternalMask(xPos, yPos, gearbox_knob, gearbox_knob_mask, 0, 0);
 
   }
+
+
 
 }
 

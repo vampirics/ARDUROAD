@@ -1,28 +1,27 @@
 #include "src/utils/Arduboy2Ext.h"
 
-#ifdef GEARBOX
 bool allowChangeGears = true;
-#endif
+uint8_t clutchCounter = 0;
 
 void playGame() {
 
 
     // Update the ground's position ..
 
-    const uint8_t speedLookup[] = {12, 6, 4, 2, 1};
-    uint8_t playerYDelta = player.getYDelta();
+    // const uint8_t speedLookup[] = {12, 6, 4, 2, 1};
+    uint8_t speed = player.getYDelta();
 
 
 //  if (gameState != GameState::Paused) {
 
-    uint8_t gear = speedLookup[absT(playerYDelta)];
+    uint8_t gear = player.getGear();//speedLookup[absT(playerYDelta)];
 
 
-    if (gear > 1 || (gear == 1 && arduboy.pressed(A_BUTTON))) { 
+    if (clutchCounter > 0 || gear > 1 || (gear == 1 && arduboy.pressed(A_BUTTON))) { 
 
       if (horizonIncrement == gear) {
 
-        if (playerYDelta >= 1)  level.incHorizonY(1);
+        if (speed >= 1)  level.incHorizonY(1);
         horizonIncrement = 0;
         
       }
@@ -33,7 +32,7 @@ void playGame() {
 
     if (arduboy.isFrameCount(3, 0)) {
 
-      otherCars.updatePositions(playerYDelta);
+      otherCars.updatePositions(&player, speed);
 
     }
 
@@ -41,7 +40,7 @@ void playGame() {
 
 
 
-    RenderScreen(playerYDelta);
+    RenderScreen(speed);
 
     if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X)) {
       level.move(&arduboy);
@@ -82,27 +81,8 @@ void playGame() {
 
 
 
-  //if (player.getStatus() == PlayerStatus::Active && gameState != GameState::Paused) {
 
-    #ifndef GEARBOX
-    if (arduboy.pressed(B_BUTTON))     { if (player.decYDelta()) horizonIncrement = 0; }
-    if (arduboy.pressed(A_BUTTON))     { 
-                                          if (player.incYDelta()) horizonIncrement = 0; 
-                                          if (arduboy.everyXFrames(2)) {// when running at 60fps
-                                            mainCarFrame = !mainCarFrame;
-                                          }
-                                        }
-    if (arduboy.pressed(LEFT_BUTTON))      { player.decX(); }
-    if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
-    if (arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; }
-    if (arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; }
-
-    if (!arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { player.decelerate(); }
-    #endif
-
-    #ifdef GEARBOX
-
-    if (arduboy.pressed(A_BUTTON))     { 
+    if (arduboy.pressed(A_BUTTON) && gear > 0)     { 
                                           if (arduboy.everyXFrames(2)) {// when running at 60fps
                                             mainCarFrame = !mainCarFrame;
                                           }
@@ -110,13 +90,14 @@ void playGame() {
                                         }
     if (arduboy.pressed(LEFT_BUTTON))     { player.decX(); }
     if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
-    if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; allowChangeGears = false; }
-    if (allowChangeGears && !!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; allowChangeGears = false; }
+    if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; allowChangeGears = false; clutchCounter = 12; }
+    if (allowChangeGears && !!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; allowChangeGears = false; clutchCounter = 12;  }
 
-    if (!arduboy.pressed(A_BUTTON) && !arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { player.decelerate(); }
+//    if ((arduboy.justReleased(UP_BUTTON) || arduboy.justReleased(DOWN_BUTTON)) && clutchCounter == 
 
-    #endif
-  //}
+    if (!arduboy.pressed(A_BUTTON) && clutchCounter == 0  /*&& !arduboy.pressed(DOWN_BUTTON) && !arduboy.pressed(UP_BUTTON)*/ && arduboy.everyXFrames(FRAME_RATE_16)) { if (!player.decelerate()) allowChangeGears = true; }
+
+    if (clutchCounter > 0) clutchCounter--;
 
 
 

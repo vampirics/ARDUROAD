@@ -45,7 +45,7 @@ class Level {
     Direction _turnDirection = Direction::Straight;
     uint8_t _turnLengthMin = 10;
     uint8_t _turnLengthMax = 50;
-    TimeOfDay _timeOfDay = TimeOfDay::Day;
+    TimeOfDay _timeOfDay = TimeOfDay::Night;
 
 };
 

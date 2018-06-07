@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils/Arduboy2Ext.h"
 #include "../utils/Enums.h"
 #include "OtherCar.h"
 
@@ -27,7 +28,7 @@ class OtherCars {
     void sortCars();
     uint8_t getActiveCars();
     OtherCar* getInactiveCar();
-    void updatePositions(uint8_t speed);
+    void updatePositions(Player *player, uint8_t speed);
 
   private:
 
@@ -102,7 +103,7 @@ void OtherCars::sortCars() {
 
 }
 
-void OtherCars::updatePositions(uint8_t speed) {
+void OtherCars::updatePositions(Player *player, uint8_t speed) {
 
   for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
 
@@ -110,8 +111,17 @@ void OtherCars::updatePositions(uint8_t speed) {
 
     if (otherCar->isActive()) {
 
-      SQ7x8 newY = otherCar->getY() - otherCar->getYDelta() + (speed / 2);
-      otherCar->setY(newY);
+      int8_t oldY = otherCar->getY().getInteger();
+      int8_t newY = otherCar->incY((speed / 2) - otherCar->getYDelta());
+      int8_t playerY = player->getY();
+
+      if (oldY <= playerY && newY > playerY) {
+        player->incCarsPassed();
+      }
+
+      if (oldY >= playerY && newY < playerY) {
+        player->decCarsPassed();
+      }
 
     }
 

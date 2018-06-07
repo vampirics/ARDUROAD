@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Arduboy2.h>
+#include "../utils/Arduboy2Ext.h"
 
 const unsigned char PROGMEM mainCar[] = {
 43, 25,

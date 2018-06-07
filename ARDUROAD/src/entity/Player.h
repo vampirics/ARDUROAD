@@ -1,6 +1,9 @@
 #pragma once
 
+#include "../utils/Arduboy2Ext.h"
 #include "../utils/Enums.h"
+
+const uint8_t speedLookup[] = {12, 6, 4, 2, 1};
 
 class Player {
 
@@ -15,17 +18,22 @@ class Player {
     int8_t getXDelta();
     int8_t getYDelta();
     int8_t getXOffset();
+    uint8_t getCarsPassed();
 
     void setX(uint8_t val);
     void setXDelta(int8_t val);
     void setYDelta(int8_t val);
     void setXOffset(int8_t val);
+    void setCarsPassed(uint8_t val);
+    uint8_t getGear();
 
 
     // Methods ..
 
     void incX();
     void decX();
+    void incCarsPassed();
+    void decCarsPassed();
 
     boolean incYDelta();
     boolean decYDelta();
@@ -37,6 +45,7 @@ class Player {
     int8_t _xOffset;
     int8_t _xDelta;
     int8_t _yDelta;
+    uint8_t _carsPassed;
 
 };
 
@@ -64,6 +73,14 @@ int8_t Player::getYDelta() {
   return _yDelta;
 }
 
+uint8_t Player::getGear() {
+  return speedLookup[absT(_yDelta)];
+}
+
+uint8_t Player::getCarsPassed() {
+  return _carsPassed;
+}
+
 void Player::setX(uint8_t val) {
   _x = val;
 }
@@ -78,6 +95,10 @@ void Player::setXOffset(int8_t val) {
 
 void Player::setYDelta(int8_t val) {
   _yDelta = val;
+}
+
+void Player::setCarsPassed(uint8_t val) {
+  _carsPassed = val;
 }
 
 
@@ -99,6 +120,15 @@ void Player::decX() {
   else _xOffset = 0;
 
 }
+
+void Player::incCarsPassed() {
+  _carsPassed++;
+}
+
+void Player::decCarsPassed() {
+  if (_carsPassed > 0) _carsPassed--;
+}
+
 
 // Returns true if the value has changed ..
 

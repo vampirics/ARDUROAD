@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Arduboy2.h>
+#include "Arduboy2Ext.h"
 #include "Enums.h"
 
 #define EEPROM_START                  EEPROM_STORAGE_SPACE_START + 100
