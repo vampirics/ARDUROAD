@@ -206,21 +206,21 @@ void Level::incTime() {
 
 void Level::move(Arduboy2Ext *arduboy, uint8_t speed) {
 
-  switch (_curves[0]) {
-
-    case -7 ... -6:     _horizonX += 1;  break;
-    case -5 ... -4:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 2)) { _horizonX += 1;  } break;
-    case -3 ... -1:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 3)) { _horizonX += 1;  } break;
-    case  1 ...  3:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 3)) { _horizonX -= 1;  } break;
-    case  4 ...  5:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 2)) { _horizonX -= 1;  } break;
-    case  6 ...  7:     _horizonX -= 1;  break;
-    
-  }
-
-  if (_horizonX < -128) _horizonX += 128;
-  if (_horizonX > 0)    _horizonX -= 128;
-
   if (speed > 0) {
+    
+    switch (_curves[0]) {
+
+      case -7 ... -6:     _horizonX += 1;  break;
+      case -5 ... -4:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 2)) { _horizonX += 1;  } break;
+      case -3 ... -1:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 3)) { _horizonX += 1;  } break;
+      case  1 ...  3:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 3)) { _horizonX -= 1;  } break;
+      case  4 ...  5:     if (arduboy->isFrameCount(FRAME_COUNT_HORIZON_X * 2)) { _horizonX -= 1;  } break;
+      case  6 ...  7:     _horizonX -= 1;  break;
+    
+    }
+
+    if (_horizonX < -128) _horizonX += 128;
+    if (_horizonX > 0)    _horizonX -= 128;
 
     if (_turnDirection == Direction::Straight) turnStraight();
     if (_turnDirection == Direction::Left)     turnLeft();
