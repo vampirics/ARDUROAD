@@ -279,6 +279,7 @@ void RenderScreen(uint8_t speed) {
   // Render player car last ..
 
   Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+  Sprites::drawExternalMask(103, 12, CarCounter, CarCounterMask, 0, 0);
 
 
   // Render gearbox ..
