@@ -33,7 +33,8 @@ class Level {
     void turnRight();
     void turnStraight();
     void decTurnLength();
-    void move(Arduboy2Ext *arduboy);
+    void move(Arduboy2Ext *arduboy, uint8_t speed);
+    void incTime();
 
   private:
 
@@ -45,7 +46,8 @@ class Level {
     Direction _turnDirection = Direction::Straight;
     uint8_t _turnLengthMin = 10;
     uint8_t _turnLengthMax = 50;
-    TimeOfDay _timeOfDay = TimeOfDay::Night;
+    TimeOfDay _timeOfDay = TimeOfDay::Dusk;
+    uint16_t _time = 0;
 
 };
 
@@ -108,13 +110,6 @@ void Level::incHorizonY(int8_t val) {
 }
 
 int8_t Level::getCurve(uint8_t index) {
-  //SJH
-  // if (index > 4) return 5;
-  // if (index == 4) return 4;
-  // if (index == 3) return 3;
-  // if (index == 2) return 2;
-  // if (index == 1) return 1;
-  // if (index == 0) return 0;
   return _curves[index];
 }
 
@@ -199,7 +194,17 @@ void Level::decTurnLength() {
 
 }
 
-void Level::move(Arduboy2Ext *arduboy) {
+void Level::incTime() {
+
+  _time++;
+  if (_time > TICKS_IN_A_PERIOD) {
+    _time = 0;
+    _timeOfDay++;
+  }
+
+}
+
+void Level::move(Arduboy2Ext *arduboy, uint8_t speed) {
 
   switch (_curves[0]) {
 
@@ -215,39 +220,43 @@ void Level::move(Arduboy2Ext *arduboy) {
   if (_horizonX < -128) _horizonX += 128;
   if (_horizonX > 0)    _horizonX -= 128;
 
-  if (_turnDirection == Direction::Straight) turnStraight();
-  if (_turnDirection == Direction::Left)     turnLeft();
-  if (_turnDirection == Direction::Right)    turnRight();
+  if (speed > 0) {
 
-  decTurnLength();
+    if (_turnDirection == Direction::Straight) turnStraight();
+    if (_turnDirection == Direction::Left)     turnLeft();
+    if (_turnDirection == Direction::Right)    turnRight();
 
-  if (_turnLength == 0) {
+    decTurnLength();
 
-    switch (_turnDirection) {
+    if (_turnLength == 0) {
 
-      case Direction::Straight:
-        {
-        uint8_t turn = random(0, 3);// 2,3// SJH(0, 3);
-        _turnDirection = static_cast<Direction>(turn - 1);
-        _turnLength = random(_turnLengthMin, _turnLengthMax);
-        }
-        break;
+      switch (_turnDirection) {
 
-      case Direction::Left:
-        {
-        uint8_t turn = random(0, 2); // 0,2
-        _turnDirection = static_cast<Direction>(turn - 1);
-        _turnLength = random(_turnLengthMin, _turnLengthMax);
-        }
-        break;
+        case Direction::Straight:
+          {
+          uint8_t turn = random(0, 3);// 2,3// SJH(0, 3);
+          _turnDirection = static_cast<Direction>(turn - 1);
+          _turnLength = random(_turnLengthMin, _turnLengthMax);
+          }
+          break;
 
-      case Direction::Right:
-        {
-        uint8_t turn = random(0, 2); 
-        _turnDirection = static_cast<Direction>(turn);
-        _turnLength = random(_turnLengthMin, _turnLengthMax);
-        }
-        break;
+        case Direction::Left:
+          {
+          uint8_t turn = random(0, 2); // 0,2
+          _turnDirection = static_cast<Direction>(turn - 1);
+          _turnLength = random(_turnLengthMin, _turnLengthMax);
+          }
+          break;
+
+        case Direction::Right:
+          {
+          uint8_t turn = random(0, 2); 
+          _turnDirection = static_cast<Direction>(turn);
+          _turnLength = random(_turnLengthMin, _turnLengthMax);
+          }
+          break;
+
+      }
 
     }
 

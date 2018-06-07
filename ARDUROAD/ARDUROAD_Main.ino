@@ -14,14 +14,22 @@ void playGame() {
 
 //  if (gameState != GameState::Paused) {
 
-    uint8_t gear = player.getGear();//speedLookup[absT(playerYDelta)];
+    uint8_t frameDelay = player.getGear();
 
+Serial.print(speed);
+Serial.print(" ");
+Serial.print(frameDelay);
+Serial.print(" ");
+Serial.print(clutchCounter);
+Serial.print(" ");
+Serial.print(arduboy.pressed(A_BUTTON));
+Serial.print(" ");
+    if (clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
 
-    if (clutchCounter > 0 || gear > 1 || (gear == 1 && arduboy.pressed(A_BUTTON))) { 
+      if (horizonIncrement == frameDelay) {
+Serial.print("xxxx");
 
-      if (horizonIncrement == gear) {
-
-        if (speed >= 1)  level.incHorizonY(1);
+        /*if (speed >= 1)  */level.incHorizonY(1);
         horizonIncrement = 0;
         
       }
@@ -29,21 +37,23 @@ void playGame() {
       horizonIncrement++;
 
     }
-
+Serial.println(" ");
     if (arduboy.isFrameCount(3, 0)) {
 
       otherCars.updatePositions(&player, speed);
 
     }
 
-  // Turn ?
-
+ 
 
 
     RenderScreen(speed);
 
-    if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X)) {
-      level.move(&arduboy);
+
+    // Move road and horizon scenery ..
+
+    if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X * (4 - speed))) {
+      level.move(&arduboy, speed);
     }
 
 
@@ -53,11 +63,11 @@ void playGame() {
 
   if (random(0, 10) == 0 && otherCars.getActiveCars() < 1){//NUMBER_OF_OTHER_CARS) {
 
-    if (horizonIncrement > 3) {
+    if (frameDelay > 3) {
 
       OtherCar *otherCar = otherCars.getInactiveCar();
       otherCar->setActive(true);
-//      otherCar->setX(random(-20,20));
+      otherCar->setX(random(-70, 70));
       otherCar->setX(70);
       otherCar->setYDelta(randomSFixed<7,8>(1, 3));
       otherCar->setY(DIST_6_BEGIN);
@@ -67,8 +77,7 @@ void playGame() {
 
       OtherCar *otherCar = otherCars.getInactiveCar();
       otherCar->setActive(true);
-//      otherCar->setX(random(-20,20));
-      otherCar->setX(70);
+      otherCar->setX(random(-70, 70));
       otherCar->setYDelta(randomSFixed<7,8>(1, 3));
       otherCar->setY(80);
 
@@ -79,19 +88,16 @@ void playGame() {
 
   }
 
-
-
-
-    if (arduboy.pressed(A_BUTTON) && gear > 0)     { 
+    if (arduboy.pressed(A_BUTTON) && speed > 0)     { 
                                           if (arduboy.everyXFrames(2)) {// when running at 60fps
                                             mainCarFrame = !mainCarFrame;
                                           }
                                           allowChangeGears = true;
                                         }
-    if (arduboy.pressed(LEFT_BUTTON))     { player.decX(); }
-    if (arduboy.pressed(RIGHT_BUTTON))    { player.incX(); }
-    if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; allowChangeGears = false; clutchCounter = 12; }
-    if (allowChangeGears && !!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; allowChangeGears = false; clutchCounter = 12;  }
+    if (arduboy.pressed(LEFT_BUTTON) && speed > 0)     { player.decX(); }
+    if (arduboy.pressed(RIGHT_BUTTON) && speed > 0)    { player.incX(); }
+    if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON))    { if (player.incYDelta()) horizonIncrement = 0; allowChangeGears = false; clutchCounter = 30; }
+    if (allowChangeGears && !!arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON))  { if (player.decYDelta()) horizonIncrement = 0; allowChangeGears = false; clutchCounter = 30;  }
 
 //    if ((arduboy.justReleased(UP_BUTTON) || arduboy.justReleased(DOWN_BUTTON)) && clutchCounter == 
 
@@ -100,7 +106,8 @@ void playGame() {
     if (clutchCounter > 0) clutchCounter--;
 
 
+  // Increase time of day ..
 
-//  }
+  level.incTime();
 
 }

@@ -1,6 +1,16 @@
 #include "src/utils/Arduboy2Ext.h"
 
 
+#define RENDER_CAR_COUNTER_LEFT   104
+#define RENDER_CAR_COUNTER_TOP    3
+
+#define RENDER_GEARBOX_RHS_LEFT 108
+#define RENDER_GEARBOX_RHS_TOP  47
+
+#define RENDER_GEARBOX_LHS_LEFT 1
+#define RENDER_GEARBOX_LHS_TOP  47
+
+bool drawOnLHS = true;
 
 
 // Render the horizon ..
@@ -137,28 +147,6 @@ void RenderScreen(uint8_t gear) {
     int16_t x8 = road_marking_right[col + 1] + curveOffset1;
     uint8_t y7 = horizon[col + 1] + HORIZON_OFFSET;
 
-    // uint8_t backgroundColour = BLACK;
-
-
-    // uint8_t colour = GREY;
-
-    // if (col % 2 == level.getBand()) {
-
-    //   switch (level.getTimeOfDay()) {
-
-    //     case TimeOfDay::Dawn:
-    //     case TimeOfDay::Day:
-    //       colour = WHITE;
-    //       break;
-
-    //     case TimeOfDay::Night:
-    //       colour = BLACK;
-    //       break;
-
-    //   }
-    
-    // }
-
 
     drawRoadSegment(x1, y1, x3, y1, x2, y2, x4, y2);
 
@@ -200,6 +188,7 @@ void RenderScreen(uint8_t gear) {
   switch (level.getTimeOfDay()) {
 
     case TimeOfDay::Dawn:
+    case TimeOfDay::Dusk:
 
       arduboy.fillRect(0, 0, WIDTH, 10, BLACK);
       Sprites::drawSelfMasked(level.getHorizonX(), 0, horizon_dawn, 0);
@@ -283,24 +272,66 @@ void RenderScreen(uint8_t gear) {
 
 
   // Render car counter ..
-
-  Sprites::drawExternalMask(104, 11, CarCounter, CarCounterMask, 0, 0);
+  
+  Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT, RENDER_CAR_COUNTER_TOP, CarCounter, CarCounterMask, 0, 0);
   {
     uint8_t carsPassed = player.getCarsPassed();
 
-    Sprites::drawExternalMask(107, 14, numbers_white, numbers_white_mask, carsPassed / 100, 0);                           
+    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  3, RENDER_CAR_COUNTER_TOP + 3, numbers_white, numbers_white_mask, carsPassed / 100, 0);                           
     carsPassed = carsPassed % 100;
-    Sprites::drawExternalMask(113, 14, numbers_white, numbers_white_mask, carsPassed / 10, 0);                           
-    Sprites::drawExternalMask(119, 14, numbers_white, numbers_white_mask, carsPassed % 10, 0);
+    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  9, RENDER_CAR_COUNTER_TOP + 3, numbers_white, numbers_white_mask, carsPassed / 10, 0);                           
+    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT + 15, RENDER_CAR_COUNTER_TOP + 3, numbers_white, numbers_white_mask, carsPassed % 10, 0);
   }
 
 
   // Render gearbox ..
-
-  Sprites::drawExternalMask(108, 47, gearbox, gearbox_mask, 0, 0);
   {
     uint8_t xPos = 0;
-    uint8_t yPos = 0;
+    uint8_t yPos = 0; 
+
+    switch (player.getX()) {
+
+      case 0 ... 30:
+        xPos = RENDER_GEARBOX_RHS_LEFT;
+        yPos = RENDER_GEARBOX_RHS_TOP;
+        drawOnLHS = false;
+        break;
+
+      case 31 ... 41:
+        if (!drawOnLHS) {
+          xPos = RENDER_GEARBOX_RHS_LEFT;
+          yPos = RENDER_GEARBOX_RHS_TOP;
+          drawOnLHS = false;
+        }
+        else {
+          xPos = RENDER_GEARBOX_LHS_LEFT;
+          yPos = RENDER_GEARBOX_LHS_TOP;
+          drawOnLHS = true;
+        }
+        break;
+
+      case 42 ... 52:
+        if (!drawOnLHS) {
+          xPos = RENDER_GEARBOX_RHS_LEFT;
+          yPos = RENDER_GEARBOX_RHS_TOP;
+          drawOnLHS = false;
+        }
+        else {
+          xPos = RENDER_GEARBOX_LHS_LEFT;
+          yPos = RENDER_GEARBOX_LHS_TOP;
+          drawOnLHS = true;
+        }
+        break;
+
+      case 53 ... 85:
+        xPos = RENDER_GEARBOX_LHS_LEFT;
+        yPos = RENDER_GEARBOX_LHS_TOP;
+        drawOnLHS = true;
+        break;
+
+    }
+
+    Sprites::drawExternalMask(xPos, yPos, gearbox, gearbox_mask, 0, 0);
 
     switch (gear) {
 
@@ -308,18 +339,18 @@ void RenderScreen(uint8_t gear) {
 
         switch (arduboy.getFrameCount(16)) {
 
-          case 0 ... 3:     xPos = 110; yPos = 53; break;
-          case 4 ... 7:     xPos = 111; yPos = 53; break;
-          case 8 ... 11:    xPos = 112; yPos = 53; break;
-          case 12 ... 15:   xPos = 111; yPos = 53; break;
+          case 0 ... 3:     xPos+= 2;   yPos+= 6;  break;
+          case 4 ... 7:     xPos+= 3;   yPos+= 6;  break;
+          case 8 ... 11:    xPos+= 4;   yPos+= 6;  break;
+          case 12 ... 15:   xPos+= 3;   yPos+= 6;  break;
             
         }
         break;
       
-      case 1:               xPos = 108; yPos = 47; break;
-      case 2:               xPos = 108; yPos = 58; break;
-      case 3:               xPos = 114; yPos = 47; break;
-      case 4:               xPos = 114; yPos = 58; break;
+      case 1:                                      break;
+      case 2:                           yPos+= 11; break;
+      case 3:               xPos+= 6;              break;
+      case 4:               xPos+= 6;   yPos+= 11; break;
 
     }
 
