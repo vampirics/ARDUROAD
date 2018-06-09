@@ -2,6 +2,7 @@
 
 #include "Arduboy2Ext.h"
 #include "Enums.h"
+#include "../entity/Player.h"
 
 class Level {
 
@@ -18,6 +19,7 @@ class Level {
     uint8_t getTurnLength();
     Direction getTurnDirection();
     TimeOfDay getTimeOfDay();
+    uint8_t getTimeOfDayImageIndex();
 
     void setHorizonX(int16_t val);
     void setHorizonY(uint8_t val);
@@ -27,7 +29,7 @@ class Level {
 
     // Methods ..
 
-    void incHorizonY(int8_t val);
+    void incHorizonY(Player *player);
     int8_t getCurve(uint8_t index);
     void turnLeft();
     void turnRight();
@@ -44,8 +46,8 @@ class Level {
     int8_t _curves[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     uint8_t _turnLength = 0;
     Direction _turnDirection = Direction::Straight;
-    uint8_t _turnLengthMin = 10;
-    uint8_t _turnLengthMax = 50;
+    uint8_t _turnLengthMin = 8;
+    uint8_t _turnLengthMax = 30;
     TimeOfDay _timeOfDay = TimeOfDay::Dusk;
     uint16_t _time = 0;
 
@@ -101,10 +103,15 @@ void Level::setTurn(uint8_t length, Direction direction) {
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
 
-void Level::incHorizonY(int8_t val) {
+void Level::incHorizonY(Player *player) {
 
-  _horizonY = (_horizonY + val);
-  if (_horizonY >= HORIZON_ROW_COUNT) _band = (_band == 0 ? 1 : 0);
+  _horizonY++;
+
+  if (_horizonY >= HORIZON_ROW_COUNT) {
+    _band = (_band == 0 ? 1 : 0);
+    player->incOdometer();
+  }
+  
   _horizonY = _horizonY % HORIZON_ROW_COUNT;
 
 }
@@ -200,6 +207,20 @@ void Level::incTime() {
   if (_time > TICKS_IN_A_PERIOD) {
     _time = 0;
     _timeOfDay++;
+  }
+
+
+
+}
+
+uint8_t Level::getTimeOfDayImageIndex() { 
+
+  switch (_timeOfDay) {
+    case TimeOfDay::Dawn:     return 1;
+    case TimeOfDay::Dusk:     return 1;
+    case TimeOfDay::Day:      return 0;
+    case TimeOfDay::Night:    return 2;
+    default:                  return 0;
   }
 
 }

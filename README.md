@@ -7,3 +7,12 @@ Key features:
 - Weather conditions changes
 - Day/Night transitions
 - 4 Channels music selected from a radio at the start
+
+
+
+## Bugs
+
+
+## To Do
+
+- High Score table - will use same logic a Juno First.

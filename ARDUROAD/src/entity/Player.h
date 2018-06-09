@@ -19,6 +19,8 @@ class Player {
     int8_t getYDelta();
     int8_t getXOffset();
     uint8_t getCarsPassed();
+    uint16_t getOdometer();
+    uint8_t getDirtCloud();
 
     void setX(uint8_t val);
     void setXDelta(int8_t val);
@@ -34,7 +36,11 @@ class Player {
     void decX();
     void incCarsPassed();
     void decCarsPassed();
-
+    void incOdometer();
+    void resetOdometer();
+    void decDirtCloud();
+    void setDirtCloud();
+    
     boolean incYDelta();
     boolean decYDelta();
     boolean decelerate();
@@ -46,6 +52,8 @@ class Player {
     int8_t _xDelta;
     int8_t _yDelta;
     uint8_t _carsPassed;
+    uint16_t _odometer;
+    uint8_t _dirtCloud;
 
 };
 
@@ -79,6 +87,14 @@ uint8_t Player::getGear() {
 
 uint8_t Player::getCarsPassed() {
   return _carsPassed;
+}
+
+uint16_t Player::getOdometer() {
+  return _odometer;
+}
+
+uint8_t Player::getDirtCloud() {
+  return _dirtCloud / DIRT_CLOUD_DIVISOR;
 }
 
 void Player::setX(uint8_t val) {
@@ -129,43 +145,46 @@ void Player::decCarsPassed() {
   if (_carsPassed > 0) _carsPassed--;
 }
 
+void Player::incOdometer() {
+  _odometer++;
+}
+
+void Player::resetOdometer() {
+  _odometer++;
+}
+
+void Player::decDirtCloud() {
+  _dirtCloud--;
+}
+
+void Player::setDirtCloud() {
+  _dirtCloud = DIRT_CLOUD_MAX;
+}
 
 // Returns true if the value has changed ..
 
 boolean Player::incYDelta() {
 
   switch(_yDelta) {
-
-    // case -4:      
-    //   _yDelta = -2;
-    //   return true;
-
-    // case -3:      
-    //   _yDelta = -2;
-    //   return true;
-
-    // case -2:      
-    //   _yDelta = -1;
-    //   return true;
-
-    // case -1:      
-    //   _yDelta = 0;
-    //   return true;
-      
+     
     case 0:
       _yDelta = 1;
+      _dirtCloud = DIRT_CLOUD_MAX;
       return true;
 
     case 1:
       _yDelta = 2;
+      _dirtCloud = DIRT_CLOUD_MAX;
       return true;
 
     case 2:
       _yDelta = 3;
+      _dirtCloud = DIRT_CLOUD_MAX;
       return true;
 
     case 3:
       _yDelta = 4;
+      _dirtCloud = DIRT_CLOUD_MAX;
       return true;
 
   }
@@ -179,18 +198,6 @@ boolean Player::incYDelta() {
 boolean Player::decYDelta() {
 
   switch(_yDelta) {
-
-    // case -2:      
-    //   _yDelta = -4;
-    //   return true;
-
-    // case -1:      
-    //   _yDelta = -2;
-    //   return true;
-      
-    // case 0:
-    //   _yDelta = -1;
-    //   return true;
 
     case 1:
       _yDelta = 0;

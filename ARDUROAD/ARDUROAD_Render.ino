@@ -1,14 +1,18 @@
 #include "src/utils/Arduboy2Ext.h"
 
 
-#define RENDER_CAR_COUNTER_LEFT   104
-#define RENDER_CAR_COUNTER_TOP    3
+#define RENDER_CAR_COUNTER_LEFT     104
+#define RENDER_CAR_COUNTER_TOP      3
 
-#define RENDER_GEARBOX_RHS_LEFT 108
-#define RENDER_GEARBOX_RHS_TOP  47
+#define RENDER_GEARBOX_RHS_LEFT     109
+#define RENDER_GEARBOX_RHS_TOP      38
 
-#define RENDER_GEARBOX_LHS_LEFT 1
-#define RENDER_GEARBOX_LHS_TOP  47
+#define RENDER_GEARBOX_LHS_LEFT     1
+#define RENDER_GEARBOX_LHS_TOP      39
+
+#define RENDER_ODOMETER_LHS_LEFT    32
+#define RENDER_ODOMETER_RHS_LEFT    120
+#define RENDER_ODOMETER_TOP         56
 
 bool drawOnLHS = true;
 
@@ -23,100 +27,81 @@ const int16_t road_marking_right[8] = { 67, 67, 69, 71, 73, 77, 81, 85 };
 const int8_t curve_offset[8] = { 32, 22, 14, 8, 4, 2, 1, 0 };
 
 const int8_t curve_offset1[8][32] = { 
-  //0
-{ 
-  0,0,0,0,   //0-7
-  0,0,0,0,   //8-15
-  0,0,0,0,   //16-23
-  0,0,0,0,           //24-31
-  0,0,0,0,           //32-39
-  0,0,0,0,           //40-47
-  0,0,0,0,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //1
-{ 
-  1,1,1,1,   //0-7
-  1,1,1,2,   //8-15
-  0,0,0,0,   //16-23
-  0,0,0,0,           //24-31
-  0,0,0,0,           //32-39
-  0,0,0,0,           //40-47
-  0,0,0,0,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //2
- { 
-  1,1,1,1,   //0-7
-  1,1,1,1,   //8-15
-  0,0,0,0,   //16-23
-  0,0,0,0,           //24-31
-  0,0,0,0,           //32-39
-  0,0,0,0,           //40-47
-  0,0,0,0,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //3
- { 
-  2,2,2,2,   //0-7
-  2,2,2,2,   //8-15
-  2,2,0,0,   //16-23
-  0,0,0,0,           //24-31
-  0,0,0,0,           //32-39
-  0,0,0,0,           //40-47
-  0,0,0,0,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //4
- { 
-  25,23,21,18,   //0-7
-  16,14,12,11,   //8-15
-  9,8,7,6,   //16-23
-  5,5,4,4,           //24-31
-  4,4,3,3,           //32-39
-  3,2,2,2,           //40-47
-  2,2,2,1,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //5
-{ 
-  25,23,21,18,   //0-7
-  16,14,12,11,   //8-15
-  9,8,7,6,   //16-23
-  5,5,4,4,           //24-31
-  3,3,3,3,           //32-39
-  3,2,2,2,           //40-47
-  2,2,2,1,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //6
-{ 
-  25,23,21,18,   //0-7
-  16,14,12,11,   //8-15
-  9,8,7,6,   //16-23
-  5,5,4,4,           //24-31
-  3,3,3,3,           //32-39
-  3,2,2,2,           //40-47
-  2,2,2,1,           //48-55
-  0,0,0,0,           //56-63
-  },
-  //7
-{ 
-  25,23,21,18,   //0-7
-  16,14,12,11,   //8-15
-  9,8,7,6,   //16-23
-  5,5,4,4,           //24-31
-  3,3,3,3,           //32-39
-  3,2,2,2,           //40-47
-  2,2,2,1,           //48-55
-  0,0,0,0,           //56-63
-  }
-};
+                                      { 0,0,0,0,           // 0-7         Line 0
+                                        0,0,0,0,           // 8-15
+                                        0,0,0,0,           // 16-23
+                                        0,0,0,0,           // 24-31
+                                        0,0,0,0,           // 32-39
+                                        0,0,0,0,           // 40-47
+                                        0,0,0,0,           // 48-55
+                                        0,0,0,0,},         // 56-63
 
+                                      { 1,1,1,1,           // 0-7         Line 1
+                                        1,1,1,2,           // 8-15
+                                        0,0,0,0,           // 16-23
+                                        0,0,0,0,           // 24-31
+                                        0,0,0,0,           // 32-39
+                                        0,0,0,0,           // 40-47
+                                        0,0,0,0,           // 48-55
+                                        0,0,0,0,},         // 56-63
+
+                                      { 1,1,1,1,           // 0-7         Line 2
+                                        1,1,1,1,           // 8-15
+                                        0,0,0,0,           // 16-23
+                                        0,0,0,0,           // 24-31
+                                        0,0,0,0,           // 32-39
+                                        0,0,0,0,           // 40-47
+                                        0,0,0,0,           // 48-55
+                                        0,0,0,0,},         // 56-63
+
+                                      { 2,2,2,2,           // 0-7         Line 3
+                                        2,2,2,2,           // 8-15
+                                        2,2,0,0,           // 16-23
+                                        0,0,0,0,           // 24-31
+                                        0,0,0,0,           // 32-39
+                                        0,0,0,0,           // 40-47
+                                        0,0,0,0,           // 48-55
+                                        0,0,0,0,},         // 56-63
+
+                                      { 25,23,21,18,       // 0-7         Line 4
+                                        16,14,12,11,       // 8-15
+                                        9,8,7,6,           // 16-23
+                                        5,5,4,4,           // 24-31
+                                        4,4,3,3,           // 32-39
+                                        3,2,2,2,           // 40-47
+                                        2,2,2,1,           // 48-55
+                                        0,0,0,0,},         // 56-63
+
+                                      { 25,23,21,18,       // 0-7         Line 5
+                                        16,14,12,11,       // 8-15
+                                        9,8,7,6,           // 16-23
+                                        5,5,4,4,           // 24-31
+                                        3,3,3,3,           // 32-39
+                                        3,2,2,2,           // 40-47
+                                        2,2,2,1,           // 48-55
+                                        0,0,0,0,},         // 56-63
+
+                                      { 25,23,21,18,       // 0-7         Line 6
+                                        16,14,12,11,       // 8-15
+                                        9,8,7,6,           // 16-23
+                                        5,5,4,4,           // 24-31
+                                        3,3,3,3,           // 32-39
+                                        3,2,2,2,           // 40-47
+                                        2,2,2,1,           // 48-55
+                                        0,0,0,0,},         // 56-63
+
+                                      { 25,23,21,18,       // 0-7         Line 7
+                                        16,14,12,11,       // 8-15
+                                        9,8,7,6,           // 16-23
+                                        5,5,4,4,           // 24-31
+                                        3,3,3,3,           // 32-39
+                                        3,2,2,2,           // 40-47
+                                        2,2,2,1,           // 48-55
+                                        0,0,0,0,}          // 56-63
+
+                                    };
 
 void RenderScreen(uint8_t gear) {
- 
-  uint8_t row = level.getHorizonY();
 
 //uint16_t m = micros();
 
@@ -185,47 +170,24 @@ void RenderScreen(uint8_t gear) {
 
   // Render horizon
 
-  switch (level.getTimeOfDay()) {
-
-    case TimeOfDay::Dawn:
-    case TimeOfDay::Dusk:
-
-      arduboy.fillRect(0, 0, WIDTH, 10, BLACK);
-      Sprites::drawSelfMasked(level.getHorizonX(), 0, horizon_dawn, 0);
-      Sprites::drawSelfMasked(level.getHorizonX() + 128, 0, horizon_dawn, 0);
-      break;
-
-    case TimeOfDay::Day:
-
-      arduboy.fillRect(0, 0, WIDTH, 10, BLACK);
-      Sprites::drawSelfMasked(level.getHorizonX(), 0, horizon_day, 0);
-      Sprites::drawSelfMasked(level.getHorizonX() + 128, 0, horizon_day, 0);
-      break;
-
-    case TimeOfDay::Night:
-
-      arduboy.fillRect(0, 0, WIDTH, 15, BLACK);
-      Sprites::drawSelfMasked(level.getHorizonX(), 0, horizon_night, 0);
-      Sprites::drawSelfMasked(level.getHorizonX() + 128, 0, horizon_night, 0);
-      break;
-
-  }
+  arduboy.fillRect(0, 0, WIDTH, pgm_read_byte(&horizon_heights[level.getTimeOfDayImageIndex()]), BLACK);
+  Sprites::drawSelfMasked(level.getHorizonX(), 0, horizons, level.getTimeOfDayImageIndex());
+  Sprites::drawSelfMasked(level.getHorizonX() + 128, 0, horizons, level.getTimeOfDayImageIndex());
 
 
   // Render other cars ..
 
   otherCars.sortCars();
-  Direction direction = level.getTurnDirection();
 
   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
     OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
 
-    if (otherCar->isActive() && otherCar->isVisible()) {
+    if (otherCar->isActive() && otherCar->isVisible(level.getTimeOfDay())) {
 
       uint8_t otherCarY = otherCar->getYDisplay();
       int8_t otherCarX = otherCar->getX();
-      uint8_t colIndex = determineOtherCarArrayIndex(0, otherCar);
+      uint8_t colIndex = determineOtherCarArrayIndex(otherCar);
       int8_t curveIndex = level.getCurve(colIndex);
 
       int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset1[absT(curveIndex)][otherCarY / 2];
@@ -267,102 +229,126 @@ void RenderScreen(uint8_t gear) {
 
   // Render player car last ..
 
-  Sprites::drawExternalMask(player.getX(), 40, mainCar, mainCarMask, mainCarFrame, 0);
+  Sprites::drawExternalMask(player.getX(), 39, mainCar, mainCarMask, mainCarFrame, 0);
+  {
+    uint8_t dirtCloud = player.getDirtCloud();
 
+    if (dirtCloud > 0) {
+
+      Sprites::drawExternalMask(player.getX(), 57, dirt_cloud, dirt_cloud_mask, dirtCloud - 1, dirtCloud - 1);
+      player.decDirtCloud();
+
+    }
+  }
 
 
   // Render car counter ..
   
-  Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT, RENDER_CAR_COUNTER_TOP, CarCounter, CarCounterMask, 0, 0);
-  {
-    uint8_t carsPassed = player.getCarsPassed();
-
-    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  3, RENDER_CAR_COUNTER_TOP + 3, numbers_white, numbers_white_mask, carsPassed / 100, 0);                           
-    carsPassed = carsPassed % 100;
-    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  9, RENDER_CAR_COUNTER_TOP + 3, numbers_white, numbers_white_mask, carsPassed / 10, 0);                           
-    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT + 15, RENDER_CAR_COUNTER_TOP + 3, numbers_white, numbers_white_mask, carsPassed % 10, 0);
-  }
-
-
-  // Render gearbox ..
-  {
-    uint8_t xPos = 0;
-    uint8_t yPos = 0; 
-
-    switch (player.getX()) {
-
-      case 0 ... 30:
-        xPos = RENDER_GEARBOX_RHS_LEFT;
-        yPos = RENDER_GEARBOX_RHS_TOP;
-        drawOnLHS = false;
-        break;
-
-      case 31 ... 41:
-        if (!drawOnLHS) {
-          xPos = RENDER_GEARBOX_RHS_LEFT;
-          yPos = RENDER_GEARBOX_RHS_TOP;
-          drawOnLHS = false;
-        }
-        else {
-          xPos = RENDER_GEARBOX_LHS_LEFT;
-          yPos = RENDER_GEARBOX_LHS_TOP;
-          drawOnLHS = true;
-        }
-        break;
-
-      case 42 ... 52:
-        if (!drawOnLHS) {
-          xPos = RENDER_GEARBOX_RHS_LEFT;
-          yPos = RENDER_GEARBOX_RHS_TOP;
-          drawOnLHS = false;
-        }
-        else {
-          xPos = RENDER_GEARBOX_LHS_LEFT;
-          yPos = RENDER_GEARBOX_LHS_TOP;
-          drawOnLHS = true;
-        }
-        break;
-
-      case 53 ... 85:
-        xPos = RENDER_GEARBOX_LHS_LEFT;
-        yPos = RENDER_GEARBOX_LHS_TOP;
-        drawOnLHS = true;
-        break;
-
-    }
-
-    Sprites::drawExternalMask(xPos, yPos, gearbox, gearbox_mask, 0, 0);
-
-    switch (gear) {
-
-      case 0:
-
-        switch (arduboy.getFrameCount(16)) {
-
-          case 0 ... 3:     xPos+= 2;   yPos+= 6;  break;
-          case 4 ... 7:     xPos+= 3;   yPos+= 6;  break;
-          case 8 ... 11:    xPos+= 4;   yPos+= 6;  break;
-          case 12 ... 15:   xPos+= 3;   yPos+= 6;  break;
-            
-        }
-        break;
+  if (showGauges) {
       
-      case 1:                                      break;
-      case 2:                           yPos+= 11; break;
-      case 3:               xPos+= 6;              break;
-      case 4:               xPos+= 6;   yPos+= 11; break;
+    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT, RENDER_CAR_COUNTER_TOP, CarCounter, CarCounterMask, 0, 0);
+    {
+      uint8_t carsPassed = player.getCarsPassed();
+
+      Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  2, RENDER_CAR_COUNTER_TOP + 2, numbers_white, numbers_white_mask, carsPassed / 100, 0);                           
+      carsPassed = carsPassed % 100;
+      Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  8, RENDER_CAR_COUNTER_TOP + 2, numbers_white, numbers_white_mask, carsPassed / 10, 0);                           
+      Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT + 14, RENDER_CAR_COUNTER_TOP + 2, numbers_white, numbers_white_mask, carsPassed % 10, 0);
+    }
+
+
+    // Render gearbox and odometer ..
+    {
+      uint8_t xPos = 0;
+      uint8_t yPos = 0; 
+
+      switch (player.getX()) {
+
+        case 0 ... 35:
+          xPos = RENDER_GEARBOX_RHS_LEFT;
+          yPos = RENDER_GEARBOX_RHS_TOP;
+          drawOnLHS = false;
+          break;
+
+        case 36 ... 41:
+          if (!drawOnLHS) {
+            xPos = RENDER_GEARBOX_RHS_LEFT;
+            yPos = RENDER_GEARBOX_RHS_TOP;
+            drawOnLHS = false;
+          }
+          else {
+            xPos = RENDER_GEARBOX_LHS_LEFT;
+            yPos = RENDER_GEARBOX_LHS_TOP;
+            drawOnLHS = true;
+          }
+          break;
+
+        case 42 ... 47:
+          if (!drawOnLHS) {
+            xPos = RENDER_GEARBOX_RHS_LEFT;
+            yPos = RENDER_GEARBOX_RHS_TOP;
+            drawOnLHS = false;
+          }
+          else {
+            xPos = RENDER_GEARBOX_LHS_LEFT;
+            yPos = RENDER_GEARBOX_LHS_TOP;
+            drawOnLHS = true;
+          }
+          break;
+
+        case 48 ... 85:
+          xPos = RENDER_GEARBOX_LHS_LEFT;
+          yPos = RENDER_GEARBOX_LHS_TOP;
+          drawOnLHS = true;
+          break;
+
+      }
+
+      Sprites::drawExternalMask(xPos, yPos, gearbox, gearbox_mask, 0, 0);
+
+      switch (gear) {
+
+        case 0:
+
+          switch (arduboy.getFrameCount(16)) {
+
+            case 0 ... 3:     xPos+= 2;   yPos+= 6;  break;
+            case 4 ... 7:     xPos+= 3;   yPos+= 6;  break;
+            case 8 ... 11:    xPos+= 4;   yPos+= 6;  break;
+            case 12 ... 15:   xPos+= 3;   yPos+= 6;  break;
+              
+          }
+          break;
+        
+        case 1:                                      break;
+        case 2:                           yPos+= 11; break;
+        case 3:               xPos+= 6;              break;
+        case 4:               xPos+= 6;   yPos+= 11; break;
+
+      }
+
+      Sprites::drawExternalMask(xPos, yPos, gearbox_knob, gearbox_knob_mask, 0, 0);
+
+      // Score ..
+      {
+        uint8_t digits[5] = {};
+        extractDigits(digits, player.getOdometer() / 10);
+        
+        for (uint8_t i = 0, x2 = (drawOnLHS ? RENDER_ODOMETER_LHS_LEFT : RENDER_ODOMETER_RHS_LEFT) - 7; i < 5; ++i, x2 -= 6) {
+          Sprites::drawOverwrite(x2, RENDER_ODOMETER_TOP, numbers_white, digits[i]);
+        }
+
+        Sprites::drawOverwrite((drawOnLHS ? RENDER_ODOMETER_LHS_LEFT : RENDER_ODOMETER_RHS_LEFT), RENDER_ODOMETER_TOP, numbers_black, player.getOdometer() % 10);
+        
+      }
 
     }
 
-    Sprites::drawExternalMask(xPos, yPos, gearbox_knob, gearbox_knob_mask, 0, 0);
-
   }
-
-
 
 }
 
-uint8_t determineOtherCarArrayIndex(uint8_t row, OtherCar *otherCar) {
+uint8_t determineOtherCarArrayIndex(OtherCar *otherCar) {
 
   for (uint8_t i = 0; i < HORIZON_COL_COUNT; i ++) {
 

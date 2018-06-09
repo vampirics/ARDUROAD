@@ -7,6 +7,7 @@
 #include "src/entity/Player.h"
 #include "src/entity/OtherCars.h"
 #include "src/entity/OtherCar.h"
+#include "src/utils/Utils.h"
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 

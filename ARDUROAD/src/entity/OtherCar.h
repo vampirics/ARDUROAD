@@ -26,7 +26,7 @@ class OtherCar {
 
     // Methods ..
 
-    bool isVisible();
+    bool isVisible(TimeOfDay timeOfDay);
     ImageSize getImageSize();
     uint8_t getImageWidthHalf();
     uint8_t getYOffset();
@@ -155,8 +155,22 @@ uint8_t OtherCar::getYDisplay() {
 
 }
 
-bool OtherCar::isVisible() {
+bool OtherCar::isVisible(TimeOfDay timeOfDay) {
+//return (_y.getInteger() > DIST_6_BEGIN && _y.getInteger() < 64);
+  switch (timeOfDay) {
 
-  return (_y.getInteger() > DIST_6_BEGIN && _y.getInteger() < 64);
+    case TimeOfDay::Dawn:
+    case TimeOfDay::Dusk:
+      return (_y.getInteger() > DIST_6_BEGIN_DUSK && _y.getInteger() < 64);
+
+    case TimeOfDay::Day:
+      return (_y.getInteger() > DIST_6_BEGIN_DAY && _y.getInteger() < 64);
+    
+    case TimeOfDay::Night:
+      return (_y.getInteger() > DIST_6_BEGIN_NIGHT && _y.getInteger() < 64);
+
+  }
+
+  return true;
 
 }

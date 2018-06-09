@@ -21,8 +21,14 @@ static const uint8_t FRAME_RATE_16                = 16;
 
 static const uint8_t FRAME_COUNT_HORIZON_X        = 3;
 
+static const uint8_t HORIZON_HEIGHT_DAY           = 10;
+static const uint8_t HORIZON_HEIGHT_DUSK          = 9;
+static const uint8_t HORIZON_HEIGHT_NIGHT         = 15;
 
-static const int8_t DIST_6_BEGIN                  = -5;
+static const int8_t DIST_6_BEGIN                  = HORIZON_HEIGHT_DAY - 15;      // -5
+static const int8_t DIST_6_BEGIN_DAY              = HORIZON_HEIGHT_DAY - 15;      // -5
+static const int8_t DIST_6_BEGIN_DUSK             = HORIZON_HEIGHT_DUSK - 15;     // -6
+static const int8_t DIST_6_BEGIN_NIGHT            = HORIZON_HEIGHT_NIGHT - 15;    // -0
 static const int8_t DIST_6_END                    = -2;
 static const int8_t DIST_5_BEGIN                  = -1;
 static const int8_t DIST_5_END                    = 4;
@@ -38,6 +44,10 @@ static const int8_t OTHER_CAR_Y_MIN               = -50;
 static const int8_t OTHER_CAR_Y_MAX               = 100;
 
 static const int16_t TICKS_IN_A_PERIOD            = 500;
+static const int16_t DIRT_CLOUD_MAX               = 15;
+static const int16_t DIRT_CLOUD_DIVISOR           = 4;
+
+
 
 
 
