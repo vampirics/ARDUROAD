@@ -69,8 +69,10 @@ template<typename T> T absT(const T & v) {
 enum class GameState : uint8_t {
 
   VSBoot,
+  SplashScreen_Init,
   SplashScreen,
   Credits,
+  PlayGame_Init,
   PlayGame,
   GameOver_Init,  
   GameOver,  

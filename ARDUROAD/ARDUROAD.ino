@@ -15,7 +15,7 @@
 #endif
 
 #ifdef USE_ATMLIB
-#include "song.h"
+#include "src/songs/song.h"
 #include <ATMlib.h>
 #endif
 
@@ -49,6 +49,7 @@ OtherCar car3;
 OtherCar *otherCarsOnly[] = { &car0, &car1, &car2, &car3 };
 Base *allCars[] = { &car0, &car1, &car2, &car3, &player };
 
+FadeOutEffect fadeOutEffect;
 FadeInEffect fadeInEffect;
 HighScore highScore;
 uint8_t horizonIncrement = 0;
@@ -67,12 +68,14 @@ void setup() {
   arduboy.systemButtons();
   arduboy.audio.begin();
   arduboy.initRandomSeed();
-  arduboy.setFrameRate(50);
+  arduboy.setFrameRate(75);
 
   player.setY(39);
 
   EEPROM_Utils::initEEPROM(false);
   
+  fadeOutEffect.reset();
+
 }
 
 void loop() {
@@ -87,6 +90,12 @@ void loop() {
       vsBoot();
       break;
 
+    case GameState::SplashScreen_Init:
+      arduboy.setFrameRate(75);
+      gameState = GameState::SplashScreen;
+      fadeInEffect.reset();
+      // break; Fall-through intentional.
+
     case GameState::SplashScreen:
       splashScreen();
       break;
@@ -95,9 +104,13 @@ void loop() {
       Credits();
       break;
 
+    case GameState::PlayGame_Init:
+      arduboy.setFrameRate(50);
+      gameState = GameState::PlayGame;
+      // break; Fall-through intentional.
+
     case GameState::PlayGame:
       playGame();
-      
       break;
 
     case GameState::GameOver_Init:

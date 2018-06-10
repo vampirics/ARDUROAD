@@ -151,7 +151,7 @@ Serial.println(slot.getOdometer());
     if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
     
       arduboy.setRGBled(0, 0, 0);
-      gameState = GameState::SplashScreen; 
+      gameState = GameState::SplashScreen_Init; 
       
     }
     

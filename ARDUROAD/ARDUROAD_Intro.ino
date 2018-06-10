@@ -72,30 +72,20 @@ void vsBoot() {
   // Vsoft logo display
   arduboy.drawBitmap(0, 0, bootlogo, 128, 64, WHITE);
 
-  if (!fadeInEffect.isComplete()) {
+  if (!fadeOutEffect.isComplete()) {
 
-    fadeInEffect.draw(arduboy);
-    fadeInEffect.update();
-
-  }
-  else {
-
-    gameState = GameState::SplashScreen;
+    fadeOutEffect.draw(arduboy);
+    fadeOutEffect.update();
 
   }
+
+  if (fadeOutEffect.isComplete()) gameState = GameState::SplashScreen_Init;
 
 }
 
 void splashScreen() {
 
   arduboy.drawBitmap(0, 0, SplashScreen, 128, 64, WHITE);
-  
-  if (!fadeInEffect.isComplete()) {
-
-    fadeInEffect.draw(arduboy);
-    fadeInEffect.update();
-
-  }
 
   font4x6.setCursor(74, 5);
   radioMusic();
@@ -117,6 +107,13 @@ void splashScreen() {
       break;
 
   }
+  
+  if (!fadeInEffect.isComplete()) {
+
+    fadeInEffect.draw(arduboy);
+    fadeInEffect.update();
+
+  }
 
   if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0) {
     radioStation--;
@@ -132,7 +129,7 @@ void splashScreen() {
     #endif
   }
 
-  if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::PlayGame; }
+  if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::PlayGame_Init; }
   if (arduboy.justPressed(B_BUTTON)) { gameState = GameState::Credits; }
   
 }
