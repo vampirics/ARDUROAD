@@ -183,23 +183,6 @@ void RenderScreen(uint8_t gear) {
   // Render other cars ..
 
   otherCars.sortCars();
-// Serial.println(".");
-// Serial.println("...................................");
-// Serial.print("Sorted Cars :");
-// for (uint8_t i = 0; i < NUMBER_OF_CARS_INC_PLAYER; i++) {
-//   Serial.print(otherCars.getSortedIndex(i));
-//   Serial.print(" ");
-// }
-// Serial.println(" ");
-// for (uint8_t i = 0; i < NUMBER_OF_CARS_INC_PLAYER; i++) {
-//   Base *baseCar = otherCars.getCarBase(otherCars.getSortedIndex(i));
-//   Serial.print((float)baseCar->getY());
-//   Serial.print(" ");
-// }
-// Serial.println(" ");
-
-
-
 
   for (uint8_t i = 0; i < NUMBER_OF_CARS_INC_PLAYER; i++) {
 

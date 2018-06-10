@@ -54,7 +54,7 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
       EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1, 0);
       EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2, 0);
 
-      odometer = (MAX_NUMBER_OF_SCORES - x) * 10;
+      odometer = 0; // (MAX_NUMBER_OF_SCORES - x) * 10;
       EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, odometer);
       EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, carsPassed);
 
@@ -74,13 +74,13 @@ void EEPROM_Utils::getSlot(uint8_t x, Slot *slot) {
   slot->setChar1(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1));
   slot->setChar2(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2));
 
-  const uint16_t odometer = 0;
+  uint16_t odometer = 0;
   EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, odometer);
   slot->setOdometer(odometer);
 
-  const uint16_t carsPassed = 0;
+  uint16_t carsPassed = 0;
   EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, carsPassed);
-  slot->setOdometer(carsPassed);
+  slot->setCarsPassed(carsPassed);
 
 }
 
@@ -89,6 +89,10 @@ void EEPROM_Utils::getSlot(uint8_t x, Slot *slot) {
  *   Save score and return index.  255 not good enough! 
  */
 uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
+Serial.print("EEPROM_Utils::saveScore ");
+Serial.print(odometer);
+Serial.print(" ");
+Serial.println(carsPassed);
 
   uint8_t idx = DO_NOT_EDIT_SLOT;
 
@@ -105,7 +109,7 @@ uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
     }
 
   }
-
+Serial.println(idx);
   if (idx < 255) {
 
     for (uint8_t x = MAX_NUMBER_OF_SCORES - 1; x > idx; x--) {
@@ -120,6 +124,10 @@ uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
       EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, slot.getCarsPassed());
 
     }
+Serial.print("ododo ");
+Serial.print(odometer);
+Serial.print(" ");
+Serial.println(carsPassed);
 
     EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx), 0);
     EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 1, 0);
@@ -127,6 +135,21 @@ uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
     EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 3, odometer);
     EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 5, carsPassed);
 
+  uint16_t xx = 0;
+  EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 3, xx);
+Serial.print("xx ");
+Serial.println(xx);
+
+  }
+
+  for (uint8_t x = 0; x < MAX_NUMBER_OF_SCORES; x++) {
+
+      Slot slot;
+      getSlot(x - 1, &slot);
+      Serial.print(x);
+      Serial.print(" ");
+      Serial.println(slot.getOdometer());
+      
   }
 
   return idx;

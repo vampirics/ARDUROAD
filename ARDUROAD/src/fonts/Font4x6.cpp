@@ -4,8 +4,6 @@
 #include "Font4x6.h"
 #include "Fonts.h"
 
-#define USE_LOWER_CASE
-
 #define FONT4x6_WIDTH 4
 #define FONT4x6_WIDTH_NARROW 3
 #define FONT4x6_HEIGHT 7
@@ -21,18 +19,12 @@
 #define CHAR_NUMBER_0 48
 #define CHAR_NUMBER_9 57
 
-#ifdef USE_LOWER_CASE
-  #define FONT_EXCLAMATION_INDEX 62
-  #define FONT_PERIOD_INDEX 63
-  #define FONT_QUESTION_INDEX 64
-  #define FONT_MINUS_INDEX 65
-  #define FONT_NUMBER_INDEX 52
-#else
-  #define FONT_EXCLAMATION_INDEX 36
-  #define FONT_PERIOD_INDEX 37
-  #define FONT_QUESTION_INDEX 38
-  #define FONT_NUMBER_INDEX 26
-#endif
+#define FONT_EXCLAMATION_INDEX 62
+#define FONT_PERIOD_INDEX 63
+#define FONT_QUESTION_INDEX 64
+#define FONT_MINUS_INDEX 65
+#define FONT_NUMBER_INDEX 52
+
 
 
 
@@ -72,11 +64,9 @@ void Font4x6::printChar(const char c, const int8_t x, int8_t y) {
       idx = c - CHAR_LETTER_A;
       break;
 
-#ifdef USE_LOWER_CASE    
     case CHAR_LETTER_A_LOWER ... CHAR_LETTER_Z_LOWER:
       idx = c - CHAR_LETTER_A_LOWER + 26;
       break;
-#endif
 
     case CHAR_NUMBER_0 ... CHAR_NUMBER_9:
       idx = c - CHAR_NUMBER_0 + FONT_NUMBER_INDEX;
