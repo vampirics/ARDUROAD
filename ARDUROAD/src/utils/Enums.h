@@ -4,6 +4,7 @@
 
 #define _USE_ATMLIB
 #define USE_ARDUBOYTONES
+#define _THICK_LINES
 
 static const uint8_t HORIZON_COL_COUNT            = 7;
 static const uint8_t HORIZON_ROW_COUNT            = 5;
@@ -48,8 +49,8 @@ static const int16_t TICKS_IN_A_PERIOD            = 500;
 static const int16_t DIRT_CLOUD_MAX               = 15;
 static const int16_t DIRT_CLOUD_DIVISOR           = 4;
 
-
-
+static const uint8_t MAX_NUMBER_OF_SCORES         = 5;
+static const uint8_t DO_NOT_EDIT_SLOT             = 255;
 
 
 // ----------------------------------------------------------------------------
@@ -71,6 +72,18 @@ enum class GameState : uint8_t {
   SplashScreen,
   Credits,
   PlayGame,
+  GameOver_Init,  
+  GameOver,  
+  SaveScore,
+  HighScore,
+
+};
+
+enum class CarType : uint8_t {
+
+  Unknown,
+  Player,
+  OtherCar,
 
 };
 

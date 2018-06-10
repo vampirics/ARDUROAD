@@ -91,7 +91,7 @@ void Credits() {
 
   if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
 
-    game.setState(GameState::SplashScreen); 
+    gameState = GameState::SplashScreen; 
     
   }
 

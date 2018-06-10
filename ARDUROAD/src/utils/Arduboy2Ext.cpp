@@ -206,6 +206,7 @@ void Arduboy2Ext::paintScreenWithBackground(uint8_t image[], TimeOfDay timeOfDay
 				nop \n\
 				nop \n\
 				nop \n\
+				nop \n\
 				");
 
 		}

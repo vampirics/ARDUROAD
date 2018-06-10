@@ -9,10 +9,11 @@ class Base {
 
   public: 
 
-    Base() {};
+    Base() { _carType = CarType::Unknown; };
   
     // Properties ..
 
+    CarType getCarType();
     int8_t getX();
     SQ7x8 getY();
     int8_t getXDelta();
@@ -25,6 +26,7 @@ class Base {
 
   protected:
 
+    CarType _carType;
     int8_t _x;
     SQ7x8 _y;
     int8_t _xDelta;
@@ -35,6 +37,10 @@ class Base {
 
 //--------------------------------------------------------------------------------------------------------------------------
 // Properties ..
+
+CarType Base::getCarType() {
+  return _carType;
+}
 
 int8_t Base::getX() {
   return _x;

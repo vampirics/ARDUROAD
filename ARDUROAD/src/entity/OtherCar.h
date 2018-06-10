@@ -10,18 +10,12 @@ class OtherCar : public Base {
 
   public: 
 
-    OtherCar() {};
+    OtherCar() { _carType = CarType::OtherCar; };
   
     // Properties ..
 
-    // int8_t getX();
-    // SQ7x8 getY();
-    // SQ7x8 getYDelta();
     bool isActive();
-
-    // void setX(int8_t val);
     void setY(SQ7x8 val);
-    // void setYDelta(SQ7x8 val);
     void setActive(bool val);
 
 
@@ -36,9 +30,6 @@ class OtherCar : public Base {
 
   private:
 
-    // int8_t _x;
-    // SQ7x8 _y;
-    // SQ7x8 _yDelta;
     bool _active;
 
 };
@@ -47,25 +38,9 @@ class OtherCar : public Base {
 //--------------------------------------------------------------------------------------------------------------------------
 // Properties ..
 
-// int8_t OtherCar::getX() {
-//   return _x;
-// }
-
-// SQ7x8 OtherCar::getY() {
-//   return _y;
-// }
-
-// SQ7x8 OtherCar::getYDelta() {
-//   return _yDelta;
-// }
-
 bool OtherCar::isActive() {
   return _active;
 }
-
-// void OtherCar::setX(int8_t val) {
-//   _x = val;
-// }
 
 void OtherCar::setY(SQ7x8 val) {
 
@@ -78,10 +53,6 @@ void OtherCar::setY(SQ7x8 val) {
   }
 
 }
-
-// void OtherCar::setYDelta(SQ7x8 val) {
-//   _yDelta = val;
-// }
 
 void OtherCar::setActive(bool val) {
   _active = val;
@@ -157,7 +128,7 @@ uint8_t OtherCar::getYDisplay() {
 }
 
 bool OtherCar::isVisible(TimeOfDay timeOfDay) {
-//return (_y.getInteger() > DIST_6_BEGIN && _y.getInteger() < 64);
+
   switch (timeOfDay) {
 
     case TimeOfDay::Dawn:
