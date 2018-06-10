@@ -19,14 +19,14 @@ bool drawOnLHS = true;
 
 // Render the horizon ..
 
-const uint8_t horizon[8] = { 0, 2, 6, 12, 20, 30, 42, 56 };
-const int16_t road_outside_left[8] =  { 53, 50, 46, 38, 29, 17, 2, -14 };
-const int16_t road_outside_right[8] = { 74, 77, 82, 89, 98, 110, 125, 142 };
-const int16_t road_marking_left[8] =  { 61, 60, 59, 57, 54, 51, 47, 42 };
-const int16_t road_marking_right[8] = { 67, 67, 69, 71, 73, 77, 81, 85 };
-const int8_t curve_offset[8] = { 32, 22, 14, 8, 4, 2, 1, 0 };
+const uint8_t PROGMEM horizon[8] =            { 0, 2, 6, 12, 20, 30, 42, 56 };
+const int16_t PROGMEM road_outside_left[8] =  { 53, 50, 46, 38, 29, 17, 2, -14 };
+const int16_t PROGMEM road_outside_right[8] = { 74, 77, 82, 89, 98, 110, 125, 142 };
+const int16_t PROGMEM road_marking_left[8] =  { 61, 60, 59, 57, 54, 51, 47, 42 };
+const int16_t PROGMEM road_marking_right[8] = { 67, 67, 69, 71, 73, 77, 81, 85 };
+const int8_t  PROGMEM curve_offset[8] =       { 32, 22, 14, 8, 4, 2, 1, 0 };
 
-const int8_t curve_offset1[8][32] = { 
+const int8_t  PROGMEM curve_offset1[8][32] = { 
                                       { 0,0,0,0,           // 0-7         Line 0
                                         0,0,0,0,           // 8-15
                                         0,0,0,0,           // 16-23
@@ -113,26 +113,23 @@ void RenderScreen(uint8_t gear) {
     int8_t curve0 = level.getCurve(col);
     int8_t curve1 = level.getCurve(col + 1);
 
-    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * curve_offset[HORIZON_COL_COUNT - absT(curve0)] + xPlayerOffset;
-    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * curve_offset[HORIZON_COL_COUNT - absT(curve1)] + xPlayerOffset;
+    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve0)]) + xPlayerOffset;
+    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve1)]) + xPlayerOffset;
 
-    int16_t x1 = road_outside_left[col] + curveOffset0;
-    uint8_t y1 = horizon[col] + HORIZON_OFFSET;
+    int16_t x1 = pgm_read_word_near(&road_outside_left[col]) + curveOffset0;
+    uint8_t y1 = pgm_read_byte(&horizon[col]) + HORIZON_OFFSET;
     
-    int16_t x2 = road_outside_left[col + 1] + curveOffset1;
-    uint8_t y2 = horizon[col + 1] + HORIZON_OFFSET;
+    int16_t x2 = pgm_read_word_near(&road_outside_left[col + 1]) + curveOffset1;
+    uint8_t y2 = pgm_read_byte(&horizon[col + 1]) + HORIZON_OFFSET;
 
-    int16_t x3 = road_outside_right[col] + curveOffset0;
-    int16_t x4 = road_outside_right[col + 1] + curveOffset1;
+    int16_t x3 = pgm_read_word_near(&road_outside_right[col]) + curveOffset0;
+    int16_t x4 = pgm_read_word_near(&road_outside_right[col + 1]) + curveOffset1;
 
-    int16_t x5 = road_marking_left[col] + curveOffset0;
-    int16_t x6 = road_marking_left[col + 1] + curveOffset1;
-    uint8_t y5 = horizon[col] + HORIZON_OFFSET;
-    int16_t x7 = road_marking_right[col] + curveOffset0;
-    int16_t x8 = road_marking_right[col + 1] + curveOffset1;
-    uint8_t y7 = horizon[col + 1] + HORIZON_OFFSET;
-
-
+    int16_t x5 = pgm_read_word_near(&road_marking_left[col]) + curveOffset0;
+    int16_t x6 = pgm_read_word_near(&road_marking_left[col + 1]) + curveOffset1;
+    int16_t x7 = pgm_read_word_near(&road_marking_right[col]) + curveOffset0;
+    int16_t x8 = pgm_read_word_near(&road_marking_right[col + 1]) + curveOffset1;
+    
     drawRoadSegment(x1, y1, x3, y1, x2, y2, x4, y2);
 
 
@@ -141,18 +138,26 @@ void RenderScreen(uint8_t gear) {
       switch (col) {
 
         case 2 ... 3:
-          arduboy.drawLine(x5, y5, x6, y7);
-          arduboy.drawLine(x7, y5, x8, y7);
+          arduboy.drawLine(x5, y1, x6, y2);
+          arduboy.drawLine(x7, y1, x8, y2);
           break;
 
         case 4 ... 5:
-          arduboy.drawLine(x5, y5, x6 + 1, y7);
-          arduboy.drawLine(x7, y5, x8 + 1, y7);
+          arduboy.drawLine(x5, y1, x6, y2);
+          arduboy.drawLine(x7, y1, x8, y2);
+          #ifdef THICK_LINES
+          arduboy.drawLine(x5, y1, x6 - 1, y2);
+          arduboy.drawLine(x7, y1, x8 + 1, y2);
+          #endif
           break;
 
         case 6 ... 7:
-          arduboy.drawLine(x5 + 1, y5, x6 + 1, y7);
-          arduboy.drawLine(x7 + 1, y5, x8 + 1, y7);
+          arduboy.drawLine(x5, y1, x6, y2);
+          arduboy.drawLine(x7, y1, x8, y2);
+          #ifdef THICK_LINES
+          arduboy.drawLine(x5 - 1, y1, x6 - 1, y2);
+          arduboy.drawLine(x7 + 1, y1, x8 + 1, y2);
+          #endif
           break;
 
       }
@@ -179,66 +184,81 @@ void RenderScreen(uint8_t gear) {
 
   otherCars.sortCars();
 
-  for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_CARS_INC_PLAYER; i++) {
 
-    OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));
+    Base *baseCar = otherCars.getCarBase(otherCars.getSortedIndex(i));
 
-    if (otherCar->isActive() && otherCar->isVisible(level.getTimeOfDay())) {
+    switch (baseCar->getCarType()) {
 
-      uint8_t otherCarY = otherCar->getYDisplay();
-      int8_t otherCarX = otherCar->getX();
-      uint8_t colIndex = determineOtherCarArrayIndex(otherCar);
-      int8_t curveIndex = level.getCurve(colIndex);
+      case CarType::OtherCar:
+        {
+          OtherCar *otherCar = (OtherCar *)baseCar;
+            
+          if (otherCar->isActive() && otherCar->isVisible(level.getTimeOfDay())) {
 
-      int8_t offset = (curveIndex < 0 ? -1 : 1) * curve_offset1[absT(curveIndex)][otherCarY / 2];
-      uint8_t w = otherCar->getImageWidthHalf();
-      int16_t x = 64 + ((otherCarX * otherCarY) / 56) + offset + xPlayerOffset;
+            uint8_t otherCarY = otherCar->getYDisplay();
+            int8_t otherCarX = otherCar->getX();
+            uint8_t colIndex = determineOtherCarArrayIndex(otherCar);
+            int8_t curveIndex = level.getCurve(colIndex);
 
-      switch (otherCar->getImageSize()) {
+            int8_t offset = (curveIndex < 0 ? -1 : 1) * pgm_read_byte(&curve_offset1[absT(curveIndex)][otherCarY / 2]);
+            uint8_t w = otherCar->getImageWidthHalf();
+            int16_t x = 64 + ((otherCarX * otherCarY) / 56) + offset + xPlayerOffset;
 
-        case ImageSize::Disappearing:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_6, opp_car_6_mask, 0, 0);
-          break;
+            switch (otherCar->getImageSize()) {
 
-        case ImageSize::Minute:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_5, opp_car_5_mask, 0, 0);
-          break;
+              case ImageSize::Disappearing:
+                Sprites::drawExternalMask(x - w, otherCarY, opp_car_6, opp_car_6_mask, 0, 0);
+                break;
 
-        case ImageSize::Tiny:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_4, opp_car_4_mask, 0, 0);
-          break;
+              case ImageSize::Minute:
+                Sprites::drawExternalMask(x - w, otherCarY, opp_car_5, opp_car_5_mask, 0, 0);
+                break;
 
-        case ImageSize::Small:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_3, opp_car_3_mask, 0, 0);
-          break;
+              case ImageSize::Tiny:
+                Sprites::drawExternalMask(x - w, otherCarY, opp_car_4, opp_car_4_mask, 0, 0);
+                break;
 
-        case ImageSize::Medium:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_2, opp_car_2_mask, 0, 0);
-          break;
+              case ImageSize::Small:
+                Sprites::drawExternalMask(x - w, otherCarY, opp_car_3, opp_car_3_mask, 0, 0);
+                break;
 
-        case ImageSize::Large:
-          Sprites::drawExternalMask(x - w, otherCarY, opp_car_1, opp_car_1_mask, 0, 0);
-          break;
-          
-      }
+              case ImageSize::Medium:
+                Sprites::drawExternalMask(x - w, otherCarY, opp_car_2, opp_car_2_mask, 0, 0);
+                break;
+
+              case ImageSize::Large:
+                Sprites::drawExternalMask(x - w, otherCarY, opp_car_1, opp_car_1_mask, 0, 0);
+                break;
+                
+            }
+
+          }
+
+        }
+        break;
+
+
+      case CarType::Player:
+
+        Sprites::drawExternalMask(player.getX(), 39, mainCar, mainCarMask, mainCarFrame, 0);
+        {
+          uint8_t dirtCloud = player.getDirtCloud();
+
+          if (dirtCloud > 0) {
+
+            Sprites::drawExternalMask(player.getX(), 57, dirt_cloud, dirt_cloud_mask, dirtCloud - 1, dirtCloud - 1);
+            player.decDirtCloud();
+
+          }
+        }
+        break;
+
+      case CarType::Unknown:
+        break;
 
     }
 
-  }
-
-
-  // Render player car last ..
-
-  Sprites::drawExternalMask(player.getX(), 39, mainCar, mainCarMask, mainCarFrame, 0);
-  {
-    uint8_t dirtCloud = player.getDirtCloud();
-
-    if (dirtCloud > 0) {
-
-      Sprites::drawExternalMask(player.getX(), 57, dirt_cloud, dirt_cloud_mask, dirtCloud - 1, dirtCloud - 1);
-      player.decDirtCloud();
-
-    }
   }
 
 

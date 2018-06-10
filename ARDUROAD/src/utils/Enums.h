@@ -4,12 +4,14 @@
 
 #define _USE_ATMLIB
 #define USE_ARDUBOYTONES
+#define _THICK_LINES
 
 static const uint8_t HORIZON_COL_COUNT            = 7;
 static const uint8_t HORIZON_ROW_COUNT            = 5;
 static const uint8_t HORIZON_OFFSET               = 8;
 
-static const uint8_t NUMBER_OF_OTHER_CARS         = 5;
+static const uint8_t NUMBER_OF_OTHER_CARS         = 4;
+static const uint8_t NUMBER_OF_CARS_INC_PLAYER    = NUMBER_OF_OTHER_CARS + 1;
 
 static const uint8_t FRAME_RATE_1                 = 1;
 static const uint8_t FRAME_RATE_2                 = 2;
@@ -47,8 +49,8 @@ static const int16_t TICKS_IN_A_PERIOD            = 500;
 static const int16_t DIRT_CLOUD_MAX               = 15;
 static const int16_t DIRT_CLOUD_DIVISOR           = 4;
 
-
-
+static const uint8_t MAX_NUMBER_OF_SCORES         = 5;
+static const uint8_t DO_NOT_EDIT_SLOT             = 255;
 
 
 // ----------------------------------------------------------------------------
@@ -67,8 +69,23 @@ template<typename T> T absT(const T & v) {
 enum class GameState : uint8_t {
 
   VSBoot,
+  SplashScreen_Init,
   SplashScreen,
+  Credits,
+  PlayGame_Init,
   PlayGame,
+  GameOver_Init,  
+  GameOver,  
+  SaveScore,
+  HighScore,
+
+};
+
+enum class CarType : uint8_t {
+
+  Unknown,
+  Player,
+  OtherCar,
 
 };
 
