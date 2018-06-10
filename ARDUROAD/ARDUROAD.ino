@@ -35,8 +35,8 @@ ATMsynth ATM;
 uint8_t fadeWidth;
 uint8_t radioStation = 0;
 uint8_t mainCarFrame = 0;
-uint8_t station = 0;
 uint8_t previousRadioStation;
+uint8_t introDelay = 0;
 
 Level level;
 Game game;
@@ -83,6 +83,12 @@ void loop() {
     case GameState::SplashScreen:
       arduboy.clear();
       splashScreen();
+      arduboy.display();
+      break;
+
+    case GameState::Credits:
+      arduboy.clear();
+      Credits();
       arduboy.display();
       break;
 

@@ -79,41 +79,39 @@ void vsBoot() {
   }
 }
 
-void splashScreen() 
-{
+void splashScreen() {
 
   arduboy.drawBitmap(0, 0, SplashScreen, 128, 64, WHITE);
   fadeIn();
   font4x6.setCursor(74, 5);
   radioMusic();
-  if (radioStation == 0)
-  { 
-    font4x6.print(F("RADIO OFF"));
-    station = 0;
-  }
-    else if (radioStation == 1)
-    { 
+
+  switch (radioStation) {
+
+    case 0:
+      font4x6.print(F("RADIO OFF"));
+      break;
+
+    case 1:
       font4x6.print(F("ARDX 89.9"));
       arduboy.drawLine(103, 25, 103, 28, WHITE);
-      station = 1;  
-    }
-      else if (radioStation == 2)
-      { 
-        font4x6.print(F("ROCK 94.6"));
-        arduboy.drawLine(113, 25, 113, 28, WHITE);
-        station = 2;
-      }
+      break;
 
-  if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0)
-  {
+    case 2:
+      font4x6.print(F("ROCK 94.6"));
+      arduboy.drawLine(113, 25, 113, 28, WHITE);
+      break;
+
+  }
+
+  if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0) {
     radioStation--;
     #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
     #endif
   }
 
-  if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2)
-  {
+  if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2) {
     radioStation++;
     #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
@@ -121,6 +119,8 @@ void splashScreen()
   }
 
   if (arduboy.justPressed(A_BUTTON)) { game.setState(GameState::PlayGame); }
+  if (arduboy.justPressed(B_BUTTON)) { game.setState(GameState::Credits); }
+  
 }
 
 void radioMusic() 

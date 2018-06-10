@@ -69,6 +69,7 @@ enum class GameState : uint8_t {
 
   VSBoot,
   SplashScreen,
+  Credits,
   PlayGame,
 
 };

@@ -4,3 +4,4 @@
 #include "Scenery.h"
 #include "Cars.h"
 #include "Numbers.h"
+#include "Credits.h"
