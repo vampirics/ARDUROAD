@@ -178,7 +178,19 @@ void RenderScreen(uint8_t gear) {
   // Render other cars ..
 
   otherCars.sortCars();
-
+//   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+//     OtherCar *otherCar = otherCars.getCar(i);
+//     Serial.print(i);
+//     Serial.print(":");
+//     Serial.print(otherCar->getYDisplay());
+//     Serial.print(", ");
+//   }
+// Serial.print(" -- ");
+//   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
+//     Serial.print(otherCars.getSortedIndex(i));
+//     Serial.print(" ");
+//   }
+// Serial.println(" ");
   for (uint8_t i = 0; i < NUMBER_OF_OTHER_CARS; i++) {
 
     OtherCar *otherCar = otherCars.getCar(otherCars.getSortedIndex(i));

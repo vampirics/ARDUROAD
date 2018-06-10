@@ -33,7 +33,7 @@ class OtherCars {
   private:
 
     OtherCar _otherCars[NUMBER_OF_OTHER_CARS];
-    uint8_t _order[NUMBER_OF_OTHER_CARS] = { 0, 1, 2, 3, 4 };
+    uint8_t _order[NUMBER_OF_OTHER_CARS];
 
 };
 
@@ -90,15 +90,15 @@ void OtherCars::sortCars() {
   for (uint8_t c = 0 ; c < ( n - 1 ); c++) {
   
     for (uint8_t d = 0 ; d < n - c - 1; d++) {
-  
-      if (_otherCars[d].getY() > _otherCars[d+1].getY()) {
+
+      if (_otherCars[_order[d]].getY() > _otherCars[_order[d+1]].getY()) {
         uint8_t swap = _order[d];
         _order[d]   = _order[d+1];
         _order[d+1] = swap;
       }
-  
+
     }
-  
+
   }
 
 }
@@ -111,9 +111,9 @@ void OtherCars::updatePositions(Player *player, uint8_t speed) {
 
     if (otherCar->isActive()) {
 
-      int8_t oldY = otherCar->getY().getInteger();
-      int8_t newY = otherCar->incY((speed / 2) - otherCar->getYDelta());
-      int8_t playerY = player->getY();
+      SQ7x8 oldY = otherCar->getY();
+      SQ7x8 newY = otherCar->incY((speed / 2) - otherCar->getYDelta());
+      SQ7x8 playerY = player->getY();
 
       if (oldY <= playerY && newY > playerY) {
         player->incCarsPassed();

@@ -2,10 +2,11 @@
 
 #include "../utils/Arduboy2Ext.h"
 #include "../utils/Enums.h"
+#include "Base.h"
 #include <FixedPoints.h>
 #include <FixedPointsCommon.h>
 
-class OtherCar {
+class OtherCar : public Base {
 
   public: 
 
@@ -13,14 +14,14 @@ class OtherCar {
   
     // Properties ..
 
-    int8_t getX();
-    SQ7x8 getY();
-    SQ7x8 getYDelta();
+    // int8_t getX();
+    // SQ7x8 getY();
+    // SQ7x8 getYDelta();
     bool isActive();
 
-    void setX(int8_t val);
+    // void setX(int8_t val);
     void setY(SQ7x8 val);
-    void setYDelta(SQ7x8 val);
+    // void setYDelta(SQ7x8 val);
     void setActive(bool val);
 
 
@@ -35,9 +36,9 @@ class OtherCar {
 
   private:
 
-    int8_t _x;
-    SQ7x8 _y;
-    SQ7x8 _yDelta;
+    // int8_t _x;
+    // SQ7x8 _y;
+    // SQ7x8 _yDelta;
     bool _active;
 
 };
@@ -46,25 +47,25 @@ class OtherCar {
 //--------------------------------------------------------------------------------------------------------------------------
 // Properties ..
 
-int8_t OtherCar::getX() {
-  return _x;
-}
+// int8_t OtherCar::getX() {
+//   return _x;
+// }
 
-SQ7x8 OtherCar::getY() {
-  return _y;
-}
+// SQ7x8 OtherCar::getY() {
+//   return _y;
+// }
 
-SQ7x8 OtherCar::getYDelta() {
-  return _yDelta;
-}
+// SQ7x8 OtherCar::getYDelta() {
+//   return _yDelta;
+// }
 
 bool OtherCar::isActive() {
   return _active;
 }
 
-void OtherCar::setX(int8_t val) {
-  _x = val;
-}
+// void OtherCar::setX(int8_t val) {
+//   _x = val;
+// }
 
 void OtherCar::setY(SQ7x8 val) {
 
@@ -78,9 +79,9 @@ void OtherCar::setY(SQ7x8 val) {
 
 }
 
-void OtherCar::setYDelta(SQ7x8 val) {
-  _yDelta = val;
-}
+// void OtherCar::setYDelta(SQ7x8 val) {
+//   _yDelta = val;
+// }
 
 void OtherCar::setActive(bool val) {
   _active = val;

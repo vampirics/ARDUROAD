@@ -9,7 +9,8 @@ static const uint8_t HORIZON_COL_COUNT            = 7;
 static const uint8_t HORIZON_ROW_COUNT            = 5;
 static const uint8_t HORIZON_OFFSET               = 8;
 
-static const uint8_t NUMBER_OF_OTHER_CARS         = 5;
+static const uint8_t NUMBER_OF_OTHER_CARS         = 4;
+static const uint8_t NUMBER_OF_CARS_INC_PLAYER    = NUMBER_OF_OTHER_CARS + 1;
 
 static const uint8_t FRAME_RATE_1                 = 1;
 static const uint8_t FRAME_RATE_2                 = 2;

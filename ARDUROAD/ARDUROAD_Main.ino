@@ -6,7 +6,7 @@ uint8_t clutchCounter = 0;
 
 void playGame() {
 
-  uint8_t speed = player.getYDelta();
+  uint8_t speed = player.getYDelta().getInteger();
   uint8_t frameDelay = player.getGear();
 
   if (clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
@@ -34,7 +34,7 @@ void playGame() {
 
   // Move road and horizon scenery .. 
 
-  if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X * (4 - speed))) {
+  if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X * (5 - speed))) {
     level.move(&arduboy, speed);
   }
 
