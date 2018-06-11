@@ -107,6 +107,9 @@ void loop() {
     case GameState::PlayGame_Init:
       arduboy.setFrameRate(50);
       gameState = GameState::PlayGame;
+      player.setYDelta(0);
+      player.setX(64 - PLAYER_WIDTH_HALF);
+      player.setXOffset(0);
       // break; Fall-through intentional.
 
     case GameState::PlayGame:

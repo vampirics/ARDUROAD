@@ -84,18 +84,27 @@ void Player::setCarsPassed(uint16_t val) {
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
 
+#define OFFSET_LHS 15
+#define OFFSET_LHS_MIN 5
+#define OFFSET_RHS 70
+#define OFFSET_RHS_MAX 80
+
 void Player::incX() {
 
-  if (_x < 82) _x++;
-  if (_x > 67) _xOffset = -(92-_x);
+  if (_x < OFFSET_RHS_MAX) _x++;
+
+  if (_x < OFFSET_LHS) _xOffset = OFFSET_LHS - _x;
+  else if (_x > OFFSET_RHS) _xOffset = -(_x - OFFSET_RHS);
   else _xOffset = 0;
 
 }
 
 void Player::decX() {
 
-  if (_x > 5) _x--;
-  if (_x < 15) _xOffset = 15-_x;
+  if (_x > OFFSET_LHS_MIN) _x--;
+
+  if (_x < OFFSET_LHS) _xOffset = OFFSET_LHS - _x;
+  else if (_x > OFFSET_RHS) _xOffset = -(_x - OFFSET_RHS);
   else _xOffset = 0;
 
 }
