@@ -28,9 +28,7 @@ void Credits() {
 
   // Draw logo and names ..
 
-  Sprites::drawOverwrite(37, 6, credits, 0);
-  arduboy.drawFastHLine(37, 25, 54, WHITE);
-  arduboy.drawFastHLine(37, 27, 54, WHITE);
+  Sprites::drawOverwrite(24, 13, credits, 0);
 
 
   // Display 'Press A' button after a short period of time ..
