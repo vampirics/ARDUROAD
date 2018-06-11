@@ -29,15 +29,9 @@ void HighScore() {
       uint8_t digits[6] = {};
       extractDigits(digits, slot.getOdometer());
     
-      Serial.print(" : ");
-      Serial.print(slot.getOdometer());
-      Serial.print(" ");
       for (uint8_t i = 0, x2 = xOffset + 49; i < 6; ++i, x2 -= 5) {
-        Serial.print(digits[i]);
-        Serial.print(" ");
         Sprites::drawOverwrite(x2, yOffset, font_images, (digits[i] + 52));
       }
-        Serial.println(" ");
       
     }
 
@@ -48,7 +42,7 @@ void HighScore() {
       uint8_t digits[3] = {};
       extractDigits(digits, slot.getCarsPassed());
       
-      for (uint8_t i = 0, x2 = xOffset + 70; i < 3; ++i, x2 -= 5) {
+      for (uint8_t i = 0, x2 = xOffset + 71; i < 3; ++i, x2 -= 5) {
         Sprites::drawOverwrite(x2, yOffset, font_images, (digits[i] + 52));
       }
       
