@@ -103,7 +103,7 @@ const int8_t  PROGMEM curve_offset1[8][32] = {
 
 void RenderScreen(uint8_t gear) {
 
-uint16_t m = micros();
+// uint16_t m = micros();
 
   int8_t xPlayerOffset = player.getXOffset();
 
@@ -167,10 +167,10 @@ uint16_t m = micros();
   }
 
 
-  uint16_t n = micros();
+  // uint16_t n = micros();
 
-  Serial.print(", time:");
-  Serial.println(n - m);
+  // Serial.print(", time:");
+  // Serial.println(n - m);
 
 
   // Render horizon
