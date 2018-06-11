@@ -182,11 +182,11 @@ void RenderScreen(uint8_t gear) {
 
   // Render other cars ..
 
-  otherCars.sortCars();
+  carController.sortCars();
 
   for (uint8_t i = 0; i < NUMBER_OF_CARS_INC_PLAYER; i++) {
 
-    Base *baseCar = otherCars.getCarBase(otherCars.getSortedIndex(i));
+    Base *baseCar = carController.getCarBase(carController.getSortedIndex(i));
 
     switch (baseCar->getCarType()) {
 

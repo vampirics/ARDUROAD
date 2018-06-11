@@ -15,8 +15,15 @@ class OtherCar : public Base {
     // Properties ..
 
     bool isActive();
+    uint8_t getTurnLength();
+    Direction getXDelta();
+
     void setY(SQ7x8 val);
+    void setXDelta(Direction val);
     void setActive(bool val);
+    void setTurnLength(uint8_t val);
+    void incX();
+    void decX();
 
 
     // Methods ..
@@ -27,10 +34,13 @@ class OtherCar : public Base {
     uint8_t getYOffset();
     uint8_t getYDisplay();
     int8_t incY(SQ7x8 val);
+    uint8_t decTurnLength();
 
   private:
 
     bool _active;
+    uint8_t _turnLength;
+    Direction _xDelta;
 
 };
 
@@ -40,6 +50,22 @@ class OtherCar : public Base {
 
 bool OtherCar::isActive() {
   return _active;
+}
+
+uint8_t OtherCar::getTurnLength() {
+  return _turnLength;
+}
+
+Direction OtherCar::getXDelta() {
+  return _xDelta;
+}
+
+void OtherCar::setTurnLength(uint8_t val) {
+  _turnLength = val;
+}
+
+void OtherCar::setXDelta(Direction val) {
+  _xDelta = val;
 }
 
 void OtherCar::setY(SQ7x8 val) {
@@ -74,6 +100,18 @@ int8_t OtherCar::incY(SQ7x8 val) {
 
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
+
+void OtherCar::incX() {
+  if (_x < OTHER_CAR_X_MAX) _x++;
+}
+
+void OtherCar::decX() {
+  if (_x > OTHER_CAR_X_MIN) _x--;
+}
+
+uint8_t OtherCar::decTurnLength() {
+  return --_turnLength;
+}
 
 ImageSize OtherCar::getImageSize() {
 

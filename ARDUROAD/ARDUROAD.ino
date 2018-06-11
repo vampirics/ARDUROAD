@@ -46,14 +46,14 @@ OtherCar car0;
 OtherCar car1;
 OtherCar car2;
 OtherCar car3;
-OtherCar *otherCarsOnly[] = { &car0, &car1, &car2, &car3 };
+OtherCar *carControllerOnly[] = { &car0, &car1, &car2, &car3 };
 Base *allCars[] = { &car0, &car1, &car2, &car3, &player };
 
 FadeOutEffect fadeOutEffect;
 FadeInEffect fadeInEffect;
 HighScore highScore;
 uint8_t horizonIncrement = 0;
-OtherCars otherCars(otherCarsOnly, allCars);
+CarController carController(carControllerOnly, allCars);
 
 void RenderScreen(/*Player *player, Enemy *enemies*/);
 
