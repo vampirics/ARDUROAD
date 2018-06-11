@@ -52,7 +52,6 @@ const unsigned char PROGMEM dirt_cloud_mask[] = {
 };
 
 
-
 const unsigned char PROGMEM opp_car_1[] = {
 39, 22,
 
@@ -148,6 +147,9 @@ const unsigned char PROGMEM opp_car_6[] = {
 const unsigned char PROGMEM opp_car_6_mask[] = {
 0x0e, 0x1f, 0x3f, 0x1f, 0x1f, 0x3f, 0x1f, 0x0e, 
 };
+
+const unsigned char *opp_cars[] = { opp_car_1, opp_car_2, opp_car_3, opp_car_4, opp_car_5, opp_car_6 };
+const unsigned char *opp_car_masks[] = { opp_car_1_mask, opp_car_2_mask, opp_car_3_mask, opp_car_4_mask, opp_car_5_mask, opp_car_6_mask };
 
 const unsigned char PROGMEM gearbox[] = {
 18, 17,

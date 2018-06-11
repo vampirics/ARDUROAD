@@ -193,8 +193,11 @@ void RenderScreen(uint8_t gear) {
       case CarType::OtherCar:
         {
           OtherCar *otherCar = (OtherCar *)baseCar;
+          TimeOfDay timeOfDay = level.getTimeOfDay();
+
+          if (otherCar->isActive() && otherCar->isVisible(timeOfDay)) {
             
-          if (otherCar->isActive() && otherCar->isVisible(level.getTimeOfDay())) {
+            uint8_t mask = (timeOfDay == TimeOfDay::Night ? 1 : 0);
 
             uint8_t otherCarY = otherCar->getYDisplay();
             int8_t otherCarX = otherCar->getX();
@@ -205,39 +208,13 @@ void RenderScreen(uint8_t gear) {
             uint8_t w = otherCar->getImageWidthHalf();
             int16_t x = 64 + ((otherCarX * otherCarY) / 56) + offset + xPlayerOffset;
 
-            switch (otherCar->getImageSize()) {
-
-              case ImageSize::Disappearing:
-                Sprites::drawExternalMask(x - w, otherCarY, opp_car_6, opp_car_6_mask, 0, 0);
-                break;
-
-              case ImageSize::Minute:
-                Sprites::drawExternalMask(x - w, otherCarY, opp_car_5, opp_car_5_mask, 0, 0);
-                break;
-
-              case ImageSize::Tiny:
-                Sprites::drawExternalMask(x - w, otherCarY, opp_car_4, opp_car_4_mask, 0, 0);
-                break;
-
-              case ImageSize::Small:
-                Sprites::drawExternalMask(x - w, otherCarY, opp_car_3, opp_car_3_mask, 0, 0);
-                break;
-
-              case ImageSize::Medium:
-                Sprites::drawExternalMask(x - w, otherCarY, opp_car_2, opp_car_2_mask, 0, 0);
-                break;
-
-              case ImageSize::Large:
-                Sprites::drawExternalMask(x - w, otherCarY, opp_car_1, opp_car_1_mask, 0, 0);
-                break;
-                
-            }
+            uint8_t index = static_cast<uint8_t>(otherCar->getImageSize());
+            Sprites::drawExternalMask(x - w, otherCarY, opp_cars[index], opp_car_masks[index], mask, 0);
 
           }
 
         }
         break;
-
 
       case CarType::Player:
 
@@ -270,10 +247,10 @@ void RenderScreen(uint8_t gear) {
     {
       uint8_t carsPassed = player.getCarsPassed();
 
-      Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  2, RENDER_CAR_COUNTER_TOP + 2, numbers_white, numbers_white_mask, carsPassed / 100, 0);                           
+      Sprites::drawOverwrite(RENDER_CAR_COUNTER_LEFT +  2, RENDER_CAR_COUNTER_TOP + 2, numbers_white, carsPassed / 100);                           
       carsPassed = carsPassed % 100;
-      Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT +  8, RENDER_CAR_COUNTER_TOP + 2, numbers_white, numbers_white_mask, carsPassed / 10, 0);                           
-      Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT + 14, RENDER_CAR_COUNTER_TOP + 2, numbers_white, numbers_white_mask, carsPassed % 10, 0);
+      Sprites::drawOverwrite(RENDER_CAR_COUNTER_LEFT +  8, RENDER_CAR_COUNTER_TOP + 2, numbers_white, carsPassed / 10);                           
+      Sprites::drawOverwrite(RENDER_CAR_COUNTER_LEFT + 14, RENDER_CAR_COUNTER_TOP + 2, numbers_white, carsPassed % 10);
     }
 
 
