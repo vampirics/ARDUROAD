@@ -206,7 +206,19 @@ void RenderScreen(uint8_t gear) {
 
             int8_t offset = (curveIndex < 0 ? -1 : 1) * pgm_read_byte(&curve_offset1[absT(curveIndex)][otherCarY / 2]);
             uint8_t w = otherCar->getImageWidthHalf();
-            int16_t x = 64 + ((otherCarX * otherCarY) / 56) + offset + xPlayerOffset;
+// Serial.print(otherCarX);
+// Serial.print(" ");
+// Serial.print(otherCarY);
+// Serial.print(" ");
+// Serial.print((otherCarX * otherCarY) / 39);
+// Serial.print(" ");
+// Serial.print(offset);
+// Serial.print(" ");
+// Serial.print(xPlayerOffset);
+            
+            int16_t x = 64 + ((otherCarX * otherCarY) / 39) + offset + xPlayerOffset;
+// Serial.print(" ");
+// Serial.println(x);
 
             uint8_t index = static_cast<uint8_t>(otherCar->getImageSize());
             Sprites::drawExternalMask(x - w, otherCarY, opp_cars[index], opp_car_masks[index], mask, 0);

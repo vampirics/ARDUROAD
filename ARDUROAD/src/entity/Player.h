@@ -14,6 +14,7 @@ class Player : public Base {
   
     // Properties ..
 
+    int8_t getXCentered();
     int8_t getXOffset();
     uint16_t getCarsPassed();
     uint16_t getOdometer();
@@ -88,6 +89,10 @@ void Player::setCarsPassed(uint16_t val) {
 #define OFFSET_LHS_MIN 5
 #define OFFSET_RHS 70
 #define OFFSET_RHS_MAX 80
+
+int8_t Player::getXCentered() {
+  return  _x - 64 + PLAYER_WIDTH_HALF;
+}
 
 void Player::incX() {
 
