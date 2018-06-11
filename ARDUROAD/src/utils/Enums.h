@@ -49,6 +49,7 @@ static const int8_t OTHER_CAR_X_MAX               = 37;
 static const int8_t OTHER_CAR_Y_MIN               = -50;
 static const int8_t OTHER_CAR_Y_MAX               = 100;
 static const uint8_t OTHER_CAR_MAX_WIDTH          = 20;
+static const uint8_t OTHER_CAR_TURN_LENGTH_MAX    = 30;
 
 static const int8_t LANE_WIDTH                    = 25;
 static const int8_t OTHER_CAR_X_LANE_1_START      = -37;

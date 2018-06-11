@@ -24,7 +24,7 @@ void playGame() {
 
   if (arduboy.isFrameCount(3, 0)) {
 
-    otherCars.updatePositions(&player, speed);
+    carController.updatePositions(&player, speed);
 
   }
 
@@ -44,7 +44,7 @@ void playGame() {
   {
     if (random(0, 10) == 0) {
 
-      OtherCar *otherCar = otherCars.getInactiveCar();
+      OtherCar *otherCar = carController.getInactiveCar();
 
       if (otherCar != nullptr) {
       
@@ -53,6 +53,8 @@ void playGame() {
           otherCar->setActive(true);
           otherCar->setX(random(OTHER_CAR_X_MIN, OTHER_CAR_X_MAX + 1));
           otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+          otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
+          otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
           switch (level.getTimeOfDay()) {
             
@@ -74,9 +76,11 @@ void playGame() {
         }
         else {
 
-          OtherCar *otherCar = otherCars.getInactiveCar();
+          OtherCar *otherCar = carController.getInactiveCar();
           otherCar->setActive(true);
           otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+          otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
+          otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
           otherCar->setY(80);
 
           int8_t playerXCentered = player.getXCentered();
