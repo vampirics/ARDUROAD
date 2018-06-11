@@ -103,7 +103,7 @@ const int8_t  PROGMEM curve_offset1[8][32] = {
 
 void RenderScreen(uint8_t gear) {
 
-//uint16_t m = micros();
+// uint16_t m = micros();
 
   int8_t xPlayerOffset = player.getXOffset();
 
@@ -130,7 +130,7 @@ void RenderScreen(uint8_t gear) {
     int16_t x7 = pgm_read_word_near(&road_marking_right[col]) + curveOffset0;
     int16_t x8 = pgm_read_word_near(&road_marking_right[col + 1]) + curveOffset1;
     
-    drawRoadSegment(x1, y1, x3, y1, x2, y2, x4, y2);
+    drawRoadSegment(x1, x3, y1, x2, x4, y2);
 
 
     if (col > 0 && (col % 2 == level.getBand())) {
@@ -384,23 +384,21 @@ uint8_t determineOtherCarArrayIndex(OtherCar *otherCar) {
 
 }
 
-void drawRoadSegment(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3) {
+void drawRoadSegment(int16_t x0, int16_t x1, uint8_t y01, int16_t x2, int16_t x3, uint8_t y23) {
 		
- 	const int8_t dy02 = y2 - y0;
- 	const int8_t dy13 = y3 - y1;
+ 	const int8_t dy = y23 - y01;
  	const int8_t dx02 = x2 - x0;
  	const int8_t dx13 = x3 - x1;
-	const int8_t yDiff = y0 - y1;
 	
 	int16_t sb = 0;
-	int16_t sc = dx13 * yDiff;
+	int16_t sc = 0;
 
-	for (int16_t y = y0; y <= y2; ++y) {
+	for (int16_t y = y01; y <= y23; ++y) {
 
 		if (y >= 64) break;
 	
-		int16_t a = x0 + sb / dy02;
-		int16_t d = x1 + sc / dy13;
+		int16_t a = x0 + sb / dy;
+		int16_t d = x1 + sc / dy;
 
 		arduboy.drawFastHLine(a, y, 2, WHITE);  
 		arduboy.drawFastHLine(a + 2, y, d - a - 3, BLACK);  
