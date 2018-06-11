@@ -284,13 +284,13 @@ void RenderScreen(uint8_t gear) {
 
       switch (player.getX()) {
 
-        case 0 ... 35:
+        case 0 ... 39:
           xPos = RENDER_GEARBOX_RHS_LEFT;
           yPos = RENDER_GEARBOX_RHS_TOP;
           drawOnLHS = false;
           break;
 
-        case 36 ... 41:
+        case 40 ... 42:
           if (!drawOnLHS) {
             xPos = RENDER_GEARBOX_RHS_LEFT;
             yPos = RENDER_GEARBOX_RHS_TOP;
@@ -303,7 +303,7 @@ void RenderScreen(uint8_t gear) {
           }
           break;
 
-        case 42 ... 47:
+        case 43 ... 46:
           if (!drawOnLHS) {
             xPos = RENDER_GEARBOX_RHS_LEFT;
             yPos = RENDER_GEARBOX_RHS_TOP;
@@ -316,7 +316,7 @@ void RenderScreen(uint8_t gear) {
           }
           break;
 
-        case 48 ... 85:
+        case 47 ... 85:
           xPos = RENDER_GEARBOX_LHS_LEFT;
           yPos = RENDER_GEARBOX_LHS_TOP;
           drawOnLHS = true;
@@ -348,6 +348,7 @@ void RenderScreen(uint8_t gear) {
       }
 
       Sprites::drawExternalMask(xPos, yPos, gearbox_knob, gearbox_knob_mask, 0, 0);
+
 
       // Score ..
       {
