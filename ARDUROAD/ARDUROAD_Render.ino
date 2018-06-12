@@ -124,41 +124,32 @@ void RenderScreen(uint8_t gear) {
 
     int16_t x3 = pgm_read_word_near(&road_outside_right[col]) + curveOffset0;
     int16_t x4 = pgm_read_word_near(&road_outside_right[col + 1]) + curveOffset1;
-
-    int16_t x5 = pgm_read_word_near(&road_marking_left[col]) + curveOffset0;
-    int16_t x6 = pgm_read_word_near(&road_marking_left[col + 1]) + curveOffset1;
-    int16_t x7 = pgm_read_word_near(&road_marking_right[col]) + curveOffset0;
-    int16_t x8 = pgm_read_word_near(&road_marking_right[col + 1]) + curveOffset1;
     
     drawRoadSegment(x1, x3, y1, x2, x4, y2);
 
 
     if (col > 0 && (col % 2 == level.getBand())) {
 
-      switch (col) {
+      const int16_t x5 = pgm_read_word_near(&road_marking_left[col]) + curveOffset0;
+      const int16_t x6 = pgm_read_word_near(&road_marking_left[col + 1]) + curveOffset1;
+      const int16_t x7 = pgm_read_word_near(&road_marking_right[col]) + curveOffset0;
+      const int16_t x8 = pgm_read_word_near(&road_marking_right[col + 1]) + curveOffset1;
 
-        case 2 ... 3:
-          arduboy.drawLine(x5, y1, x6, y2);
-          arduboy.drawLine(x7, y1, x8, y2);
-          break;
+      const uint8_t col2 = col / 2;
+      if(col2 > 0 && col2 < 4) {
 
-        case 4 ... 5:
-          arduboy.drawLine(x5, y1, x6, y2);
-          arduboy.drawLine(x7, y1, x8, y2);
-          #ifdef THICK_LINES
-          arduboy.drawLine(x5, y1, x6 - 1, y2);
-          arduboy.drawLine(x7, y1, x8 + 1, y2);
-          #endif
-          break;
-
-        case 6 ... 7:
-          arduboy.drawLine(x5, y1, x6, y2);
-          arduboy.drawLine(x7, y1, x8, y2);
-          #ifdef THICK_LINES
-          arduboy.drawLine(x5 - 1, y1, x6 - 1, y2);
-          arduboy.drawLine(x7 + 1, y1, x8 + 1, y2);
-          #endif
-          break;
+        arduboy.drawLine(x5, y1, x6, y2);
+        arduboy.drawLine(x7, y1, x8, y2);
+        #ifdef THICK_LINES
+        if(col2 == 2) {
+            arduboy.drawLine(x5, y1, x6 - 1, y2);
+            arduboy.drawLine(x7, y1, x8 + 1, y2);
+        }
+        else if(col2 == 3) {
+            arduboy.drawLine(x5 - 1, y1, x6 - 1, y2);
+            arduboy.drawLine(x7 + 1, y1, x8 + 1, y2);
+        }
+        #endif
 
       }
 
