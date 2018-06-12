@@ -38,7 +38,7 @@ class CarController {
 
     OtherCar *_carController[NUMBER_OF_OTHER_CARS];
     Base *_allCars[NUMBER_OF_CARS_INC_PLAYER];
-    uint8_t _order[NUMBER_OF_CARS_INC_PLAYER];
+    uint8_t _order[NUMBER_OF_CARS_INC_PLAYER] = { 0, 1, 2, 3, 4 };
 
 };
 
@@ -58,10 +58,6 @@ uint8_t CarController::getSortedIndex(uint8_t index) {
   return _order[index];
 }
 
-// void CarController::setCar(uint8_t index, OtherCar *val) {
-//   _carController[index] = val;
-// }
-
 
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
@@ -77,10 +73,6 @@ OtherCar* CarController::getInactiveCar() {
 }
 
 void CarController::sortCars() {
-
-  for (uint8_t i = 0 ; i < NUMBER_OF_CARS_INC_PLAYER; ++i) {
-    _order[i] = i;
-  }
 
   constexpr uint8_t n = NUMBER_OF_CARS_INC_PLAYER;
 

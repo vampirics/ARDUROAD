@@ -109,14 +109,11 @@ void RenderScreen(uint8_t gear) {
 
   for (uint8_t col = 0; col < HORIZON_COL_COUNT; col++) {
 
-
     int8_t curve0 = level.getCurve(col);
     int8_t curve1 = level.getCurve(col + 1);
 
-    int8_t curveOffset0 = pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve0)]) + xPlayerOffset;
-    if (curve0 < 0) curveOffset0 = -curveOffset0;
-    int8_t curveOffset1 = pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve1)]) + xPlayerOffset;
-    if (curve1 < 0) curveOffset1 = -curveOffset1;
+    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve0)]) + xPlayerOffset;
+    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve1)]) + xPlayerOffset;
 
     int16_t x1 = pgm_read_word_near(&road_outside_left[col]) + curveOffset0;
     uint8_t y1 = pgm_read_byte(&horizon[col]) + HORIZON_OFFSET;
@@ -126,7 +123,8 @@ void RenderScreen(uint8_t gear) {
 
     int16_t x3 = pgm_read_word_near(&road_outside_right[col]) + curveOffset0;
     int16_t x4 = pgm_read_word_near(&road_outside_right[col + 1]) + curveOffset1;
-    
+
+
     drawRoadSegment(x1, x3, y1, x2, x4, y2);
 
 
@@ -199,7 +197,7 @@ void RenderScreen(uint8_t gear) {
         int8_t curveIndex = level.getCurve(colIndex);
 
         int8_t offset = pgm_read_byte(&curve_offset1[absT(curveIndex)][otherCarY / 2]);
-        if(curveIndex < 0) offset = -offset;
+        if (curveIndex < 0) offset = -offset;
 
         uint8_t w = otherCar->getImageWidthHalf();
         int16_t x = 64 + ((otherCarX * otherCarY) / 39) + offset + xPlayerOffset;
