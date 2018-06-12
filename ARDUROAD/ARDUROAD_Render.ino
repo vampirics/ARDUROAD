@@ -198,8 +198,8 @@ void RenderScreen(uint8_t gear) {
             int8_t curveIndex = level.getCurve(colIndex);
 
             int8_t offset = pgm_read_byte(&curve_offset1[absT(curveIndex)][otherCarY / 2]);
-			if(curveIndex < 0) offset = -offset;
-			
+            if(curveIndex < 0) offset = -offset;
+
             uint8_t w = otherCar->getImageWidthHalf();
 // Serial.print(otherCarX);
 // Serial.print(" ");
