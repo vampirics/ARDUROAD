@@ -100,7 +100,7 @@ const int8_t  PROGMEM curve_offset1[8][32] = {
                                         0,0,0,0,}          // 56-63
 
                                     };
-									
+
 void RenderScreen(uint8_t gear) {
 
 // uint16_t m = micros();
