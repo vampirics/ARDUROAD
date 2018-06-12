@@ -103,7 +103,7 @@ const int8_t  PROGMEM curve_offset1[8][32] = {
 
 void RenderScreen(uint8_t gear) {
 
-// uint16_t m = micros();
+//  uint32_t m = micros();
 
   int8_t xPlayerOffset = player.getXOffset();
 
@@ -114,9 +114,9 @@ void RenderScreen(uint8_t gear) {
     int8_t curve1 = level.getCurve(col + 1);
 
     int8_t curveOffset0 = pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve0)]) + xPlayerOffset;
-    if(curve0 < 0) curveOffset0 = -curveOffset0;
+    if (curve0 < 0) curveOffset0 = -curveOffset0;
     int8_t curveOffset1 = pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve1)]) + xPlayerOffset;
-    if(curve1 < 1) curveOffset1 = -curveOffset1;
+    if (curve1 < 0) curveOffset1 = -curveOffset1;
 
     int16_t x1 = pgm_read_word_near(&road_outside_left[col]) + curveOffset0;
     uint8_t y1 = pgm_read_byte(&horizon[col]) + HORIZON_OFFSET;
@@ -138,20 +138,10 @@ void RenderScreen(uint8_t gear) {
       const int16_t x8 = pgm_read_word_near(&road_marking_right[col + 1]) + curveOffset1;
 
       const uint8_t col2 = col / 2;
-      if(col2 > 0 && col2 < 4) {
+      if (col2 > 0 && col2 < 4) {
 
         arduboy.drawLine(x5, y1, x6, y2);
         arduboy.drawLine(x7, y1, x8, y2);
-        #ifdef THICK_LINES
-        if(col2 == 2) {
-            arduboy.drawLine(x5, y1, x6 - 1, y2);
-            arduboy.drawLine(x7, y1, x8 + 1, y2);
-        }
-        else if(col2 == 3) {
-            arduboy.drawLine(x5 - 1, y1, x6 - 1, y2);
-            arduboy.drawLine(x7 + 1, y1, x8 + 1, y2);
-        }
-        #endif
 
       }
 
@@ -160,7 +150,7 @@ void RenderScreen(uint8_t gear) {
   }
 
 
-  // uint16_t n = micros();
+  // uint32_t n = micros();
 
   // Serial.print(", time:");
   // Serial.println(n - m);
@@ -181,65 +171,43 @@ void RenderScreen(uint8_t gear) {
 
     Base *baseCar = carController.getCarBase(carController.getSortedIndex(i));
 
-    switch (baseCar->getCarType()) {
+    if (baseCar->getId() == PLAYER_INDEX) {
 
-      case CarType::OtherCar:
-        {
-          OtherCar *otherCar = (OtherCar *)baseCar;
-          TimeOfDay timeOfDay = level.getTimeOfDay();
+        Sprites::drawPlusMask(player.getX(), 39, mainCar, mainCarFrame);
+        uint8_t dirtCloud = player.getDirtCloud();
 
-          if (otherCar->isActive() && otherCar->isVisible(timeOfDay)) {
-            
-            uint8_t mask = (timeOfDay == TimeOfDay::Night ? 1 : 0);
+        if (dirtCloud > 0) {
 
-            uint8_t otherCarY = otherCar->getYDisplay();
-            int8_t otherCarX = otherCar->getX();
-            uint8_t colIndex = determineOtherCarArrayIndex(otherCar);
-            int8_t curveIndex = level.getCurve(colIndex);
-
-            int8_t offset = pgm_read_byte(&curve_offset1[absT(curveIndex)][otherCarY / 2]);
-            if(curveIndex < 0) offset = -offset;
-
-            uint8_t w = otherCar->getImageWidthHalf();
-// Serial.print(otherCarX);
-// Serial.print(" ");
-// Serial.print(otherCarY);
-// Serial.print(" ");
-// Serial.print((otherCarX * otherCarY) / 39);
-// Serial.print(" ");
-// Serial.print(offset);
-// Serial.print(" ");
-// Serial.print(xPlayerOffset);
-            
-            int16_t x = 64 + ((otherCarX * otherCarY) / 39) + offset + xPlayerOffset;
-// Serial.print(" ");
-// Serial.println(x);
-
-            uint8_t index = static_cast<uint8_t>(otherCar->getImageSize());
-            Sprites::drawExternalMask(x - w, otherCarY, opp_cars[index], opp_car_masks[index], mask, 0);
-
-          }
+          Sprites::drawPlusMask(player.getX(), 57, dirt_cloud, dirtCloud - 1);
+          player.decDirtCloud();
 
         }
-        break;
 
-      case CarType::Player:
+    }
+    else {
 
-        Sprites::drawExternalMask(player.getX(), 39, mainCar, mainCarMask, mainCarFrame, 0);
-        {
-          uint8_t dirtCloud = player.getDirtCloud();
+      OtherCar *otherCar = (OtherCar *)baseCar;
+      TimeOfDay timeOfDay = level.getTimeOfDay();
 
-          if (dirtCloud > 0) {
+      if (otherCar->isActive() && otherCar->isVisible(timeOfDay)) {
+        
+        uint8_t mask = (timeOfDay == TimeOfDay::Night ? 1 : 0);
 
-            Sprites::drawExternalMask(player.getX(), 57, dirt_cloud, dirt_cloud_mask, dirtCloud - 1, dirtCloud - 1);
-            player.decDirtCloud();
+        uint8_t otherCarY = otherCar->getYDisplay();
+        int8_t otherCarX = otherCar->getX();
+        uint8_t colIndex = determineOtherCarArrayIndex(otherCar);
+        int8_t curveIndex = level.getCurve(colIndex);
 
-          }
-        }
-        break;
+        int8_t offset = pgm_read_byte(&curve_offset1[absT(curveIndex)][otherCarY / 2]);
+        if(curveIndex < 0) offset = -offset;
 
-      case CarType::Unknown:
-        break;
+        uint8_t w = otherCar->getImageWidthHalf();
+        int16_t x = 64 + ((otherCarX * otherCarY) / 39) + offset + xPlayerOffset;
+
+        uint8_t index = static_cast<uint8_t>(otherCar->getImageSize());
+        Sprites::drawPlusMask(x - w, otherCarY, opp_cars[index], mask);
+
+      }
 
     }
 
@@ -250,7 +218,7 @@ void RenderScreen(uint8_t gear) {
   
   if (showGauges) {
       
-    Sprites::drawExternalMask(RENDER_CAR_COUNTER_LEFT, RENDER_CAR_COUNTER_TOP, CarCounter, CarCounterMask, 0, 0);
+    Sprites::drawPlusMask(RENDER_CAR_COUNTER_LEFT, RENDER_CAR_COUNTER_TOP, CarCounter, 0);
     {
       uint8_t carsPassed = player.getCarsPassed();
 
@@ -308,8 +276,8 @@ void RenderScreen(uint8_t gear) {
 
       }
 
-      Sprites::drawExternalMask(xPos, yPos, gearbox, gearbox_mask, 0, 0);
-	  
+      Sprites::drawPlusMask(xPos, yPos, gearbox, 0);
+
       static const uint8_t gearLookup[] PROGMEM = { 2, 3, 4, 3, };
 	        
       switch (gear) {
@@ -329,7 +297,7 @@ void RenderScreen(uint8_t gear) {
 
       }
 
-      Sprites::drawExternalMask(xPos, yPos, gearbox_knob, gearbox_knob_mask, 0, 0);
+      Sprites::drawPlusMask(xPos, yPos, gearbox_knob, 0);
 
 
       // Score ..

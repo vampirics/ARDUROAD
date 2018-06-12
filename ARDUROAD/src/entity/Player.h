@@ -10,8 +10,9 @@ class Player : public Base {
 
   public: 
 
-    Player() { _carType = CarType::Player; };
-  
+    Player(uint8_t id) : Base(id) {};
+
+
     // Properties ..
 
     int8_t getXCentered();
@@ -22,7 +23,7 @@ class Player : public Base {
 
     void setXOffset(int8_t val);
     void setCarsPassed(uint16_t val);
-    uint8_t getGear();
+    uint8_t getFrameDelay();
 
 
     // Methods ..
@@ -57,7 +58,7 @@ int8_t Player::getXOffset() {
   return _xOffset;
 }
 
-uint8_t Player::getGear() {
+uint8_t Player::getFrameDelay() {
   return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
 }
 

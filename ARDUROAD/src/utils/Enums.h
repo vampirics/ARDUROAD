@@ -41,6 +41,7 @@ static const int8_t DIST_3_END                    = 17;
 static const int8_t DIST_2_BEGIN                  = 18;
 static const int8_t DIST_2_END                    = 32;
 
+static const uint8_t PLAYER_INDEX                 = 0;
 static const uint8_t PLAYER_WIDTH                 = 44;
 static const uint8_t PLAYER_WIDTH_HALF            = PLAYER_WIDTH / 2;
 
@@ -93,14 +94,6 @@ enum class GameState : uint8_t {
   GameOver,  
   SaveScore,
   HighScore,
-
-};
-
-enum class CarType : uint8_t {
-
-  Unknown,
-  Player,
-  OtherCar,
 
 };
 

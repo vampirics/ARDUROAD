@@ -10,8 +10,9 @@ class OtherCar : public Base {
 
   public: 
 
-    OtherCar() { _carType = CarType::OtherCar; };
+    OtherCar(uint8_t id) : Base(id) {};
   
+
     // Properties ..
 
     bool isActive();

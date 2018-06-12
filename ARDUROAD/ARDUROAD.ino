@@ -41,11 +41,11 @@ uint8_t alternate = 0;
 GameState gameState = GameState::VSBoot;
 
 Level level;
-Player player;
-OtherCar car0;
-OtherCar car1;
-OtherCar car2;
-OtherCar car3;
+Player player(PLAYER_INDEX);
+OtherCar car0(1);
+OtherCar car1(2);
+OtherCar car2(3);
+OtherCar car3(4);
 OtherCar *carControllerOnly[] = { &car0, &car1, &car2, &car3 };
 Base *allCars[] = { &car0, &car1, &car2, &car3, &player };
 
