@@ -76,16 +76,24 @@ OtherCar* CarController::getInactiveCar() {
 
 }
 
-void CarController::sortCars()
-{
-	for (uint8_t i = 0 ; i < NUMBER_OF_CARS_INC_PLAYER; ++i)
-		_order[i] = i;
+void CarController::sortCars() {
 
-	uint8_t n = NUMBER_OF_CARS_INC_PLAYER;
+  for (uint8_t i = 0 ; i < NUMBER_OF_CARS_INC_PLAYER; ++i) {
+    _order[i] = i;
+  }
 
-	for (uint8_t i = 1; i < n; ++i)
-		for(uint8_t j = i; j > 0 && _allCars[_order[j]]->getY() <= _allCars[_order[j - 1]]->getY(); --j)
-			swap(_order[j], _order[j - 1]);
+  constexpr uint8_t n = NUMBER_OF_CARS_INC_PLAYER;
+
+  for (uint8_t i = 1; i < n; ++i) {
+  
+    for(uint8_t j = i; j > 0 && _allCars[_order[j]]->getY() <= _allCars[_order[j - 1]]->getY(); --j) {
+
+      swap(_order[j], _order[j - 1]);
+
+    }
+
+  }
+
 }
 
 void CarController::updatePositions(Player *player, uint8_t speed) {
