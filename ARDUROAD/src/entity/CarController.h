@@ -2,6 +2,7 @@
 
 #include "../utils/Arduboy2Ext.h"
 #include "../utils/Enums.h"
+#include "../utils/Utils.h"
 #include "OtherCar.h"
 
 class CarController {
@@ -75,28 +76,16 @@ OtherCar* CarController::getInactiveCar() {
 
 }
 
-void CarController::sortCars() {
+void CarController::sortCars()
+{
+	for (uint8_t i = 0 ; i < NUMBER_OF_CARS_INC_PLAYER; ++i)
+		_order[i] = i;
 
-  for (uint8_t x = 0 ; x < NUMBER_OF_CARS_INC_PLAYER; x++) {
-    _order[x] = x;
-  }
+	uint8_t n = NUMBER_OF_CARS_INC_PLAYER;
 
-  uint8_t n = NUMBER_OF_CARS_INC_PLAYER;
-
-  for (uint8_t c = 0 ; c < ( n - 1 ); c++) {
-  
-    for (uint8_t d = 0 ; d < n - c - 1; d++) {
-
-      if (_allCars[_order[d]]->getY() > _allCars[_order[d+1]]->getY()) {
-        uint8_t swap = _order[d];
-        _order[d]   = _order[d+1];
-        _order[d+1] = swap;
-      }
-
-    }
-
-  }
-
+	for (uint8_t i = 1; i < n; ++i)
+		for(uint8_t j = i; j > 0 && _allCars[_order[j]]->getY() <= _allCars[_order[j - 1]]->getY(); --j)
+			swap(_order[j], _order[j - 1]);
 }
 
 void CarController::updatePositions(Player *player, uint8_t speed) {
