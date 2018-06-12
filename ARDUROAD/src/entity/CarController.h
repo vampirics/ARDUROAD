@@ -33,6 +33,8 @@ class CarController {
     void sortCars();
     OtherCar* getInactiveCar();
     void updatePositions(Player *player, uint8_t speed);
+    void updateCarPosition(Player *player, OtherCar *carToUpdate, uint8_t speed);
+    bool collide(Rect rect1, Rect rect2);
 
   private:
 
@@ -98,54 +100,42 @@ void CarController::sortCars() {
 
 void CarController::updatePositions(Player *player, uint8_t speed) {
 
-  for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
+  // Use the sorted positions to move the cars ..
 
-    OtherCar *otherCar = _carController[x];
+  if (speed < 2) {
 
-    if (otherCar->isActive()) {
+    for (uint8_t x = 0 ; x < NUMBER_OF_CARS_INC_PLAYER; x++) {
 
+      Base *baseCar = _allCars[_order[x]];
 
-      // Update Y position ..
+      if (baseCar->getCarType() == CarType::OtherCar) {
 
-      SQ7x8 oldY = otherCar->getY();
-      SQ7x8 newY = otherCar->incY((speed / 2) - otherCar->getYDelta());
-      SQ7x8 playerY = player->getY();
+        OtherCar *otherCar = (OtherCar *)baseCar;
 
-      if ((oldY < playerY) && (newY >= playerY)) {
-        player->incCarsPassed();
-      }
+        if (otherCar->isActive()) { 
+          
+          updateCarPosition(player, otherCar, speed);
 
-      if ((oldY >= playerY) && (newY < playerY)) {
-        player->decCarsPassed();
-      }
-
-    
-
-
-      // Update X position ..
-
-      uint8_t turnLength = otherCar->getTurnLength();
-
-      if (turnLength == 0) {
-
-        otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
-        otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
+        }
 
       }
-      else {
 
-        switch (otherCar->getXDelta()) {
+    }
 
-          case Direction::Left:
-            otherCar->decX();
-            break;
+  }
+  else {
 
-          case Direction::Right:
-            otherCar->incX();
-            break;
+    for (uint8_t x = NUMBER_OF_CARS_INC_PLAYER; x > 0; x--) {
 
-          default:
-            break;
+      Base *baseCar = _allCars[_order[x]];
+
+      if (baseCar->getCarType() == CarType::OtherCar) {
+
+        OtherCar *otherCar = (OtherCar *)baseCar;
+
+        if (otherCar->isActive()) { 
+          
+          updateCarPosition(player, otherCar, speed);
 
         }
 
@@ -155,5 +145,121 @@ void CarController::updatePositions(Player *player, uint8_t speed) {
 
   }
 
+}
+
+void CarController::updateCarPosition(Player *player, OtherCar *carToUpdate, uint8_t speed) {
+
+
+  // Update Y position ..
+
+  SQ7x8 oldY = carToUpdate->getY();
+  SQ7x8 newY = carToUpdate->getY() + (speed / 2) - carToUpdate->getYDelta();
+
+  bool crash = false;
+
+  Rect rectCarToUpdate = { carToUpdate->getX(), newY.getInteger(), OTHER_CAR_MAX_WIDTH, 10 }; 
+
+Serial.println("");
+Serial.println("--------------------------------------");
+Serial.print("updateCarPosition (");
+Serial.print(carToUpdate->getId());
+Serial.println(")");
+
+  for (uint8_t x = 0 ; x < NUMBER_OF_CARS_INC_PLAYER; x++) {
+
+    Base *compareCar = _allCars[x];
+
+    if (carToUpdate->getId() != compareCar->getId()) {
+
+      Rect rectCarToCompare = { compareCar->getX(), compareCar->getY().getInteger(), OTHER_CAR_MAX_WIDTH, 10 }; 
+
+Serial.print("Compare (");
+Serial.print(carToUpdate->getId());
+Serial.print(":");
+Serial.print(rectCarToUpdate.x);
+Serial.print(",");
+Serial.print(rectCarToUpdate.y);
+Serial.print(",");
+Serial.print(rectCarToUpdate.width);
+Serial.print(",");
+Serial.print(rectCarToUpdate.height);
+Serial.print(") (");
+Serial.print(compareCar->getId());
+Serial.print(":");
+Serial.print(rectCarToCompare.x);
+Serial.print(",");
+Serial.print(rectCarToCompare.y);
+Serial.print(",");
+Serial.print(rectCarToCompare.width);
+Serial.print(",");
+Serial.print(rectCarToCompare.height);
+Serial.print(")");
+
+      if (collide(rectCarToUpdate, rectCarToCompare)) {
+Serial.println(" ******* Crash!");
+        crash = true;
+        break;
+
+      }
+Serial.println(" ");
+    }
+
+  }
+
+  if (!crash) {
+
+    carToUpdate->setY(newY);
+    SQ7x8 playerY = player->getY();
+
+    if ((oldY < playerY) && (newY >= playerY)) {
+      player->incCarsPassed();
+    }
+
+    if ((oldY >= playerY) && (newY < playerY)) {
+      player->decCarsPassed();
+    }
+
+  }
+
+
+
+  // Update X position ..
+
+  uint8_t turnLength = carToUpdate->getTurnLength();
+
+  if (turnLength == 0) {
+
+    carToUpdate->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
+    carToUpdate->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
+
+  }
+  else {
+
+    switch (carToUpdate->getXDelta()) {
+
+      case Direction::Left:
+        carToUpdate->decX();
+        break;
+
+      case Direction::Right:
+        carToUpdate->incX();
+        break;
+
+      default:
+        break;
+
+    }
+
+  }
+
+}
+
+bool CarController::collide(Rect rect1, Rect rect2) {
+
+  return !(rect2.x                >= rect1.x + rect1.width  ||
+           rect2.x + rect2.width  <= rect1.x                ||
+           rect2.y                >= rect1.y + rect1.height ||
+           rect2.y + rect2.height <= rect1.y);
+           
 }
 

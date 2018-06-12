@@ -7,7 +7,7 @@ uint8_t clutchCounter = 0;
 void playGame() {
 
   uint8_t speed = player.getYDelta().getInteger();
-  uint8_t frameDelay = player.getGear();
+  uint8_t frameDelay = player.getFrameDelay();
 
   if (clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
 
@@ -22,14 +22,14 @@ void playGame() {
 
   }
 
+
+  RenderScreen(speed);
+
   if (arduboy.isFrameCount(3, 0)) {
 
     carController.updatePositions(&player, speed);
 
   }
-
-
-  RenderScreen(speed);
 
 
   // Move road and horizon scenery .. 
@@ -123,7 +123,7 @@ void playGame() {
   }
   
 
-  //Handle player's keypresses ..
+  // Handle player's keypresses ..
 
   if (arduboy.pressed(A_BUTTON) && speed > 0) { 
 

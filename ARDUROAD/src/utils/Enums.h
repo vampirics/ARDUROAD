@@ -4,7 +4,6 @@
 
 #define _USE_ATMLIB
 #define USE_ARDUBOYTONES
-#define _THICK_LINES
 
 static const uint8_t HORIZON_COL_COUNT            = 7;
 static const uint8_t HORIZON_ROW_COUNT            = 5;
@@ -48,7 +47,8 @@ static const int8_t OTHER_CAR_X_MIN               = -37;
 static const int8_t OTHER_CAR_X_MAX               = 37;
 static const int8_t OTHER_CAR_Y_MIN               = -50;
 static const int8_t OTHER_CAR_Y_MAX               = 100;
-static const uint8_t OTHER_CAR_MAX_WIDTH          = 20;
+static const uint8_t OTHER_CAR_MAX_WIDTH_HALF     = 20;
+static const uint8_t OTHER_CAR_MAX_WIDTH          = 39;
 static const uint8_t OTHER_CAR_TURN_LENGTH_MAX    = 30;
 
 static const int8_t LANE_WIDTH                    = 25;
@@ -61,8 +61,8 @@ static const int8_t OTHER_CAR_X_LANE_3_END        = OTHER_CAR_X_LANE_3_START + L
 
 
 static const int16_t TICKS_IN_A_PERIOD            = 500;
-static const int16_t DIRT_CLOUD_MAX               = 15;
 static const int16_t DIRT_CLOUD_DIVISOR           = 4;
+static const int16_t DIRT_CLOUD_MAX               = (DIRT_CLOUD_DIVISOR * 4) - 1;
 
 static const uint8_t MAX_NUMBER_OF_SCORES         = 5;
 static const uint8_t DO_NOT_EDIT_SLOT             = 255;
