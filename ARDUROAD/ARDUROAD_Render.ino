@@ -100,7 +100,7 @@ const int8_t  PROGMEM curve_offset1[8][32] = {
                                         0,0,0,0,}          // 56-63
 
                                     };
-
+									
 void RenderScreen(uint8_t gear) {
 
 // uint16_t m = micros();
@@ -314,18 +314,16 @@ void RenderScreen(uint8_t gear) {
       }
 
       Sprites::drawExternalMask(xPos, yPos, gearbox, gearbox_mask, 0, 0);
-
+	  
+      static const uint8_t gearLookup[] PROGMEM = { 2, 3, 4, 3, };
+	        
       switch (gear) {
 
         case 0:
-
-          switch (arduboy.getFrameCount(16)) {
-
-            case 0 ... 3:     xPos+= 2;   yPos+= 6;  break;
-            case 4 ... 7:     xPos+= 3;   yPos+= 6;  break;
-            case 8 ... 11:    xPos+= 4;   yPos+= 6;  break;
-            case 12 ... 15:   xPos+= 3;   yPos+= 6;  break;
-              
+          {
+            const uint8_t index = (arduboy.getFrameCount(16) / 4);
+            xPos += pgm_read_byte(&gearLookup[index]);
+            yPos += 6;
           }
           break;
         
