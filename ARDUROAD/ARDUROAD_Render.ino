@@ -113,8 +113,10 @@ void RenderScreen(uint8_t gear) {
     int8_t curve0 = level.getCurve(col);
     int8_t curve1 = level.getCurve(col + 1);
 
-    int8_t curveOffset0 = (curve0 < 0 ? -1 : 1) * pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve0)]) + xPlayerOffset;
-    int8_t curveOffset1 = (curve1 < 0 ? -1 : 1) * pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve1)]) + xPlayerOffset;
+    int8_t curveOffset0 = pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve0)]) + xPlayerOffset;
+    if(curve0 < 0) curveOffset0 = -curveOffset0;
+    int8_t curveOffset1 = pgm_read_byte(&curve_offset[HORIZON_COL_COUNT - absT(curve1)]) + xPlayerOffset;
+    if(curve1 < 1) curveOffset1 = -curveOffset1;
 
     int16_t x1 = pgm_read_word_near(&road_outside_left[col]) + curveOffset0;
     uint8_t y1 = pgm_read_byte(&horizon[col]) + HORIZON_OFFSET;
