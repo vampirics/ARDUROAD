@@ -334,28 +334,30 @@ uint8_t determineOtherCarArrayIndex(OtherCar *otherCar) {
 }
 
 void drawRoadSegment(int16_t x0, int16_t x1, uint8_t y01, int16_t x2, int16_t x3, uint8_t y23) {
-		
+	
  	const int8_t dy = y23 - y01;
  	const int8_t dx02 = x2 - x0;
  	const int8_t dx13 = x3 - x1;
 	
-	int16_t sb = 0;
-	int16_t sc = 0;
+	const SQ7x8 xRatio = SQ7x8(dx02) / SQ7x8(dy);
+	const SQ7x8 yRatio = SQ7x8(dx13) / SQ7x8(dy);
+	
+	SQ7x8 sb = 0;
+	SQ7x8 sc = 0;
 
 	for (int16_t y = y01; y <= y23; ++y) {
 
 		if (y >= 64) break;
 	
-		int16_t a = x0 + sb / dy;
-		int16_t d = x1 + sc / dy;
+		const int8_t a = x0 + static_cast<int8_t>(sb);
+		const int8_t d = x1 + static_cast<int8_t>(sc);
+		sb += xRatio;
+		sc += yRatio;
 
 		arduboy.drawFastHLine(a, y, 2, WHITE);  
 		arduboy.drawFastHLine(a + 2, y, d - a - 3, BLACK);  
-		arduboy.drawFastHLine(d - 1, y, 2, WHITE);  
-
-		sb += dx02;
-		sc += dx13;
-	
+		arduboy.drawFastHLine(d - 1, y, 2, WHITE); 
+		
 	}
 
 }
