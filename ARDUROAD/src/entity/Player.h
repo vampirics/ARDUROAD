@@ -59,6 +59,7 @@ int8_t Player::getXOffset() {
 }
 
 uint8_t Player::getFrameDelay() {
+  Serial.println(absT(_yDelta.getInteger()));
   return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
 }
 

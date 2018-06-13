@@ -19,6 +19,9 @@
 #include <ATMlib.h>
 #endif
 
+#include "src/songs/Songs.h"
+
+
 Arduboy2Ext arduboy;
 Font4x6 font4x6 = Font4x6();
 Sprites sprite;

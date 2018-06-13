@@ -62,7 +62,7 @@ static const int8_t OTHER_CAR_X_LANE_3_END        = OTHER_CAR_X_LANE_3_START + L
 
 
 static const int16_t TICKS_IN_A_PERIOD            = 500;
-static const int16_t DIRT_CLOUD_MAX               = 15;
+static const int16_t DIRT_CLOUD_MAX               = 26;
 static const int16_t DIRT_CLOUD_DIVISOR           = 4;
 
 static const uint8_t MAX_NUMBER_OF_SCORES         = 5;

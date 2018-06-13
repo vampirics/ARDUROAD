@@ -143,12 +143,19 @@ void radioMusic()
       #ifdef USE_ATMLIB
       ATM.play(music1);
       #endif
+      #ifdef USE_ARDUBOYTONES
+      sound.tones(song2small); 
+      #endif
     }
     if (radioStation == 2)
     {
       #ifdef USE_ATMLIB
       ATM.play(music2);
       #endif
+      #ifdef USE_ARDUBOYTONES
+      sound.tones(song2); 
+      #endif
+
     }
     if (radioStation == 0)
     {
