@@ -42,6 +42,7 @@
         "streambuf": "cpp",
         "tuple": "cpp",
         "hashtable": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "type_traits": "cpp"
     }
 }

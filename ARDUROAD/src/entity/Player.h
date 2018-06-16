@@ -17,11 +17,13 @@ class Player : public Base {
 
     int8_t getXCentered();
     int8_t getXOffset();
+    uint16_t getCarsPassedInit();
     uint16_t getCarsPassed();
     uint16_t getOdometer();
     uint8_t getDirtCloud();
 
     void setXOffset(int8_t val);
+    void setCarsPassedInit(uint16_t val);
     void setCarsPassed(uint16_t val);
     uint8_t getFrameDelay();
 
@@ -44,6 +46,7 @@ class Player : public Base {
   private:
 
     int8_t _xOffset;
+    uint16_t _carsPassedInit;
     uint16_t _carsPassed;
     uint16_t _odometer;
     uint8_t _dirtCloud;
@@ -66,6 +69,10 @@ uint16_t Player::getCarsPassed() {
   return _carsPassed;
 }
 
+uint16_t Player::getCarsPassedInit() {
+  return _carsPassedInit;
+}
+
 uint16_t Player::getOdometer() {
   return _odometer;
 }
@@ -79,6 +86,11 @@ void Player::setXOffset(int8_t val) {
 }
 
 void Player::setCarsPassed(uint16_t val) {
+  _carsPassed = val;
+}
+
+void Player::setCarsPassedInit(uint16_t val) {
+  _carsPassedInit = val;
   _carsPassed = val;
 }
 
@@ -116,7 +128,7 @@ void Player::decX() {
 }
 
 void Player::incCarsPassed() {
-  _carsPassed++;
+  if (_carsPassed < _carsPassedInit) _carsPassed++;
 }
 
 void Player::decCarsPassed() {

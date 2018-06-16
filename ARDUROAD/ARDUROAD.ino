@@ -113,6 +113,7 @@ void loop() {
       player.setYDelta(0);
       player.setX(64 - PLAYER_WIDTH_HALF);
       player.setXOffset(0);
+      player.setCarsPassedInit(50);
       // break; Fall-through intentional.
 
     case GameState::PlayGame:

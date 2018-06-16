@@ -20,6 +20,20 @@ void playGame() {
 
     horizonIncrement++;
 
+    if (arduboy.isFrameCount(frameDelay * 4, 0)) {
+
+      int8_t curve0 = level.getCurve(0);
+      int8_t curve6 = level.getCurve(6);
+
+      if (curve0 != 0 && curve6 != 0) {
+
+        if (curve0 > 0) player.decX();
+        if (curve0 < 0) player.incX();
+
+      }
+
+    }
+
   }
 
   if (arduboy.isFrameCount(3, 0)) {
@@ -43,22 +57,20 @@ void playGame() {
   
   {
     if (random(0, 10) == 0) {
-Serial.print("Launch");
+
       OtherCar *otherCar = carController.getInactiveCar();
 
       if (otherCar != nullptr) {
-Serial.print(" - car free");
-      
+
         if (frameDelay < 2) {
           
           OtherCar *otherCarLowestY = carController.getActiveCar_LowestY();
-Serial.print(" - LowestY ");
 
           if (otherCarLowestY == nullptr || otherCarLowestY->getY() > 20) {
             
             otherCar->setActive(true);
             otherCar->setX(random(OTHER_CAR_X_MIN, OTHER_CAR_X_MAX + 1));
-            otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+            otherCar->setYDelta(randomSFixed<7,8>(0.5, 2));
             otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
             otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
@@ -90,7 +102,7 @@ Serial.print(" - LowestY ");
 
             OtherCar *otherCar = carController.getInactiveCar();
             otherCar->setActive(true);
-            otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+            otherCar->setYDelta(randomSFixed<7,8>(0.5, 2));
             otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
             otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
             otherCar->setY(80);
@@ -136,6 +148,8 @@ Serial.print(" - LowestY ");
 
   }
   
+
+
 
   //Handle player's keypresses ..
 

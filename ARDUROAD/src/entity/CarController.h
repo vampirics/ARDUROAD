@@ -131,11 +131,11 @@ void CarController::updatePositions(Player *player, uint8_t speed) {
       SQ7x8 playerY = player->getY();
 
       if ((oldY < playerY) && (newY >= playerY)) {
-        player->incCarsPassed();
+        player->decCarsPassed();
       }
 
       if ((oldY >= playerY) && (newY < playerY)) {
-        player->decCarsPassed();
+        player->incCarsPassed();
       }
 
     
