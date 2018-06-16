@@ -43,76 +43,90 @@ void playGame() {
   
   {
     if (random(0, 10) == 0) {
-
+Serial.print("Launch");
       OtherCar *otherCar = carController.getInactiveCar();
 
       if (otherCar != nullptr) {
+Serial.print(" - car free");
       
         if (frameDelay < 2) {
           
-          otherCar->setActive(true);
-          otherCar->setX(random(OTHER_CAR_X_MIN, OTHER_CAR_X_MAX + 1));
-          otherCar->setYDelta(randomSFixed<7,8>(1, 3));
-          otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
-          otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
+          OtherCar *otherCarLowestY = carController.getActiveCar_LowestY();
+Serial.print(" - LowestY ");
 
-          switch (level.getTimeOfDay()) {
+          if (otherCarLowestY == nullptr || otherCarLowestY->getY() > 20) {
             
-            case TimeOfDay::Dusk:
-            case TimeOfDay::Dawn:
-              otherCar->setY(DIST_6_BEGIN_DUSK);
-              break;
+            otherCar->setActive(true);
+            otherCar->setX(random(OTHER_CAR_X_MIN, OTHER_CAR_X_MAX + 1));
+            otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+            otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
+            otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
-            case TimeOfDay::Day:
-              otherCar->setY(DIST_6_BEGIN_DAY);
-              break;
+            switch (level.getTimeOfDay()) {
+              
+              case TimeOfDay::Dusk:
+              case TimeOfDay::Dawn:
+                otherCar->setY(DIST_6_BEGIN_DUSK);
+                break;
 
-            case TimeOfDay::Night:
-              otherCar->setY(DIST_6_BEGIN_NIGHT);
-              break;
+              case TimeOfDay::Day:
+                otherCar->setY(DIST_6_BEGIN_DAY);
+                break;
+
+              case TimeOfDay::Night:
+                otherCar->setY(DIST_6_BEGIN_NIGHT);
+                break;
+
+            }
 
           }
 
         }
         else {
 
-          OtherCar *otherCar = carController.getInactiveCar();
-          otherCar->setActive(true);
-          otherCar->setYDelta(randomSFixed<7,8>(1, 3));
-          otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
-          otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
-          otherCar->setY(80);
+          OtherCar *otherCarHighestY = carController.getActiveCar_HighestY();
 
-          int8_t playerXCentered = player.getXCentered();
+          if (otherCarHighestY == nullptr || otherCarHighestY->getY() < 65) {
 
-          int randMin = 0;
-          int randMax = 0;
+            OtherCar *otherCar = carController.getInactiveCar();
+            otherCar->setActive(true);
+            otherCar->setYDelta(randomSFixed<7,8>(1, 3));
+            otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
+            otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
+            otherCar->setY(80);
 
-          switch (playerXCentered) {
+            int8_t playerXCentered = player.getXCentered();
 
-            case -37 ... -17:
-              randMin = -17 + PLAYER_WIDTH;
-              randMax = OTHER_CAR_X_MAX;
-              break;
+            int randMin = 0;
+            int randMax = 0;
 
-            case -16 ... 0:
-              randMin = PLAYER_WIDTH;
-              randMax = OTHER_CAR_X_MAX;
-              break;
+            switch (playerXCentered) {
 
-            case 1 ... 16:
-              randMin = OTHER_CAR_X_MIN;
-              randMax = -PLAYER_WIDTH;
-              break;
+              case -37 ... -17:
+                randMin = -17 + PLAYER_WIDTH;
+                randMax = OTHER_CAR_X_MAX;
+                break;
 
-            case 17 ... 37:
-              randMin = OTHER_CAR_X_MIN;
-              randMax = 17 - PLAYER_WIDTH;
-              break;
+              case -16 ... 0:
+                randMin = PLAYER_WIDTH;
+                randMax = OTHER_CAR_X_MAX;
+                break;
+
+              case 1 ... 16:
+                randMin = OTHER_CAR_X_MIN;
+                randMax = -PLAYER_WIDTH;
+                break;
+
+              case 17 ... 37:
+                randMin = OTHER_CAR_X_MIN;
+                randMax = 17 - PLAYER_WIDTH;
+                break;
+
+            }
+
+            otherCar->setX(random(randMin, randMax + 1));
 
           }
-
-          otherCar->setX(random(randMin, randMax + 1));
 
         }
 

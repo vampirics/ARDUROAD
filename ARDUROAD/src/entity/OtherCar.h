@@ -76,6 +76,7 @@ void OtherCar::setY(SQ7x8 val) {
   int8_t y = _y.getInteger();
 
   if (y < OTHER_CAR_Y_MIN || y > OTHER_CAR_Y_MAX) {
+    _y = 0;
     _active = false;
   }
 
@@ -92,6 +93,7 @@ int8_t OtherCar::incY(SQ7x8 val) {
   int8_t y = _y.getInteger();
 
   if (y < OTHER_CAR_Y_MIN || y > OTHER_CAR_Y_MAX) {
+    _y = 0;
     _active = false;
   }
 

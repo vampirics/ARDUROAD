@@ -13,7 +13,7 @@ class CarController {
       
       for (uint8_t x = 0 ; x < NUMBER_OF_CARS_INC_PLAYER; x++) {
         _allCars[x] = allCars[x];
-        if (x < NUMBER_OF_OTHER_CARS) _carController[x] = carController[x];
+        if (x < NUMBER_OF_OTHER_CARS) _otherCars[x] = carController[x];
       }
 
     };
@@ -25,18 +25,19 @@ class CarController {
     Base *getCarBase(uint8_t index);
     uint8_t getSortedIndex(uint8_t index);
 
-    // void setCar(uint8_t index, OtherCar *val);
-
 
     // Methods ..
 
     void sortCars();
     OtherCar* getInactiveCar();
     void updatePositions(Player *player, uint8_t speed);
+    OtherCar* getActiveCar_LowestY();
+    OtherCar* getActiveCar_HighestY();
+
 
   private:
 
-    OtherCar *_carController[NUMBER_OF_OTHER_CARS];
+    OtherCar *_otherCars[NUMBER_OF_OTHER_CARS];
     Base *_allCars[NUMBER_OF_CARS_INC_PLAYER];
     uint8_t _order[NUMBER_OF_CARS_INC_PLAYER] = { 0, 1, 2, 3, 4 };
 
@@ -47,7 +48,7 @@ class CarController {
 // Properties ..
 
 OtherCar *CarController::getCar(uint8_t index) {
-  return _carController[index];
+  return _otherCars[index];
 }
 
 Base *CarController::getCarBase(uint8_t index) {
@@ -65,7 +66,33 @@ uint8_t CarController::getSortedIndex(uint8_t index) {
 OtherCar* CarController::getInactiveCar() {
 
   for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
-    if (!_carController[x]->isActive()) return _carController[x];
+    if (!_otherCars[x]->isActive()) return _otherCars[x];
+  }
+
+  return nullptr;
+
+}
+
+OtherCar* CarController::getActiveCar_LowestY() {
+
+  for (uint8_t x = NUMBER_OF_CARS_INC_PLAYER; x > 0; x--) {
+    if (_allCars[(x - 1)]->getId() != 0) {
+      OtherCar *otherCar = (OtherCar *)_allCars[(x - 1)];
+      if (otherCar->isActive()) return otherCar;
+    }
+  }
+
+  return nullptr;
+
+}
+
+OtherCar* CarController::getActiveCar_HighestY() {
+
+  for (uint8_t x = 0; x < NUMBER_OF_CARS_INC_PLAYER; x++) {
+    if (_allCars[x]->getId() != 0) {
+      OtherCar *otherCar = (OtherCar *)_allCars[x];
+      if (otherCar->isActive()) return otherCar;
+    }
   }
 
   return nullptr;
@@ -92,7 +119,7 @@ void CarController::updatePositions(Player *player, uint8_t speed) {
 
   for (uint8_t x = 0 ; x < NUMBER_OF_OTHER_CARS; x++) {
 
-    OtherCar *otherCar = _carController[x];
+    OtherCar *otherCar = _otherCars[x];
 
     if (otherCar->isActive()) {
 

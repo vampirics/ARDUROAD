@@ -4,7 +4,7 @@
 #include "../utils/Enums.h"
 #include "Base.h"
 
-const uint8_t PROGMEM speedLookup[] = {12, 5, 3, 2, 1};
+const uint8_t PROGMEM speedLookup[] = {255, 5, 3, 2, 1};
 
 class Player : public Base {
 
@@ -59,7 +59,6 @@ int8_t Player::getXOffset() {
 }
 
 uint8_t Player::getFrameDelay() {
-  Serial.println(absT(_yDelta.getInteger()));
   return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
 }
 
