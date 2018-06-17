@@ -35,7 +35,7 @@ class Level {
     void turnRight();
     void turnStraight();
     void decTurnLength();
-    void move(Arduboy2Ext *arduboy, uint8_t speed);
+    void moveHorizontally(Arduboy2Ext *arduboy, uint8_t speed);
     void incTime();
 
   private:
@@ -224,10 +224,13 @@ uint8_t Level::getTimeOfDayImageIndex() {
 
 }
 
-void Level::move(Arduboy2Ext *arduboy, uint8_t speed) {
+void Level::moveHorizontally(Arduboy2Ext *arduboy, uint8_t speed) {
 
   if (speed > 0) {
     
+
+    // Slide the horizon left or right ..
+
     switch (_curves[0]) {
 
       case -7 ... -6:     _horizonX += 1;  break;

@@ -55,7 +55,8 @@ Base *allCars[] = { &car0, &car1, &car2, &car3, &player };
 FadeOutEffect fadeOutEffect;
 FadeInEffect fadeInEffect;
 HighScore highScore;
-uint8_t horizonIncrement = 0;
+//uint8_t horizonIncrement = 0;
+UQ8x8 horizonIncrement = 0;
 CarController carController(carControllerOnly, allCars);
 
 void RenderScreen(/*Player *player, Enemy *enemies*/);

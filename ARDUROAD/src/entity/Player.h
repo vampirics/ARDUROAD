@@ -4,7 +4,8 @@
 #include "../utils/Enums.h"
 #include "Base.h"
 
-const uint8_t PROGMEM speedLookup[] = {255, 5, 3, 2, 1};
+//const uint8_t PROGMEM speedLookup[] = {255, 5, 3, 2, 1};
+UQ8x8 speedLookup[] = {255, 3.5, 2.75, 1.5, 1.0};
 
 class Player : public Base {
 
@@ -25,7 +26,6 @@ class Player : public Base {
     void setXOffset(int8_t val);
     void setCarsPassedInit(uint16_t val);
     void setCarsPassed(uint16_t val);
-    uint8_t getFrameDelay();
 
 
     // Methods ..
@@ -38,7 +38,8 @@ class Player : public Base {
     void resetOdometer();
     void decDirtCloud();
     void setDirtCloud();
-    
+    UQ8x8 getFrameDelay();
+
     boolean incYDelta();
     boolean decYDelta();
     boolean decelerate();
@@ -61,8 +62,9 @@ int8_t Player::getXOffset() {
   return _xOffset;
 }
 
-uint8_t Player::getFrameDelay() {
-  return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
+UQ8x8 Player::getFrameDelay() {
+//  return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
+  return speedLookup[absT(_yDelta.getInteger())];
 }
 
 uint16_t Player::getCarsPassed() {

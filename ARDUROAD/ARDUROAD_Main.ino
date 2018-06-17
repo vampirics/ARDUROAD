@@ -7,20 +7,24 @@ uint8_t clutchCounter = 0;
 void playGame() {
 
   uint8_t speed = player.getYDelta().getInteger();
-  uint8_t frameDelay = player.getFrameDelay();
+//  uint8_t frameDelay = player.getFrameDelay();
+  UQ8x8 frameDelay = player.getFrameDelay();
 
   if (clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
 
     if (horizonIncrement >= frameDelay) {
 
       level.incHorizonY(&player);
-      horizonIncrement = 0;
+      horizonIncrement = horizonIncrement - frameDelay.getInteger();
       
     }
 
-    horizonIncrement++;
+    horizonIncrement = horizonIncrement + 1;
 
-    if (arduboy.isFrameCount(frameDelay * 4, 0)) {
+
+    // Move car to outside of curve ..
+    
+    if (arduboy.isFrameCount(frameDelay.getInteger() * 4, 0)) {
 
       int8_t curve0 = level.getCurve(0);
       int8_t curve6 = level.getCurve(6);
@@ -36,6 +40,9 @@ void playGame() {
 
   }
 
+
+  // Update positions of other cars ..
+
   if (arduboy.isFrameCount(3, 0)) {
 
     carController.updatePositions(&player, speed);
@@ -46,17 +53,17 @@ void playGame() {
   RenderScreen(speed);
 
 
-  // Move road and horizon scenery .. 
+  // Move road and horizon scenery horizontally .. 
 
   if (arduboy.isFrameCount(FRAME_COUNT_HORIZON_X * (5 - speed))) {
-    level.move(&arduboy, speed);
+    level.moveHorizontally(&arduboy, speed);
   }
 
 
   // Launch another car?
   
   {
-    if (random(0, 10) == 0) {
+    //if (random(0, 10) == 0) {
 
       OtherCar *otherCar = carController.getInactiveCar();
 
@@ -70,7 +77,7 @@ void playGame() {
             
             otherCar->setActive(true);
             otherCar->setX(random(OTHER_CAR_X_MIN, OTHER_CAR_X_MAX + 1));
-            otherCar->setYDelta(randomSFixed<7,8>(0.5, 2));
+            otherCar->setYDelta(randomSFixed<7,8>(0.5, 1.5));
             otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
             otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
@@ -102,7 +109,7 @@ void playGame() {
 
             OtherCar *otherCar = carController.getInactiveCar();
             otherCar->setActive(true);
-            otherCar->setYDelta(randomSFixed<7,8>(0.5, 2));
+            otherCar->setYDelta(randomSFixed<7,8>(0.5, 1.5));
             otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
             otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
             otherCar->setY(80);
@@ -144,7 +151,7 @@ void playGame() {
 
       }
 
-    }
+    //}
 
   }
   

@@ -43,6 +43,7 @@
         "tuple": "cpp",
         "hashtable": "cpp",
         "unordered_map": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "locale": "cpp"
     }
 }
