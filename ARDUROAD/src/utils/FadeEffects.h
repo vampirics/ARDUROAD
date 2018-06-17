@@ -6,11 +6,15 @@ class FadeInEffect {
 
   private:
     uint8_t fadeWidth = WIDTH;
+    uint8_t upperY = 0;
+    uint8_t lowerY = HEIGHT;
     
   public:	
 
-    void reset(void) {
+    void reset(uint8_t upperY, uint8_t lowerY) {
       this->fadeWidth = WIDTH;
+      this->upperY = upperY;
+      this->lowerY = lowerY;
     }
     
     bool isComplete(void) const {
@@ -24,10 +28,11 @@ class FadeInEffect {
 
     void draw(Arduboy2Ext & arduboy) const {
 
-      for (uint8_t i = 0; i < (HEIGHT / 2); ++i) {
+      uint8_t lowerLimit = (lowerY - upperY) / 2;
+      for (uint8_t i = 0; i < lowerLimit; ++i) {
 
-        arduboy.drawFastHLine(0, (i * 2), this->fadeWidth, BLACK);
-        arduboy.drawFastHLine((WIDTH - this->fadeWidth), (i * 2) + 1, this->fadeWidth, BLACK);
+        arduboy.drawFastHLine(0, upperY + (i * 2), this->fadeWidth, BLACK);
+        arduboy.drawFastHLine((WIDTH - this->fadeWidth), upperY + (i * 2) + 1, this->fadeWidth, BLACK);
 
       }
 
@@ -38,27 +43,33 @@ class FadeInEffect {
 class FadeOutEffect {
 
   private:
-
-    uint8_t fadeWidth = 0;
+    uint8_t fadeWidth = WIDTH;
+    uint8_t upperY = 0;
+    uint8_t lowerY = HEIGHT;
     
-  public:
+  public:	
 
-    void reset(void) {
-      this->fadeWidth = 0;
+    void reset(uint8_t upperY, uint8_t lowerY) {
+      this->fadeWidth = WIDTH;
+      this->upperY = upperY;
+      this->lowerY = lowerY;
     }
+
     
     bool isComplete(void) const {
       return (this->fadeWidth >= WIDTH);
     }
 
     void update(void) {
-      if(this->fadeWidth < WIDTH)
+      if (this->fadeWidth < WIDTH)
         ++this->fadeWidth;
     }
 
     void draw(Arduboy2Ext & arduboy) const {
 
-      for(uint8_t i = 0; i < (HEIGHT / 2); ++i) {
+      uint8_t lowerLimit = upperY + ((lowerY - upperY) / 2);
+
+      for (uint8_t i = upperY; i < lowerLimit; ++i) {
 
         arduboy.drawFastHLine(0, (i * 2), this->fadeWidth, BLACK);
         arduboy.drawFastHLine((WIDTH - this->fadeWidth), (i * 2) + 1, this->fadeWidth, BLACK);

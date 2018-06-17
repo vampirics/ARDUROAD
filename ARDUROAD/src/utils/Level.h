@@ -36,7 +36,8 @@ class Level {
     void turnStraight();
     void decTurnLength();
     void moveHorizontally(Arduboy2Ext *arduboy, uint8_t speed);
-    void incTime();
+    bool incTime();
+    bool getTimeLow();
 
   private:
 
@@ -48,7 +49,7 @@ class Level {
     Direction _turnDirection = Direction::Straight;
     uint8_t _turnLengthMin = 8;
     uint8_t _turnLengthMax = 30;
-    TimeOfDay _timeOfDay = TimeOfDay::Dusk;
+    TimeOfDay _timeOfDay = TimeOfDay::Dawn;
     uint16_t _time = 0;
 
 };
@@ -200,7 +201,7 @@ void Level::decTurnLength() {
 
 }
 
-void Level::incTime() {
+bool Level::incTime() { // returns true if new day
 
   _time++;
   if (_time > TICKS_IN_A_PERIOD) {
@@ -208,7 +209,13 @@ void Level::incTime() {
     _timeOfDay++;
   }
 
+  return (_timeOfDay == TimeOfDay::Dawn && _time == 0);
 
+}
+
+bool Level::getTimeLow() {
+
+  return (_timeOfDay == TimeOfDay::Night && _time > TICKS_WHEN_TIME_IS_LOW);
 
 }
 

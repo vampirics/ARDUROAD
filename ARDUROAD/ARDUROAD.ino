@@ -58,6 +58,7 @@ HighScore highScore;
 //uint8_t horizonIncrement = 0;
 UQ8x8 horizonIncrement = 0;
 CarController carController(carControllerOnly, allCars);
+uint8_t carCounterBlink = 0;
 
 void RenderScreen(/*Player *player, Enemy *enemies*/);
 
@@ -78,7 +79,7 @@ void setup() {
 
   EEPROM_Utils::initEEPROM(false);
   
-  fadeOutEffect.reset();
+  fadeOutEffect.reset(0, HEIGHT);
 
 }
 
@@ -97,7 +98,7 @@ void loop() {
     case GameState::SplashScreen_Init:
       arduboy.setFrameRate(75);
       gameState = GameState::SplashScreen;
-      fadeInEffect.reset();
+      fadeInEffect.reset(0, HEIGHT);
       // break; Fall-through intentional.
 
     case GameState::SplashScreen:
@@ -110,33 +111,34 @@ void loop() {
 
     case GameState::PlayGame_Init:
       arduboy.setFrameRate(50);
-      gameState = GameState::PlayGame;
+      gameState = GameState::PlayGame_StartOfDay;
       player.setYDelta(0);
       player.setX(64 - PLAYER_WIDTH_HALF);
       player.setXOffset(0);
       player.setCarsPassedInit(50);
+      carCounterBlink = 0;
       // break; Fall-through intentional.
 
+    case GameState::PlayGame_StartOfDay:
     case GameState::PlayGame:
+    case GameState::PlayGame_EndOfPlay:
       playGame();
       break;
 
-    case GameState::GameOver_Init:
+     case GameState::GameOver_Init:
       gameState = GameState::GameOver;
-      fadeInEffect.reset();
-//      sound.tones(end_of_game);
-//      arduboy.setRGBled(0, 0, 0);
+      fadeInEffect.reset(14, 38);
       // break; Fall-through intentional.
    
     case GameState::GameOver:
-      GameOver();
+      playGame();
       break;
 
     case GameState::SaveScore:
       highScore.reset();
       highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getOdometer(), player.getCarsPassed()));
       gameState = GameState::HighScore;
-      fadeInEffect.reset();
+      fadeInEffect.reset(0, HEIGHT);
       // break; Fall-through intentional.
 
     case GameState::HighScore:
@@ -145,11 +147,20 @@ void loop() {
 
   }
 
-  if (gameState == GameState::PlayGame) {
-    arduboy.displayWithBackground(level.getTimeOfDay(), level.getHorizonY(), level.getBand());
-  }
-  else {
-    arduboy.display(true);
+  switch (gameState) {
+
+    case GameState::PlayGame:
+    case GameState::PlayGame_StartOfDay:
+    case GameState::PlayGame_EndOfPlay:
+    case GameState::GameOver_Init:
+    case GameState::GameOver:
+      arduboy.displayWithBackground(level.getTimeOfDay(), level.getHorizonY(), level.getBand());
+      break;
+
+    default:
+      arduboy.display(true);
+      break;
+
   }
 
 }

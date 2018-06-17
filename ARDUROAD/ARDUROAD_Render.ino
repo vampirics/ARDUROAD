@@ -219,17 +219,35 @@ void RenderScreen(uint8_t gear) {
 
   // Render car counter ..
   
-  if (showGauges) {
+  if (showGauges && gameState != GameState::GameOver) {
       
     Sprites::drawPlusMask(RENDER_CAR_COUNTER_LEFT, RENDER_CAR_COUNTER_TOP, CarCounter, 0);
-    {
+
+//    if (gameState == GameState::PlayGame || (gameState == GameState::PlayGame_StartOfDay && carCounterBlink % 2 == 0)) {
+    if (carCounterBlink % 2 == 0) {
+
       uint8_t carsPassed = player.getCarsPassed();
+      arduboy.setRGBled(0, 0, 0);
 
       Sprites::drawOverwrite(RENDER_CAR_COUNTER_LEFT +  2, RENDER_CAR_COUNTER_TOP + 2, numbers_white, carsPassed / 100);                           
       carsPassed = carsPassed % 100;
       Sprites::drawOverwrite(RENDER_CAR_COUNTER_LEFT +  8, RENDER_CAR_COUNTER_TOP + 2, numbers_white, carsPassed / 10);                           
       Sprites::drawOverwrite(RENDER_CAR_COUNTER_LEFT + 14, RENDER_CAR_COUNTER_TOP + 2, numbers_white, carsPassed % 10);
+
     }
+    else {
+
+      arduboy.fillRect(RENDER_CAR_COUNTER_LEFT + 2, RENDER_CAR_COUNTER_TOP + 2, 18, 8, BLACK);
+
+      if (gameState == GameState::PlayGame) {
+        arduboy.setRGBled(32, 0, 0);
+      }
+      else {
+        arduboy.setRGBled(0, 32, 0);
+      }
+
+    }
+
 
 
     // Render gearbox and odometer ..
@@ -317,6 +335,34 @@ void RenderScreen(uint8_t gear) {
       }
 
     }
+
+  }
+
+
+
+  // Display start of day logo?
+
+  if (gameState == GameState::PlayGame_StartOfDay) {
+
+    arduboy.fillRect(15, 23, 98, 18, BLACK);
+    arduboy.drawFastHLine(16, 24, 96, WHITE);
+    arduboy.drawFastHLine(16, 40, 96, WHITE);
+
+    font4x6.setCursor(18, 26);
+    font4x6.print(F("Day 00 Target 050"));
+
+  }
+
+  if (gameState == GameState::GameOver) {
+
+    Sprites::drawOverwrite(0, 14, GameOverBanner, 0);
+
+    if (!fadeInEffect.isComplete()) {
+
+      fadeInEffect.draw(arduboy);
+      fadeInEffect.update();
+
+    }    
 
   }
 

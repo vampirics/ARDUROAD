@@ -62,6 +62,8 @@ static const int8_t OTHER_CAR_X_LANE_3_END        = OTHER_CAR_X_LANE_3_START + L
 
 
 static const int16_t TICKS_IN_A_PERIOD            = 500;
+static const int16_t TICKS_WHEN_TIME_IS_LOW       = 300;
+
 static const int16_t DIRT_CLOUD_MAX               = 26;
 static const int16_t DIRT_CLOUD_DIVISOR           = 4;
 
@@ -89,7 +91,9 @@ enum class GameState : uint8_t {
   SplashScreen,
   Credits,
   PlayGame_Init,
+  PlayGame_StartOfDay,
   PlayGame,
+  PlayGame_EndOfPlay,
   GameOver_Init,  
   GameOver,  
   SaveScore,
