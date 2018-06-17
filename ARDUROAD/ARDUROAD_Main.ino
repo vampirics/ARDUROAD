@@ -76,7 +76,7 @@ void playGame() {
           
           otherCar->setActive(true);
           otherCar->setX(random(OTHER_CAR_X_MIN, OTHER_CAR_X_MAX + 1));
-          otherCar->setYDelta(randomSFixed<7,8>(0.5, 1.5));
+          otherCar->setYDelta(randomSFixed<7,8>(LAUNCH_SLOWER_SPEED, LAUNCH_FASTER_SPEED));
           otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
           otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
@@ -108,7 +108,7 @@ void playGame() {
 
           OtherCar *otherCar = carController.getInactiveCar();
           otherCar->setActive(true);
-          otherCar->setYDelta(randomSFixed<7,8>(0.5, 1.5));
+          otherCar->setYDelta(randomSFixed<7,8>(LAUNCH_SLOWER_SPEED, LAUNCH_FASTER_SPEED));
           otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
           otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
           otherCar->setY(80);
