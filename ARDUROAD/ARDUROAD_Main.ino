@@ -8,7 +8,6 @@ uint8_t clutchCounter = 0;
 void playGame() {
 
   uint8_t speed = player.getYDelta().getInteger();
-//  uint8_t frameDelay = player.getFrameDelay();
   UQ8x8 frameDelay = player.getFrameDelay();
 
   if (player.isAutomatic() || clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
@@ -151,8 +150,6 @@ void playGame() {
 
     }
 
-    //}
-
   }
   
 
@@ -182,11 +179,9 @@ void playGame() {
       }
 
       if (arduboy.justPressed(B_BUTTON)) { 
-Serial.println("down");        
         if (player.decYDelta()) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_AUTO_COUNTDOWN;  
-      
       }
 
       if (!arduboy.pressed(A_BUTTON) && !arduboy.pressed(B_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { 
