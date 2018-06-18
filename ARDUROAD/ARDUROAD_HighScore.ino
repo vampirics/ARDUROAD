@@ -42,7 +42,7 @@ void HighScore() {
       uint8_t digits[3] = {};
       extractDigits(digits, slot.getCarsPassed());
       
-      for (uint8_t i = 0, x2 = xOffset + 71; i < 3; ++i, x2 -= 5) {
+      for (uint8_t i = 0, x2 = xOffset + 70; i < 3; ++i, x2 -= 5) {
         Sprites::drawOverwrite(x2, yOffset, font_images, (digits[i] + 52));
       }
       
@@ -60,8 +60,8 @@ void HighScore() {
   
     if (alternate < 40) {
 
-      Sprites::drawOverwrite(xOffset - 6, yOffset + (highScore.getSlotNumber() * 8), arrowLeft, 0);
-      Sprites::drawOverwrite(xOffset + 77, yOffset + (highScore.getSlotNumber() * 8), arrowRight, 0);
+      Sprites::drawOverwrite(xOffset - 4, yOffset + (highScore.getSlotNumber() * 8) - 1, arrow, 0);
+      Sprites::drawOverwrite(xOffset + 76, yOffset + (highScore.getSlotNumber() * 8) - 1, arrow, 0);
     
     }
     else if (alternate > 80) {

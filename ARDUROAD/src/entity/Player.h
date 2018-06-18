@@ -5,7 +5,7 @@
 #include "Base.h"
 
 //const uint8_t PROGMEM speedLookup[] = {255, 5, 3, 2, 1};
-UQ8x8 speedLookup[] = {255, 3.5, 2.75, 1.5, 1.0};
+UQ8x8 speedLookup[] = {255, 3.0, 2.25, 1.5, 1.0};
 
 class Player : public Base {
 

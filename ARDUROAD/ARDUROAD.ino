@@ -79,7 +79,7 @@ void setup() {
 
   EEPROM_Utils::initEEPROM(false);
   
-  fadeOutEffect.reset(0, HEIGHT);
+  fadeOutEffect.reset(0, HEIGHT, 1);
 
 }
 
@@ -98,7 +98,7 @@ void loop() {
     case GameState::SplashScreen_Init:
       arduboy.setFrameRate(75);
       gameState = GameState::SplashScreen;
-      fadeInEffect.reset(0, HEIGHT);
+      fadeInEffect.reset(0, HEIGHT, 1);
       // break; Fall-through intentional.
 
     case GameState::SplashScreen:
@@ -127,7 +127,7 @@ void loop() {
 
      case GameState::GameOver_Init:
       gameState = GameState::GameOver;
-      fadeInEffect.reset(14, 38);
+      fadeInEffect.reset(14, 38, 2);
       // break; Fall-through intentional.
    
     case GameState::GameOver:
@@ -138,7 +138,7 @@ void loop() {
       highScore.reset();
       highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getOdometer(), player.getCarsPassed()));
       gameState = GameState::HighScore;
-      fadeInEffect.reset(0, HEIGHT);
+      fadeInEffect.reset(0, HEIGHT, 1);
       // break; Fall-through intentional.
 
     case GameState::HighScore:

@@ -15,7 +15,7 @@ void playGame() {
     if (horizonIncrement >= frameDelay) {
 
       level.incHorizonY(&player);
-      horizonIncrement = horizonIncrement - frameDelay.getInteger();
+      horizonIncrement = horizonIncrement - frameDelay;
       
     }
 

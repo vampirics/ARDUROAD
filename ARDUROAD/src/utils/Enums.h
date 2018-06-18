@@ -7,7 +7,7 @@
 #define _THICK_LINES
 
 #define LAUNCH_SLOWER_SPEED  0.5
-#define LAUNCH_FASTER_SPEED  1.5
+#define LAUNCH_FASTER_SPEED  1.65
 
 static const uint8_t HORIZON_COL_COUNT            = 7;
 static const uint8_t HORIZON_ROW_COUNT            = 5;

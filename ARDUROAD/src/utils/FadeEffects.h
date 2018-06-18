@@ -8,13 +8,15 @@ class FadeInEffect {
     uint8_t fadeWidth = WIDTH;
     uint8_t upperY = 0;
     uint8_t lowerY = HEIGHT;
+    uint8_t inc = 0;
     
   public:	
 
-    void reset(uint8_t upperY, uint8_t lowerY) {
+    void reset(uint8_t upperY, uint8_t lowerY, uint8_t inc) {
       this->fadeWidth = WIDTH;
       this->upperY = upperY;
       this->lowerY = lowerY;
+      this->inc = inc;
     }
     
     bool isComplete(void) const {
@@ -23,7 +25,8 @@ class FadeInEffect {
 
     void update(void) {
       if (this->fadeWidth > 0)
-        --this->fadeWidth;
+        this->fadeWidth-=inc;
+
     }
 
     void draw(Arduboy2Ext & arduboy) const {
@@ -46,13 +49,15 @@ class FadeOutEffect {
     uint8_t fadeWidth = WIDTH;
     uint8_t upperY = 0;
     uint8_t lowerY = HEIGHT;
+    uint8_t inc = 0;
     
   public:	
 
-    void reset(uint8_t upperY, uint8_t lowerY) {
+    void reset(uint8_t upperY, uint8_t lowerY, uint8_t inc) {
       this->fadeWidth = WIDTH;
       this->upperY = upperY;
       this->lowerY = lowerY;
+      this->inc = inc;
     }
 
     
@@ -62,7 +67,7 @@ class FadeOutEffect {
 
     void update(void) {
       if (this->fadeWidth < WIDTH)
-        ++this->fadeWidth;
+        this->fadeWidth+=inc;
     }
 
     void draw(Arduboy2Ext & arduboy) const {
