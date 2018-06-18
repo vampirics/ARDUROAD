@@ -73,6 +73,10 @@ static const int16_t DIRT_CLOUD_DIVISOR           = 4;
 static const uint8_t MAX_NUMBER_OF_SCORES         = 5;
 static const uint8_t DO_NOT_EDIT_SLOT             = 255;
 
+static const uint8_t TRANS_AUTO_COUNTDOWN         = 75;
+static const uint8_t TRANS_AUTO_COUNTDOWN_SHORT   = 30;
+static const uint8_t TRANS_MANUAL_COUNTDOWN       = 30;
+
 
 // ----------------------------------------------------------------------------
 //  A better absolute as it uses less memory than the standard one .. 

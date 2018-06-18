@@ -22,10 +22,12 @@ class Player : public Base {
     uint16_t getCarsPassed();
     uint16_t getOdometer();
     uint8_t getDirtCloud();
+    bool isAutomatic();
 
     void setXOffset(int8_t val);
     void setCarsPassedInit(uint16_t val);
     void setCarsPassed(uint16_t val);
+    void setAutomatic(bool val);
 
 
     // Methods ..
@@ -40,9 +42,9 @@ class Player : public Base {
     void setDirtCloud();
     UQ8x8 getFrameDelay();
 
-    boolean incYDelta();
-    boolean decYDelta();
-    boolean decelerate();
+    bool incYDelta();
+    bool decYDelta();
+//    boolean decelerate();
 
   private:
 
@@ -51,6 +53,7 @@ class Player : public Base {
     uint16_t _carsPassed;
     uint16_t _odometer;
     uint8_t _dirtCloud;
+    bool _automatic;
 
 };
 
@@ -83,6 +86,10 @@ uint8_t Player::getDirtCloud() {
   return _dirtCloud / DIRT_CLOUD_DIVISOR;
 }
 
+bool Player::isAutomatic() {
+  return _automatic;
+}
+
 void Player::setXOffset(int8_t val) {
   _xOffset = val;
 }
@@ -94,6 +101,10 @@ void Player::setCarsPassed(uint16_t val) {
 void Player::setCarsPassedInit(uint16_t val) {
   _carsPassedInit = val;
   _carsPassed = val;
+}
+
+void Player::setAutomatic(bool val) {
+  _automatic = val;
 }
 
 
@@ -155,7 +166,7 @@ void Player::setDirtCloud() {
 
 // Returns true if the value has changed ..
 
-boolean Player::incYDelta() {
+bool Player::incYDelta() {
 
   switch(_yDelta.getInteger()) {
      
@@ -187,7 +198,7 @@ boolean Player::incYDelta() {
 
 // Returns true if the value has changed ..
 
-boolean Player::decYDelta() {
+bool Player::decYDelta() {
 
   switch(_yDelta.getInteger()) {
 
@@ -213,11 +224,11 @@ boolean Player::decYDelta() {
 
 }
 
-boolean Player::decelerate() {
+// boolean Player::decelerate() {
 
-  if (_yDelta > 0) return decYDelta();
-  if (_yDelta < 0) return incYDelta();
+//   if (_yDelta > 0) return decYDelta();
+//   if (_yDelta < 0) return incYDelta();
 
-  return false;
+//   return false;
 
-}
+// }

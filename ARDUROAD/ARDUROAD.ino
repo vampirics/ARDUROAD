@@ -76,10 +76,12 @@ void setup() {
   arduboy.setFrameRate(75);
 
   player.setY(39);
+  player.setAutomatic(true);
 
   EEPROM_Utils::initEEPROM(false);
   
   fadeOutEffect.reset(0, HEIGHT, 1);
+  
 
 }
 
