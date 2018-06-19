@@ -17,18 +17,15 @@ class Base {
     int8_t getX();
     uint8_t getId();
     SQ7x8 getY();
-    SQ7x8 getYDelta();
 
     void setX(int8_t val);
     void setY(SQ7x8 val);
-    void setYDelta(SQ7x8 val);
 
   protected:
 
     uint8_t _id;
     int8_t _x;
     SQ7x8 _y;
-    SQ7x8 _yDelta;
 
 };
 
@@ -48,18 +45,10 @@ SQ7x8 Base::getY() {
   return _y;
 }
 
-SQ7x8 Base::getYDelta() {
-  return _yDelta;
-}
-
 void Base::setX(int8_t val) {
   _x = val;
 }
 
 void Base::setY(SQ7x8 val) {
   _y = val;
-}
-
-void Base::setYDelta(SQ7x8 val) {
-  _yDelta = val;
 }

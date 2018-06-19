@@ -7,7 +7,7 @@ uint8_t clutchCounter = 0;
 
 void playGame() {
 
-  uint8_t speed = player.getYDelta().getInteger();
+  uint8_t speed = player.getYDelta();
   uint8_t frameDelay = player.getFrameDelay();
 
   if (player.getTransmissionType() == TransmissionType::Automatic || clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 

@@ -1,76 +1,9 @@
 #include "src/utils/Arduboy2Ext.h"
 
-
-// // ----------------------------------------------------------------------------
-// //  Reset the fade effect .. 
-// //
-// void resetFade() {
-//   fadeWidth = 0;
-// }
-
-// // ----------------------------------------------------------------------------
-// //  Reset the fade in effect .. 
-// //
-// void resetFadeIn() {
-//   fadeWidth = WIDTH;
-// }
-
-
-// // ----------------------------------------------------------------------------
-// //  Fade In function .. 
-// //
-// bool fadeIn() {
-
-//   for (uint8_t i = 0; i < (HEIGHT / 2); ++i)
-//   {
-//     arduboy.drawFastHLine(0, (i * 2), fadeWidth, BLACK);
-//     arduboy.drawFastHLine((WIDTH - fadeWidth), (i * 2) + 1, fadeWidth, BLACK);
-//   }
-
-//   // If fade isn't complete, decrease the counter
-//   if (fadeWidth > 0) 
-//   {
-//     fadeWidth = fadeWidth - 4;
-//     return false;
-//   }
-//   else 
-//   {
-//     return true;
-//   }
-
-// }
-
-
-// // ----------------------------------------------------------------------------
-// //  Fade Out function .. 
-// //
-// bool fadeOut() 
-// {
-
-//   for (uint8_t i = 0; i < (HEIGHT / 2); ++i) 
-//   {
-//     arduboy.drawFastHLine(0, (i * 2), fadeWidth, BLACK);
-//     arduboy.drawFastHLine((WIDTH - fadeWidth), (i * 2) + 1, fadeWidth, BLACK);
-//   }
-
-//   // If fade isn't complete, increase the counter
-//   if(fadeWidth < WIDTH) 
-//   {
-//     ++fadeWidth;
-//     ++fadeWidth;
-//     return false;
-//   }
-//   else 
-//   {
-//     return true;
-//   }
-  
-// }
-
 void vsBoot() {
 
   // Vsoft logo display
-  arduboy.drawBitmap(0, 0, bootlogo, 128, 64, WHITE);
+  Sprites::drawOverwrite(46, 8, bootlogo, 0);
 
   if (!fadeOutEffect.isComplete()) {
 
@@ -85,7 +18,7 @@ void vsBoot() {
 
 void splashScreen() {
 
-  arduboy.drawBitmap(0, 0, SplashScreen, 128, 64, WHITE);
+  Sprites::drawOverwrite(0, 0, SplashScreen, 0);
 
   font4x6.setCursor(74, 5);
   radioMusic();

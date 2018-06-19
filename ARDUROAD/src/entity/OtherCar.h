@@ -18,6 +18,7 @@ class OtherCar : public Base {
     bool isActive();
     uint8_t getTurnLength();
     Direction getXDelta();
+    SQ7x8 getYDelta();
 
     void setY(SQ7x8 val);
     void setXDelta(Direction val);
@@ -25,7 +26,7 @@ class OtherCar : public Base {
     void setTurnLength(uint8_t val);
     void incX();
     void decX();
-
+    void setYDelta(SQ7x8 val);
 
     // Methods ..
 
@@ -42,6 +43,7 @@ class OtherCar : public Base {
     bool _active;
     uint8_t _turnLength;
     Direction _xDelta;
+    SQ7x8 _yDelta;
 
 };
 
@@ -61,12 +63,20 @@ Direction OtherCar::getXDelta() {
   return _xDelta;
 }
 
+SQ7x8 OtherCar::getYDelta() {
+  return _yDelta;
+}
+
 void OtherCar::setTurnLength(uint8_t val) {
   _turnLength = val;
 }
 
 void OtherCar::setXDelta(Direction val) {
   _xDelta = val;
+}
+
+void OtherCar::setYDelta(SQ7x8 val) {
+  _yDelta = val;
 }
 
 void OtherCar::setY(SQ7x8 val) {

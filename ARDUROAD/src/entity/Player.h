@@ -22,9 +22,11 @@ class Player : public Base {
     uint16_t getCarsPassed();
     uint16_t getOdometer();
     uint8_t getDirtCloud();
+    uint8_t getYDelta();
     TransmissionType getTransmissionType();
 
     void setXOffset(int8_t val);
+    void setYDelta(uint8_t val);
     void setCarsPassedInit(uint16_t val);
     void setCarsPassed(uint16_t val);
     void setTransmissionType(TransmissionType val);
@@ -57,6 +59,7 @@ class Player : public Base {
     uint8_t _dirtCloud;
     TransmissionType _transmissionType;
     uint8_t _frameDelay;
+    uint8_t _yDelta;
 
 };
 
@@ -95,6 +98,10 @@ TransmissionType Player::getTransmissionType() {
   return _transmissionType;
 }
 
+uint8_t Player::getYDelta() {
+  return _yDelta;
+}
+
 void Player::setXOffset(int8_t val) {
   _xOffset = val;
 }
@@ -112,6 +119,9 @@ void Player::setTransmissionType(TransmissionType val) {
   _transmissionType = val;
 }
 
+void Player::setYDelta(uint8_t val) {
+  _yDelta = val;
+}
 
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
@@ -226,7 +236,7 @@ bool Player::decSpeed() {
 
     case TransmissionType::Manual:
 
-      switch (_yDelta.getInteger()) {
+      switch (_yDelta) {
 
         case 4:
 
@@ -315,7 +325,7 @@ bool Player::incSpeed() {
 
     case TransmissionType::Manual:
 
-      switch (_yDelta.getInteger()) {
+      switch (_yDelta) {
 
         case 4:
 
