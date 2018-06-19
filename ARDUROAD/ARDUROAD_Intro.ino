@@ -40,7 +40,7 @@ void splashScreen() {
   //     break;
 
   // }
-  Serial.print("s");
+
   if (!fadeInEffect.isComplete()) {
 
     fadeInEffect.draw(arduboy);
@@ -62,8 +62,8 @@ void splashScreen() {
     #endif
   }
 
-  if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::PlayGame_Init; }
-  if (arduboy.justPressed(B_BUTTON)) { gameState = GameState::Credits; }
+  if (arduboy.justPressed(A_BUTTON)) { player.setTransmissionType(TransmissionType::Automatic); gameState = GameState::PlayGame_Init; }
+  if (arduboy.justPressed(B_BUTTON)) { player.setTransmissionType(TransmissionType::Manual); gameState = GameState::PlayGame_Init;/*gameState = GameState::Credits;*/ }
   
 }
 

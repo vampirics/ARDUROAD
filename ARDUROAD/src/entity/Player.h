@@ -48,6 +48,7 @@ class Player : public Base {
     // bool decYDelta();
     bool incSpeed();
     bool decSpeed();
+    void reset();
 //    boolean decelerate();
 
   private:
@@ -179,6 +180,11 @@ void Player::setDirtCloud() {
   _dirtCloud = DIRT_CLOUD_MAX;
 }
 
+void Player::reset() {
+  _frameDelay = PLAYER_NO_MOVEMENT;
+  _yDelta = 0;
+}
+
 // Returns true if the value has changed ..
 //uint8_t speedLookup[] = {255, FRAME_DELAY_MAX, 22, 15, FRAME_DELAY_MIN};
 #define FRAME_DELAY_MAX 30 
@@ -200,7 +206,13 @@ bool Player::decSpeed() {
 
     case TransmissionType::Automatic:
 
-      if (_frameDelay <= FRAME_DELAY_MAX - FRAME_DELAY_INC) {
+      if (_frameDelay == FRAME_DELAY_MAX) {
+
+        _frameDelay = PLAYER_NO_MOVEMENT;
+        _yDelta = 0;
+
+      }
+      else if (_frameDelay <= FRAME_DELAY_MAX) {
         
         _frameDelay+=FRAME_DELAY_INC;
 
@@ -231,7 +243,7 @@ bool Player::decSpeed() {
         return true;
 
       }
-
+      
       return false;
 
     case TransmissionType::Manual:
@@ -290,8 +302,14 @@ bool Player::incSpeed() {
   switch (_transmissionType) {
 
     case TransmissionType::Automatic:
-        
-      if (_frameDelay >= FRAME_DELAY_MIN  + FRAME_DELAY_INC) {
+
+      if (_frameDelay == PLAYER_NO_MOVEMENT) {
+
+        _frameDelay = FRAME_DELAY_MAX;
+        _yDelta = 1;
+
+      } 
+      else if (_frameDelay >= FRAME_DELAY_MIN  + FRAME_DELAY_INC) {
 
         if (_yDelta == 0)  { _dirtCloud = DIRT_CLOUD_MAX; }  
 
@@ -311,7 +329,7 @@ bool Player::incSpeed() {
             _yDelta = 2;
             break;
 
-          case FRAME_DELAY_GEAR_1_START ... FRAME_DELAY_GEAR_1_END:
+          default:
             _yDelta = 1;
             break;
             
@@ -324,7 +342,10 @@ bool Player::incSpeed() {
       break;
 
     case TransmissionType::Manual:
-
+// Serial.print("Manual ");
+// Serial.print(_yDelta);
+// Serial.print(", ");
+// Serial.println (_yDelta);
       switch (_yDelta) {
 
         case 4:
@@ -357,9 +378,14 @@ bool Player::incSpeed() {
 
           return false;
 
-        case 1:
-
-          if (_frameDelay >= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
+        default:
+          
+          if (_yDelta == 0) {
+            _yDelta = 1;
+            _frameDelay = FRAME_DELAY_GEAR_1_END;
+            return true;
+          }
+          else if (_frameDelay >= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
             _frameDelay-=FRAME_DELAY_INC;
             _dirtCloud = DIRT_CLOUD_MAX;
             return true;

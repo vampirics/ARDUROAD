@@ -47,6 +47,7 @@ static const int8_t DIST_2_END                    = 32;
 static const uint8_t PLAYER_INDEX                 = 0;
 static const uint8_t PLAYER_WIDTH                 = 44;
 static const uint8_t PLAYER_WIDTH_HALF            = PLAYER_WIDTH / 2;
+static const uint8_t PLAYER_NO_MOVEMENT           = 255;
 
 static const int8_t OTHER_CAR_X_MIN               = -37;
 static const int8_t OTHER_CAR_X_MAX               = 37;
@@ -73,8 +74,8 @@ static const int16_t DIRT_CLOUD_DIVISOR           = 4;
 static const uint8_t MAX_NUMBER_OF_SCORES         = 5;
 static const uint8_t DO_NOT_EDIT_SLOT             = 255;
 
-static const uint8_t TRANS_AUTO_COUNTDOWN         = 75;
-static const uint8_t TRANS_AUTO_COUNTDOWN_SHORT   = 30;
+static const uint8_t TRANS_AUTO_COUNTDOWN         = 30;
+static const uint8_t TRANS_AUTO_COUNTDOWN_SHORT   = 10;
 static const uint8_t TRANS_MANUAL_COUNTDOWN       = 30;
 
 

@@ -115,7 +115,7 @@ void loop() {
     case GameState::PlayGame_Init:
       arduboy.setFrameRate(50);
       gameState = GameState::PlayGame_StartOfDay;
-      player.setYDelta(0);
+      player.reset();
       player.setX(64 - PLAYER_WIDTH_HALF);
       player.setXOffset(0);
       player.setCarsPassedInit(50);

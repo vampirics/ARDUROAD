@@ -31,8 +31,8 @@ class FadeInEffect {
 
     void draw(Arduboy2Ext & arduboy) const {
 
-      uint8_t lowerLimit = (lowerY - upperY) / 2;
-      for (uint8_t i = 0; i < lowerLimit; ++i) {
+      uint8_t halfway = (lowerY - upperY) / 2;
+      for (uint8_t i = 0; i < halfway; ++i) {
 
         arduboy.drawFastHLine(0, upperY + (i * 2), this->fadeWidth, BLACK);
         arduboy.drawFastHLine((WIDTH - this->fadeWidth), upperY + (i * 2) + 1, this->fadeWidth, BLACK);
@@ -54,7 +54,7 @@ class FadeOutEffect {
   public:	
 
     void reset(uint8_t upperY, uint8_t lowerY, uint8_t inc) {
-      this->fadeWidth = WIDTH;
+      this->fadeWidth = 0;
       this->upperY = upperY;
       this->lowerY = lowerY;
       this->inc = inc;
@@ -72,12 +72,11 @@ class FadeOutEffect {
 
     void draw(Arduboy2Ext & arduboy) const {
 
-      uint8_t lowerLimit = upperY + ((lowerY - upperY) / 2);
+      uint8_t halfway = (lowerY - upperY) / 2;
+      for (uint8_t i = 0; i < halfway; ++i) {
 
-      for (uint8_t i = upperY; i < lowerLimit; ++i) {
-
-        arduboy.drawFastHLine(0, (i * 2), this->fadeWidth, BLACK);
-        arduboy.drawFastHLine((WIDTH - this->fadeWidth), (i * 2) + 1, this->fadeWidth, BLACK);
+        arduboy.drawFastHLine(0, upperY + (i * 2), this->fadeWidth, BLACK);
+        arduboy.drawFastHLine((WIDTH - this->fadeWidth), upperY + (i * 2) + 1, this->fadeWidth, BLACK);
 
       }
 
