@@ -348,8 +348,8 @@ void RenderScreen(uint8_t gear) {
     arduboy.drawFastHLine(16, 24, 96, WHITE);
     arduboy.drawFastHLine(16, 40, 96, WHITE);
 
-    font4x6.setCursor(18, 26);
-    font4x6.print(F("Day 00 Target 050"));
+    // font4x6.setCursor(18, 26);
+    // font4x6.print(F("Day 00 Target 050"));
 
   }
 

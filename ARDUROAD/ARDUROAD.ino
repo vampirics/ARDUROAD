@@ -1,6 +1,7 @@
 #include "src/utils/Arduboy2Ext.h"
 #include "src/images/Images.h"
-#include "src/fonts/Font4x6.h"
+//#include "src/fonts/Font4x6.h"
+#include "src/fonts/Fonts.h"
 #include "src/utils/Enums.h"
 #include "src/utils/Level.h"
 #include "src/entity/Entities.h"
@@ -23,7 +24,7 @@
 
 
 Arduboy2Ext arduboy;
-Font4x6 font4x6 = Font4x6();
+//Font4x6 font4x6 = Font4x6();
 Sprites sprite;
 
 #ifdef USE_ARDUBOYTONES

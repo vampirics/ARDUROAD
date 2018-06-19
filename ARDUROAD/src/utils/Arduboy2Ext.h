@@ -7,7 +7,7 @@
 #define BORDER_LEFT 1
 #define BORDER_RIGHT 2
 
-class Arduboy2Ext : public Arduboy2 {
+class Arduboy2Ext : public Arduboy2Base {
 
   public:
 

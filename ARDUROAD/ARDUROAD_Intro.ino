@@ -20,27 +20,27 @@ void splashScreen() {
 
   Sprites::drawOverwrite(0, 0, SplashScreen, 0);
 
-  font4x6.setCursor(74, 5);
+//  font4x6.setCursor(74, 5);
   radioMusic();
 
-  switch (radioStation) {
+  // switch (radioStation) {
 
-    case 0:
-      font4x6.print(F("RADIO OFF"));
-      break;
+  //   case 0:
+  //     font4x6.print(F("RADIO OFF"));
+  //     break;
 
-    case 1:
-      font4x6.print(F("ARDX 89.9"));
-      arduboy.drawLine(103, 25, 103, 28, WHITE);
-      break;
+  //   case 1:
+  //     font4x6.print(F("ARDX 89.9"));
+  //     arduboy.drawLine(103, 25, 103, 28, WHITE);
+  //     break;
 
-    case 2:
-      font4x6.print(F("ROCK 94.6"));
-      arduboy.drawLine(113, 25, 113, 28, WHITE);
-      break;
+  //   case 2:
+  //     font4x6.print(F("ROCK 94.6"));
+  //     arduboy.drawLine(113, 25, 113, 28, WHITE);
+  //     break;
 
-  }
-  
+  // }
+  Serial.print("s");
   if (!fadeInEffect.isComplete()) {
 
     fadeInEffect.draw(arduboy);
