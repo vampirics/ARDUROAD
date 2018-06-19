@@ -136,6 +136,13 @@ enum class Direction : int8_t {
 
 };
 
+enum class TransmissionType : uint8_t {
+
+  Automatic,
+  Manual
+
+};
+
 
 
 

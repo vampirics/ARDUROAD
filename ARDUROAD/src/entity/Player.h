@@ -5,8 +5,8 @@
 #include "Base.h"
 
 //const uint8_t PROGMEM speedLookup[] = {255, 5, 3, 2, 1};
-UQ8x8 speedLookup[] = {255, 3.0, 2.25, 1.5, 1.0};
-
+//UQ8x8 speedLookup[] = {255, 3.0, 2.25, 1.5, 1.0};
+uint8_t speedLookup[] = {255, 30, 22, 15, 10};
 class Player : public Base {
 
   public: 
@@ -22,12 +22,12 @@ class Player : public Base {
     uint16_t getCarsPassed();
     uint16_t getOdometer();
     uint8_t getDirtCloud();
-    bool isAutomatic();
+    TransmissionType getTransmissionType();
 
     void setXOffset(int8_t val);
     void setCarsPassedInit(uint16_t val);
     void setCarsPassed(uint16_t val);
-    void setAutomatic(bool val);
+    void setTransmissionType(TransmissionType val);
 
 
     // Methods ..
@@ -40,10 +40,12 @@ class Player : public Base {
     void resetOdometer();
     void decDirtCloud();
     void setDirtCloud();
-    UQ8x8 getFrameDelay();
+    uint8_t getFrameDelay();
 
-    bool incYDelta();
-    bool decYDelta();
+    // bool incYDelta();
+    // bool decYDelta();
+    bool incSpeed();
+    bool decSpeed();
 //    boolean decelerate();
 
   private:
@@ -53,7 +55,8 @@ class Player : public Base {
     uint16_t _carsPassed;
     uint16_t _odometer;
     uint8_t _dirtCloud;
-    bool _automatic;
+    TransmissionType _transmissionType;
+    uint8_t _frameDelay;
 
 };
 
@@ -65,9 +68,11 @@ int8_t Player::getXOffset() {
   return _xOffset;
 }
 
-UQ8x8 Player::getFrameDelay() {
+uint8_t Player::getFrameDelay() {
 //  return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
-  return speedLookup[absT(_yDelta.getInteger())];
+  //return speedLookup[absT(_yDelta.getInteger())];
+  return _frameDelay;
+
 }
 
 uint16_t Player::getCarsPassed() {
@@ -86,8 +91,8 @@ uint8_t Player::getDirtCloud() {
   return _dirtCloud / DIRT_CLOUD_DIVISOR;
 }
 
-bool Player::isAutomatic() {
-  return _automatic;
+TransmissionType Player::getTransmissionType() {
+  return _transmissionType;
 }
 
 void Player::setXOffset(int8_t val) {
@@ -103,8 +108,8 @@ void Player::setCarsPassedInit(uint16_t val) {
   _carsPassed = val;
 }
 
-void Player::setAutomatic(bool val) {
-  _automatic = val;
+void Player::setTransmissionType(TransmissionType val) {
+  _transmissionType = val;
 }
 
 
@@ -165,30 +170,196 @@ void Player::setDirtCloud() {
 }
 
 // Returns true if the value has changed ..
+//uint8_t speedLookup[] = {255, FRAME_DELAY_MAX, 22, 15, FRAME_DELAY_MIN};
+#define FRAME_DELAY_MAX 30 
+#define FRAME_DELAY_MIN 10 
+#define FRAME_DELAY_INC 2
 
-bool Player::incYDelta() {
+#define FRAME_DELAY_GEAR_1_END   30
+#define FRAME_DELAY_GEAR_1_START 25 
+#define FRAME_DELAY_GEAR_2_END   24
+#define FRAME_DELAY_GEAR_2_START 20 
+#define FRAME_DELAY_GEAR_3_END   19
+#define FRAME_DELAY_GEAR_3_START 15 
+#define FRAME_DELAY_GEAR_4_END   14
+#define FRAME_DELAY_GEAR_4_START 10 
 
-  switch(_yDelta.getInteger()) {
-     
-    case 0:
-      _yDelta = 1;
-      _dirtCloud = DIRT_CLOUD_MAX;
-      return true;
+bool Player::decSpeed() {
 
-    case 1:
-      _yDelta = 2;
-      _dirtCloud = DIRT_CLOUD_MAX;
-      return true;
+  switch (_transmissionType) {
 
-    case 2:
-      _yDelta = 3;
-      _dirtCloud = DIRT_CLOUD_MAX;
-      return true;
+    case TransmissionType::Automatic:
 
-    case 3:
-      _yDelta = 4;
-      _dirtCloud = DIRT_CLOUD_MAX;
-      return true;
+      if (_frameDelay <= FRAME_DELAY_MAX - FRAME_DELAY_INC) {
+        
+        _frameDelay+=FRAME_DELAY_INC;
+
+        switch (_frameDelay) {
+
+          case FRAME_DELAY_GEAR_4_START ... FRAME_DELAY_GEAR_4_END:
+            _yDelta = 4;
+            break;
+
+          case FRAME_DELAY_GEAR_3_START ... FRAME_DELAY_GEAR_3_END:
+            _yDelta = 3;
+            break;
+
+          case FRAME_DELAY_GEAR_2_START ... FRAME_DELAY_GEAR_2_END:
+            _yDelta = 2;
+            break;
+
+          case FRAME_DELAY_GEAR_1_START ... FRAME_DELAY_GEAR_1_END:
+            _yDelta = 1;
+            break;
+
+          default:
+            _yDelta = 0;
+            break;
+            
+        }
+
+        return true;
+
+      }
+
+      return false;
+
+    case TransmissionType::Manual:
+
+      switch (_yDelta.getInteger()) {
+
+        case 4:
+
+          if (_frameDelay <= FRAME_DELAY_GEAR_4_END - FRAME_DELAY_INC) {
+            _frameDelay+=FRAME_DELAY_INC;
+            return true;
+          }
+          
+          return false;
+
+        case 3:
+
+          if (_frameDelay <= FRAME_DELAY_GEAR_3_START - FRAME_DELAY_INC) {
+            _frameDelay+=FRAME_DELAY_INC;
+            return true;
+          }
+
+          return false;
+
+        case 2:
+
+          if (_frameDelay <= FRAME_DELAY_GEAR_2_START - FRAME_DELAY_INC) {
+            _frameDelay+=FRAME_DELAY_INC;
+            return true;
+          }
+
+          return false;
+
+        case 1:
+
+          if (_frameDelay <= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
+            _frameDelay+=FRAME_DELAY_INC;
+            return true;
+          }
+
+          return false;
+          
+      } 
+
+      return false;
+
+  }
+
+  return false;
+
+}
+
+
+bool Player::incSpeed() {
+
+  switch (_transmissionType) {
+
+    case TransmissionType::Automatic:
+        
+      if (_frameDelay >= FRAME_DELAY_MIN  + FRAME_DELAY_INC) {
+
+        if (_yDelta == 0)  { _dirtCloud = DIRT_CLOUD_MAX; }  
+
+        _frameDelay-=FRAME_DELAY_INC;
+
+        switch (_frameDelay) {
+
+          case FRAME_DELAY_GEAR_4_START ... FRAME_DELAY_GEAR_4_END:
+            _yDelta = 4;
+            break;
+
+          case FRAME_DELAY_GEAR_3_START ... FRAME_DELAY_GEAR_3_END:
+            _yDelta = 3;
+            break;
+
+          case FRAME_DELAY_GEAR_2_START ... FRAME_DELAY_GEAR_2_END:
+            _yDelta = 2;
+            break;
+
+          case FRAME_DELAY_GEAR_1_START ... FRAME_DELAY_GEAR_1_END:
+            _yDelta = 1;
+            break;
+            
+        } 
+
+        return true;
+        
+      }
+
+      break;
+
+    case TransmissionType::Manual:
+
+      switch (_yDelta.getInteger()) {
+
+        case 4:
+
+          if (_frameDelay >= FRAME_DELAY_GEAR_4_START - FRAME_DELAY_INC) {
+            _frameDelay-=FRAME_DELAY_INC;
+            _dirtCloud = DIRT_CLOUD_MAX;
+            return true;
+          }
+
+          return false;
+
+        case 3:
+
+          if (_frameDelay >= FRAME_DELAY_GEAR_3_START - FRAME_DELAY_INC) {
+            _frameDelay-=FRAME_DELAY_INC;
+            _dirtCloud = DIRT_CLOUD_MAX;
+            return true;
+          }
+
+          return false;
+
+        case 2:
+
+          if (_frameDelay >= FRAME_DELAY_GEAR_2_START - FRAME_DELAY_INC) {
+            _frameDelay-=FRAME_DELAY_INC;
+            _dirtCloud = DIRT_CLOUD_MAX;
+            return true;
+          }
+
+          return false;
+
+        case 1:
+
+          if (_frameDelay >= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
+            _frameDelay-=FRAME_DELAY_INC;
+            _dirtCloud = DIRT_CLOUD_MAX;
+            return true;
+          }
+
+          return false;
+          
+      } 
+
+      return false;
 
   }
 
@@ -198,31 +369,63 @@ bool Player::incYDelta() {
 
 // Returns true if the value has changed ..
 
-bool Player::decYDelta() {
+// bool Player::incYDelta() {
 
-  switch(_yDelta.getInteger()) {
+//   switch(_yDelta.getInteger()) {
+     
+//     case 0:
+//       _yDelta = 1;
+//       _dirtCloud = DIRT_CLOUD_MAX;
+//       return true;
 
-    case 1:
-      _yDelta = 0;
-      return true;
+//     case 1:
+//       _yDelta = 2;
+//       _dirtCloud = DIRT_CLOUD_MAX;
+//       return true;
 
-    case 2:
-      _yDelta = 1;
-      return true;
+//     case 2:
+//       _yDelta = 3;
+//       _dirtCloud = DIRT_CLOUD_MAX;
+//       return true;
 
-    case 3:
-      _yDelta = 2;
-      return true;
+//     case 3:
+//       _yDelta = 4;
+//       _dirtCloud = DIRT_CLOUD_MAX;
+//       return true;
 
-    case 4:
-      _yDelta = 3;
-      return true;
+//   }
 
-  }
+//   return false;
 
-  return false;
+// }
 
-}
+// // Returns true if the value has changed ..
+
+// bool Player::decYDelta() {
+
+//   switch(_yDelta.getInteger()) {
+
+//     case 1:
+//       _yDelta = 0;
+//       return true;
+
+//     case 2:
+//       _yDelta = 1;
+//       return true;
+
+//     case 3:
+//       _yDelta = 2;
+//       return true;
+
+//     case 4:
+//       _yDelta = 3;
+//       return true;
+
+//   }
+
+//   return false;
+
+// }
 
 // boolean Player::decelerate() {
 

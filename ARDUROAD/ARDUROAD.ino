@@ -76,7 +76,7 @@ void setup() {
   arduboy.setFrameRate(75);
 
   player.setY(39);
-  player.setAutomatic(true);
+  player.setTransmissionType(TransmissionType::Automatic);
 
   EEPROM_Utils::initEEPROM(false);
   

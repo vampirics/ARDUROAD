@@ -8,9 +8,9 @@ uint8_t clutchCounter = 0;
 void playGame() {
 
   uint8_t speed = player.getYDelta().getInteger();
-  UQ8x8 frameDelay = player.getFrameDelay();
+  uint8_t frameDelay = player.getFrameDelay();
 
-  if (player.isAutomatic() || clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
+  if (player.getTransmissionType() == TransmissionType::Automatic || clutchCounter > 0 || speed > 1 || (speed == 1 && arduboy.pressed(A_BUTTON))) { 
 
     if (horizonIncrement >= frameDelay) {
 
@@ -19,12 +19,12 @@ void playGame() {
       
     }
 
-    horizonIncrement = horizonIncrement + 1;
+    horizonIncrement = horizonIncrement + 10;
 
 
     // Move car to outside of curve ..
     
-    if (arduboy.isFrameCount(frameDelay.getInteger() * 4, 0)) {
+    if (arduboy.isFrameCount(frameDelay * 4, 0)) {
 
       int8_t curve0 = level.getCurve(0);
       int8_t curve6 = level.getCurve(6);
@@ -163,30 +163,33 @@ void playGame() {
         mainCarFrame = !mainCarFrame;
       }
 
-      if (!player.isAutomatic()) allowChangeGears = true;
+      if (player.getTransmissionType() == TransmissionType::Manual) allowChangeGears = true;
 
     }
 
     if (arduboy.pressed(LEFT_BUTTON) && speed > 0)     { player.decX(); }
     if (arduboy.pressed(RIGHT_BUTTON) && speed > 0)    { player.incX(); }
 
-    if (player.isAutomatic()) {
+    if (player.getTransmissionType() == TransmissionType::Automatic) {
 
       if (allowChangeGears && arduboy.pressed(A_BUTTON)) { 
-        if (player.incYDelta()) horizonIncrement = 0; 
+        if (player.incSpeed()) horizonIncrement = 0;
+//        if (player.incYDelta()) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_AUTO_COUNTDOWN; 
       }
 
       if (arduboy.justPressed(B_BUTTON)) { 
-        if (player.decYDelta()) horizonIncrement = 0; 
+        if (player.decSpeed()) horizonIncrement = 0;
+//        if (player.decYDelta()) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_AUTO_COUNTDOWN;  
       }
 
       if (!arduboy.pressed(A_BUTTON) && !arduboy.pressed(B_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { 
         
-        if (player.decYDelta()) horizonIncrement = 0; 
+//        if (player.decYDelta()) horizonIncrement = 0; 
+        if (player.decSpeed()) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_AUTO_COUNTDOWN_SHORT;  
         
@@ -201,14 +204,16 @@ void playGame() {
     else {
 
       if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON)) { 
-        if (player.incYDelta()) horizonIncrement = 0; 
+        // if (player.incYDelta()) horizonIncrement = 0; 
+        if (player.incSpeed()) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_MANUAL_COUNTDOWN; 
       }
 
       if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) { 
         
-        if (player.decYDelta()) horizonIncrement = 0; 
+        // if (player.decYDelta()) horizonIncrement = 0; 
+        if (player.decSpeed()) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_MANUAL_COUNTDOWN;  
       
@@ -216,7 +221,8 @@ void playGame() {
 
       if (!arduboy.pressed(A_BUTTON) && clutchCounter == 0 && arduboy.everyXFrames(FRAME_RATE_16)) { 
         
-        if (!player.decYDelta()) allowChangeGears = true; 
+        // if (!player.decYDelta()) allowChangeGears = true; 
+        if (!player.decSpeed()) allowChangeGears = true; 
         
       }
 
@@ -232,7 +238,8 @@ void playGame() {
 
     if (arduboy.everyXFrames(FRAME_RATE_16)) { 
       
-      player.decYDelta();
+      // player.decYDelta();
+      player.decSpeed();
       
     }
 
