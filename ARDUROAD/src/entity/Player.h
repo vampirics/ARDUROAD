@@ -4,9 +4,6 @@
 #include "../utils/Enums.h"
 #include "Base.h"
 
-//const uint8_t PROGMEM speedLookup[] = {255, 5, 3, 2, 1};
-//UQ8x8 speedLookup[] = {255, 3.0, 2.25, 1.5, 1.0};
-uint8_t speedLookup[] = {255, 30, 22, 15, 10};
 class Player : public Base {
 
   public: 
@@ -34,8 +31,8 @@ class Player : public Base {
 
     // Methods ..
 
-    bool incX();
-    bool decX();
+    void incX();
+    void decX();
     void incCarsPassed();
     void decCarsPassed();
     void incOdometer();
@@ -44,11 +41,10 @@ class Player : public Base {
     void setDirtCloud();
     uint8_t getFrameDelay();
 
-    // bool incYDelta();
-    // bool decYDelta();
     bool incSpeed(bool changeGearsManual);
-    bool decSpeed(bool changeGearsManual);
+    bool decSpeed();
     void reset();
+    bool onRoadsEdge();
 //    boolean decelerate();
 
   private:
@@ -73,10 +69,7 @@ int8_t Player::getXOffset() {
 }
 
 uint8_t Player::getFrameDelay() {
-//  return pgm_read_byte(&speedLookup[absT(_yDelta.getInteger())]);
-  //return speedLookup[absT(_yDelta.getInteger())];
   return _frameDelay;
-
 }
 
 uint16_t Player::getCarsPassed() {
@@ -124,6 +117,7 @@ void Player::setYDelta(uint8_t val) {
   _yDelta = val;
 }
 
+
 //--------------------------------------------------------------------------------------------------------------------------
 // Methods ..
 
@@ -138,7 +132,7 @@ int8_t Player::getXCentered() {
   return  _x - 64 + PLAYER_WIDTH_HALF;
 }
 
-bool Player::incX() {  // returns true if in gutter
+void Player::incX() {  
 
   if      (_x < OFFSET_RHS_MAX) _x++;
 
@@ -146,11 +140,11 @@ bool Player::incX() {  // returns true if in gutter
   else if (_x > OFFSET_RHS) _xOffset = -(_x - OFFSET_RHS);
   else    _xOffset = 0;
 
-  return (_x < OFFSET_LHS_GUTTER);
+  if (_x > OFFSET_RHS_GUTTER && _dirtCloud < DIRT_CLOUD_DIVISOR) _dirtCloud = DIRT_CLOUD_MAX;
 
 }
 
-bool Player::decX() {// returns true if in gutter
+void Player::decX() {
 
   if      (_x > OFFSET_LHS_MIN) _x--;
 
@@ -158,7 +152,13 @@ bool Player::decX() {// returns true if in gutter
   else if (_x > OFFSET_RHS) _xOffset = -(_x - OFFSET_RHS);
   else    _xOffset = 0;
 
-  return (_x > OFFSET_RHS_GUTTER);
+  if (_x < OFFSET_LHS_GUTTER && _dirtCloud < DIRT_CLOUD_DIVISOR) _dirtCloud = DIRT_CLOUD_MAX;
+
+}
+
+bool Player::onRoadsEdge() {// returns true if in gutter
+
+  return (_x < OFFSET_LHS_GUTTER) || (_x > OFFSET_RHS_GUTTER);
 
 }
 
@@ -191,11 +191,9 @@ void Player::reset() {
   _yDelta = 0;
 }
 
-// Returns true if the value has changed ..
-//uint8_t speedLookup[] = {255, FRAME_DELAY_MAX, 22, 15, FRAME_DELAY_MIN};
 #define FRAME_DELAY_MAX 30 
 #define FRAME_DELAY_MIN 10 
-#define FRAME_DELAY_INC 4
+#define FRAME_DELAY_INC 2
 
 #define FRAME_DELAY_GEAR_1_END   30
 #define FRAME_DELAY_GEAR_1_START 25 
@@ -206,7 +204,7 @@ void Player::reset() {
 #define FRAME_DELAY_GEAR_4_END   14
 #define FRAME_DELAY_GEAR_4_START 10 
 
-bool Player::decSpeed(bool changeGearsManual) {
+bool Player::decSpeed() {
 
   switch (_transmissionType) {
 
@@ -288,46 +286,6 @@ bool Player::decSpeed(bool changeGearsManual) {
 
       }
 
-      // switch (_yDelta) {
-
-      //   case 4:
-
-      //     if (_frameDelay <= FRAME_DELAY_GEAR_4_END - FRAME_DELAY_INC) {
-      //       _frameDelay+=FRAME_DELAY_INC;
-      //       return true;
-      //     }
-          
-      //     return false;
-
-      //   case 3:
-
-      //     if (_frameDelay <= FRAME_DELAY_GEAR_3_START - FRAME_DELAY_INC) {
-      //       _frameDelay+=FRAME_DELAY_INC;
-      //       return true;
-      //     }
-
-      //     return false;
-
-      //   case 2:
-
-      //     if (_frameDelay <= FRAME_DELAY_GEAR_2_START - FRAME_DELAY_INC) {
-      //       _frameDelay+=FRAME_DELAY_INC;
-      //       return true;
-      //     }
-
-      //     return false;
-
-      //   case 1:
-
-      //     if (_frameDelay <= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
-      //       _frameDelay+=FRAME_DELAY_INC;
-      //       return true;
-      //     }
-
-      //     return false;
-          
-      // } 
-
       return false;
 
   }
@@ -381,20 +339,25 @@ bool Player::incSpeed(bool changeGearsManual) {
       break;
 
     case TransmissionType::Manual:
-// Serial.print("Manual ");
-// Serial.print(_yDelta);
-// Serial.print(", ");
-// Serial.println (_yDelta);
 
-      if (changeGearsManual && _yDelta < 4) _yDelta++;
+      if (changeGearsManual && _yDelta >= 1 && _yDelta < 4) { 
+        _yDelta++;
+        _dirtCloud = DIRT_CLOUD_MAX;
+      }
+
+      if (changeGearsManual && _yDelta == 0) {
+        _yDelta = 1;
+        _dirtCloud = DIRT_CLOUD_MAX;
+        _frameDelay = FRAME_DELAY_GEAR_1_END;
+        return true;
+      }
 
       switch (_yDelta) {
 
         case 4:
 
-          if (_frameDelay >= FRAME_DELAY_GEAR_4_START - FRAME_DELAY_INC) {
+          if (_frameDelay >= FRAME_DELAY_GEAR_4_START + FRAME_DELAY_INC) {
             _frameDelay-=FRAME_DELAY_INC;
-            _dirtCloud = DIRT_CLOUD_MAX;
             return true;
           }
 
@@ -402,9 +365,8 @@ bool Player::incSpeed(bool changeGearsManual) {
 
         case 3:
 
-          if (_frameDelay >= FRAME_DELAY_GEAR_3_START - FRAME_DELAY_INC) {
+          if (_frameDelay >= FRAME_DELAY_GEAR_3_START + FRAME_DELAY_INC) {
             _frameDelay-=FRAME_DELAY_INC;
-            _dirtCloud = DIRT_CLOUD_MAX;
             return true;
           }
 
@@ -412,9 +374,8 @@ bool Player::incSpeed(bool changeGearsManual) {
 
         case 2:
 
-          if (_frameDelay >= FRAME_DELAY_GEAR_2_START - FRAME_DELAY_INC) {
+          if (_frameDelay >= FRAME_DELAY_GEAR_2_START + FRAME_DELAY_INC) {
             _frameDelay-=FRAME_DELAY_INC;
-            _dirtCloud = DIRT_CLOUD_MAX;
             return true;
           }
 
@@ -427,9 +388,8 @@ bool Player::incSpeed(bool changeGearsManual) {
             _frameDelay = FRAME_DELAY_GEAR_1_END;
             return true;
           }
-          else if (_frameDelay >= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
+          else if (_frameDelay >= FRAME_DELAY_GEAR_1_START + FRAME_DELAY_INC) {
             _frameDelay-=FRAME_DELAY_INC;
-            _dirtCloud = DIRT_CLOUD_MAX;
             return true;
           }
 
@@ -444,72 +404,3 @@ bool Player::incSpeed(bool changeGearsManual) {
   return false;
 
 }
-
-// Returns true if the value has changed ..
-
-// bool Player::incYDelta() {
-
-//   switch(_yDelta.getInteger()) {
-     
-//     case 0:
-//       _yDelta = 1;
-//       _dirtCloud = DIRT_CLOUD_MAX;
-//       return true;
-
-//     case 1:
-//       _yDelta = 2;
-//       _dirtCloud = DIRT_CLOUD_MAX;
-//       return true;
-
-//     case 2:
-//       _yDelta = 3;
-//       _dirtCloud = DIRT_CLOUD_MAX;
-//       return true;
-
-//     case 3:
-//       _yDelta = 4;
-//       _dirtCloud = DIRT_CLOUD_MAX;
-//       return true;
-
-//   }
-
-//   return false;
-
-// }
-
-// // Returns true if the value has changed ..
-
-// bool Player::decYDelta() {
-
-//   switch(_yDelta.getInteger()) {
-
-//     case 1:
-//       _yDelta = 0;
-//       return true;
-
-//     case 2:
-//       _yDelta = 1;
-//       return true;
-
-//     case 3:
-//       _yDelta = 2;
-//       return true;
-
-//     case 4:
-//       _yDelta = 3;
-//       return true;
-
-//   }
-
-//   return false;
-
-// }
-
-// boolean Player::decelerate() {
-
-//   if (_yDelta > 0) return decYDelta();
-//   if (_yDelta < 0) return incYDelta();
-
-//   return false;
-
-// }

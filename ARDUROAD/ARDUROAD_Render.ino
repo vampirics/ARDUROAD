@@ -369,7 +369,7 @@ void RenderScreen(uint8_t gear) {
 
   if (gameState == GameState::PlayGame_StartOfDay) {
 
-    Sprites::drawPlusMask(16, 20, StartOfDay, 0);
+    Sprites::drawPlusMask(16, 15, StartOfDay, 0);
 
     // font4x6.setCursor(18, 26);
     // font4x6.print(F("Day 00 Target 050"));

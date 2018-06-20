@@ -130,6 +130,7 @@ void loop() {
 
      case GameState::GameOver_Init:
       gameState = GameState::GameOver;
+      arduboy.setRGBled(0, 0, 0);
       fadeInEffect.reset(14, 38, 2);
       // break; Fall-through intentional.
    
