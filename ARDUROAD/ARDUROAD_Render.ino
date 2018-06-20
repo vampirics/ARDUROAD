@@ -297,28 +297,53 @@ void RenderScreen(uint8_t gear) {
 
       }
 
-      Sprites::drawPlusMask(xPos, yPos, gearbox, 0);
+      switch (player.getTransmissionType()) {
 
-      static const uint8_t gearLookup[] PROGMEM = { 2, 3, 4, 3, };
-	        
-      switch (gear) {
-
-        case 0:
+        case TransmissionType::Automatic:
           {
-            const uint8_t index = (arduboy.getFrameCount(16) / 4);
-            xPos += pgm_read_byte(&gearLookup[index]);
-            yPos += 6;
+            switch (gear) {
+
+              case 0:
+                Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoN, AutoMask, 0, 0);
+                break;
+
+              default:
+                Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoD, AutoMask, 0, 0);
+                break;
+
+            }
+
           }
           break;
-        
-        case 1:                                      break;
-        case 2:                           yPos+= 11; break;
-        case 3:               xPos+= 6;              break;
-        case 4:               xPos+= 6;   yPos+= 11; break;
+
+        case TransmissionType::Manual:
+          {
+            Sprites::drawPlusMask(xPos, yPos, gearbox, 0);
+
+            static const uint8_t gearLookup[] PROGMEM = { 2, 3, 4, 3, };
+                
+            switch (gear) {
+
+              case 0:
+                {
+                  const uint8_t index = (arduboy.getFrameCount(16) / 4);
+                  xPos += pgm_read_byte(&gearLookup[index]);
+                  yPos += 6;
+                }
+                break;
+              
+              case 1:                                      break;
+              case 2:                           yPos+= 11; break;
+              case 3:               xPos+= 6;              break;
+              case 4:               xPos+= 6;   yPos+= 11; break;
+
+            }
+
+            Sprites::drawPlusMask(xPos, yPos, gearbox_knob, 0);
+          }
+          break;
 
       }
-
-      Sprites::drawPlusMask(xPos, yPos, gearbox_knob, 0);
 
 
       // Score ..
@@ -344,9 +369,7 @@ void RenderScreen(uint8_t gear) {
 
   if (gameState == GameState::PlayGame_StartOfDay) {
 
-    arduboy.fillRect(15, 23, 98, 18, BLACK);
-    arduboy.drawFastHLine(16, 24, 96, WHITE);
-    arduboy.drawFastHLine(16, 40, 96, WHITE);
+    Sprites::drawPlusMask(16, 20, StartOfDay, 0);
 
     // font4x6.setCursor(18, 26);
     // font4x6.print(F("Day 00 Target 050"));

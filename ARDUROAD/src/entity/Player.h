@@ -34,8 +34,8 @@ class Player : public Base {
 
     // Methods ..
 
-    void incX();
-    void decX();
+    bool incX();
+    bool decX();
     void incCarsPassed();
     void decCarsPassed();
     void incOdometer();
@@ -46,8 +46,8 @@ class Player : public Base {
 
     // bool incYDelta();
     // bool decYDelta();
-    bool incSpeed();
-    bool decSpeed();
+    bool incSpeed(bool changeGearsManual);
+    bool decSpeed(bool changeGearsManual);
     void reset();
 //    boolean decelerate();
 
@@ -128,31 +128,37 @@ void Player::setYDelta(uint8_t val) {
 // Methods ..
 
 #define OFFSET_LHS 15
-#define OFFSET_LHS_MIN 5
+#define OFFSET_LHS_GUTTER 5
+#define OFFSET_LHS_MIN 0
 #define OFFSET_RHS 70
-#define OFFSET_RHS_MAX 80
+#define OFFSET_RHS_GUTTER 80
+#define OFFSET_RHS_MAX 85
 
 int8_t Player::getXCentered() {
   return  _x - 64 + PLAYER_WIDTH_HALF;
 }
 
-void Player::incX() {
+bool Player::incX() {  // returns true if in gutter
 
-  if (_x < OFFSET_RHS_MAX) _x++;
+  if      (_x < OFFSET_RHS_MAX) _x++;
 
-  if (_x < OFFSET_LHS) _xOffset = OFFSET_LHS - _x;
+  if      (_x < OFFSET_LHS) _xOffset = OFFSET_LHS - _x;
   else if (_x > OFFSET_RHS) _xOffset = -(_x - OFFSET_RHS);
-  else _xOffset = 0;
+  else    _xOffset = 0;
+
+  return (_x < OFFSET_LHS_GUTTER);
 
 }
 
-void Player::decX() {
+bool Player::decX() {// returns true if in gutter
 
-  if (_x > OFFSET_LHS_MIN) _x--;
+  if      (_x > OFFSET_LHS_MIN) _x--;
 
-  if (_x < OFFSET_LHS) _xOffset = OFFSET_LHS - _x;
+  if      (_x < OFFSET_LHS) _xOffset = OFFSET_LHS - _x;
   else if (_x > OFFSET_RHS) _xOffset = -(_x - OFFSET_RHS);
-  else _xOffset = 0;
+  else    _xOffset = 0;
+
+  return (_x > OFFSET_RHS_GUTTER);
 
 }
 
@@ -189,7 +195,7 @@ void Player::reset() {
 //uint8_t speedLookup[] = {255, FRAME_DELAY_MAX, 22, 15, FRAME_DELAY_MIN};
 #define FRAME_DELAY_MAX 30 
 #define FRAME_DELAY_MIN 10 
-#define FRAME_DELAY_INC 2
+#define FRAME_DELAY_INC 4
 
 #define FRAME_DELAY_GEAR_1_END   30
 #define FRAME_DELAY_GEAR_1_START 25 
@@ -200,7 +206,7 @@ void Player::reset() {
 #define FRAME_DELAY_GEAR_4_END   14
 #define FRAME_DELAY_GEAR_4_START 10 
 
-bool Player::decSpeed() {
+bool Player::decSpeed(bool changeGearsManual) {
 
   switch (_transmissionType) {
 
@@ -248,45 +254,79 @@ bool Player::decSpeed() {
 
     case TransmissionType::Manual:
 
-      switch (_yDelta) {
+      if (_frameDelay <= FRAME_DELAY_GEAR_1_END) {
+        
+        _frameDelay+=FRAME_DELAY_INC;
 
-        case 4:
+        if (_frameDelay > FRAME_DELAY_GEAR_1_END) { _frameDelay = PLAYER_NO_MOVEMENT; }
 
-          if (_frameDelay <= FRAME_DELAY_GEAR_4_END - FRAME_DELAY_INC) {
-            _frameDelay+=FRAME_DELAY_INC;
-            return true;
-          }
+        switch (_frameDelay) {
+
+          case FRAME_DELAY_GEAR_4_START ... FRAME_DELAY_GEAR_4_END:
+            _yDelta = 4;
+            break;
+
+          case FRAME_DELAY_GEAR_3_START ... FRAME_DELAY_GEAR_3_END:
+            _yDelta = 3;
+            break;
+
+          case FRAME_DELAY_GEAR_2_START ... FRAME_DELAY_GEAR_2_END:
+            _yDelta = 2;
+            break;
+
+          case FRAME_DELAY_GEAR_1_START ... FRAME_DELAY_GEAR_1_END:
+            _yDelta = 1;
+            break;
+
+          default:
+            _yDelta = 0;
+            break;
+            
+        }
+
+        return true;
+
+      }
+
+      // switch (_yDelta) {
+
+      //   case 4:
+
+      //     if (_frameDelay <= FRAME_DELAY_GEAR_4_END - FRAME_DELAY_INC) {
+      //       _frameDelay+=FRAME_DELAY_INC;
+      //       return true;
+      //     }
           
-          return false;
+      //     return false;
 
-        case 3:
+      //   case 3:
 
-          if (_frameDelay <= FRAME_DELAY_GEAR_3_START - FRAME_DELAY_INC) {
-            _frameDelay+=FRAME_DELAY_INC;
-            return true;
-          }
+      //     if (_frameDelay <= FRAME_DELAY_GEAR_3_START - FRAME_DELAY_INC) {
+      //       _frameDelay+=FRAME_DELAY_INC;
+      //       return true;
+      //     }
 
-          return false;
+      //     return false;
 
-        case 2:
+      //   case 2:
 
-          if (_frameDelay <= FRAME_DELAY_GEAR_2_START - FRAME_DELAY_INC) {
-            _frameDelay+=FRAME_DELAY_INC;
-            return true;
-          }
+      //     if (_frameDelay <= FRAME_DELAY_GEAR_2_START - FRAME_DELAY_INC) {
+      //       _frameDelay+=FRAME_DELAY_INC;
+      //       return true;
+      //     }
 
-          return false;
+      //     return false;
 
-        case 1:
+      //   case 1:
 
-          if (_frameDelay <= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
-            _frameDelay+=FRAME_DELAY_INC;
-            return true;
-          }
+      //     if (_frameDelay <= FRAME_DELAY_GEAR_1_START - FRAME_DELAY_INC) {
+      //       _frameDelay+=FRAME_DELAY_INC;
+      //       return true;
+      //     }
 
-          return false;
+      //     return false;
           
-      } 
+      // } 
 
       return false;
 
@@ -296,8 +336,7 @@ bool Player::decSpeed() {
 
 }
 
-
-bool Player::incSpeed() {
+bool Player::incSpeed(bool changeGearsManual) {
 
   switch (_transmissionType) {
 
@@ -346,6 +385,9 @@ bool Player::incSpeed() {
 // Serial.print(_yDelta);
 // Serial.print(", ");
 // Serial.println (_yDelta);
+
+      if (changeGearsManual && _yDelta < 4) _yDelta++;
+
       switch (_yDelta) {
 
         case 4:

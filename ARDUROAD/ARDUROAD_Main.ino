@@ -173,50 +173,58 @@ void playGame() {
     if (player.getTransmissionType() == TransmissionType::Automatic) {
 
       if (allowChangeGears && arduboy.pressed(A_BUTTON)) { 
-   
-        if (player.incSpeed()) horizonIncrement = 0;
-//        if (player.incYDelta()) horizonIncrement = 0; 
+        if (player.incSpeed(false)) horizonIncrement = 0;
         allowChangeGears = false; 
         clutchCounter = TRANS_AUTO_COUNTDOWN; 
       }
 
       if (arduboy.justPressed(B_BUTTON)) { 
-        if (player.decSpeed()) horizonIncrement = 0;
-//        if (player.decYDelta()) horizonIncrement = 0; 
+        if (player.decSpeed(false)) horizonIncrement = 0;
         allowChangeGears = false; 
         clutchCounter = 0;  
       }
 
       if (!arduboy.pressed(A_BUTTON) && !arduboy.pressed(B_BUTTON) && arduboy.everyXFrames(FRAME_RATE_16)) { 
-        
-//        if (player.decYDelta()) horizonIncrement = 0; 
-        if (player.decSpeed()) horizonIncrement = 0; 
+        if (player.decSpeed(false)) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_AUTO_COUNTDOWN_SHORT;  
-        
       }
 
-      if (clutchCounter > 0)  {
-        clutchCounter--;
-      }
-      if (clutchCounter == 0) allowChangeGears = true;
+      if (clutchCounter > 0)    clutchCounter--; 
+      if (clutchCounter == 0)   allowChangeGears = true;
 
     }
     else {
+// Serial.print(speed);
+// Serial.print(" ");
+// Serial.print(allowChangeGears);
+// Serial.println("");
+
+      if (allowChangeGears && arduboy.pressed(A_BUTTON)) { 
+Serial.println("inc1");
+   
+        if (player.incSpeed(false)) horizonIncrement = 0;
+        allowChangeGears = false; 
+        clutchCounter = TRANS_MANUAL_COUNTDOWN; 
+      }
+
+      if (arduboy.justPressed(B_BUTTON)) { 
+        if (player.decSpeed(false)) horizonIncrement = 0;
+        allowChangeGears = false; 
+        clutchCounter = 0;  
+      }
 
       if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(UP_BUTTON)) { 
-        // if (player.incYDelta()) horizonIncrement = 0; 
-        Serial.println("inc");
-        if (player.incSpeed()) horizonIncrement = 0; 
+        Serial.println("inc2");
+        if (player.incSpeed(true)) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_MANUAL_COUNTDOWN; 
       }
 
       if (allowChangeGears && !arduboy.pressed(A_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) { 
         
-        // if (player.decYDelta()) horizonIncrement = 0; 
         Serial.println("dec1");
-        if (player.decSpeed()) horizonIncrement = 0; 
+        if (player.decSpeed(true)) horizonIncrement = 0; 
         allowChangeGears = false; 
         clutchCounter = TRANS_MANUAL_COUNTDOWN;  
       
@@ -225,21 +233,25 @@ void playGame() {
       if (!arduboy.pressed(A_BUTTON) && clutchCounter == 0 && arduboy.everyXFrames(FRAME_RATE_16)) { 
         Serial.println("dec2");        
         // if (!player.decYDelta()) allowChangeGears = true; 
-        if (!player.decSpeed()) allowChangeGears = true; 
+        if (!player.decSpeed(true)) allowChangeGears = true; 
         
       }
 
-      if (allowChangeGears && arduboy.pressed(A_BUTTON)) { 
+//       if (allowChangeGears && arduboy.pressed(A_BUTTON)) { 
    
-        if (player.incSpeed()) horizonIncrement = 0;
-//        if (player.incYDelta()) horizonIncrement = 0; 
-        allowChangeGears = false; 
-        clutchCounter = TRANS_AUTO_COUNTDOWN; 
+//         if (player.incSpeed()) horizonIncrement = 0;
+// //        if (player.incYDelta()) horizonIncrement = 0; 
+//         allowChangeGears = false; 
+//         clutchCounter = TRANS_AUTO_COUNTDOWN; 
+//       }
+      if (clutchCounter > 0)  {
+        clutchCounter--;
+//        allowChangeGears = false;
       }
-
-      if (clutchCounter > 0) clutchCounter--;
-
+     if (clutchCounter == 0) allowChangeGears = true;
     }
+
+
 
   }
   else {
@@ -250,7 +262,7 @@ void playGame() {
     if (arduboy.everyXFrames(FRAME_RATE_16)) { 
       
       // player.decYDelta();
-      player.decSpeed();
+      player.decSpeed(false);
       
     }
 

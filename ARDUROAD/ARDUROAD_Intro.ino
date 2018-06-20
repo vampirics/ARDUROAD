@@ -64,7 +64,7 @@ void splashScreen() {
 
   if (arduboy.justPressed(A_BUTTON)) { player.setTransmissionType(TransmissionType::Automatic); gameState = GameState::PlayGame_Init; }
   if (arduboy.justPressed(B_BUTTON)) { player.setTransmissionType(TransmissionType::Manual); gameState = GameState::PlayGame_Init;/*gameState = GameState::Credits;*/ }
-  
+
 }
 
 void radioMusic() 
