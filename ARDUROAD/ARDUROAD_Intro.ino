@@ -3,7 +3,7 @@
 void vsBoot() {
 
   // Vsoft logo display
-  Sprites::drawOverwrite(46, 8, bootlogo, 0);
+  Sprites::drawOverwrite(46, 14, bootlogo, 0);
 
   if (!fadeOutEffect.isComplete()) {
 
@@ -20,42 +20,48 @@ void splashScreen() {
 
   Sprites::drawOverwrite(0, 0, SplashScreen, 0);
 
-//  font4x6.setCursor(74, 5);
+
   radioMusic();
 
-  // switch (radioStation) {
+ switch (radioStation)
+ {
 
-  //   case 0:
-  //     font4x6.print(F("RADIO OFF"));
-  //     break;
+   case 0:
+     Sprites::drawOverwrite(73, 6, RADIOOFF, 0);
+     break;
 
-  //   case 1:
-  //     font4x6.print(F("ARDX 89.9"));
-  //     arduboy.drawLine(103, 25, 103, 28, WHITE);
-  //     break;
+   case 1:
+     Sprites::drawOverwrite(73, 6, ARDXStation, 0);
+     arduboy.drawLine(103, 25, 103, 28, WHITE);
+     break;
 
-  //   case 2:
-  //     font4x6.print(F("ROCK 94.6"));
-  //     arduboy.drawLine(113, 25, 113, 28, WHITE);
-  //     break;
+   case 2:
+     Sprites::drawOverwrite(73, 6, ROCKStation, 0);
+     arduboy.drawLine(113, 25, 113, 28, WHITE);
+     break;
 
-  // }
+ }
 
-  if (!fadeInEffect.isComplete()) {
+  arduboy.drawLine(73, 13, 113, 13, WHITE);
+
+  if (!fadeInEffect.isComplete())
+  {
 
     fadeInEffect.draw(arduboy);
     fadeInEffect.update();
 
   }
 
-  if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0) {
+  if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0)
+  {
     radioStation--;
     #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
     #endif
   }
 
-  if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2) {
+  if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2)
+  {
     radioStation++;
     #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
