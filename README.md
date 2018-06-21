@@ -21,7 +21,7 @@ Key features:
 - Slow player car when bumping into other cars.
 - [Done] ~~Allow car to move onto edge of road which will decrease speed.~~
 - [Done] ~~Test whether extending ArduboyBase will save memory.  Font4x6 might require some additional library references to work.~~
-- Test whether drawCompressed() or other compression library for rendering logos and initial splash screen will save memory.
+- [Done, final is 1.188 times original]~~Test whether drawCompressed() or other compression library for rendering logos and initial splash screen will save memory.~~
 - [Done] ~~Add automatic control to HUD.  Will draw gears or auto shift based on player.isAutomatic();~~
 
 ## Enhancements:
