@@ -240,10 +240,10 @@ void RenderScreen(uint8_t gear) {
       arduboy.fillRect(RENDER_CAR_COUNTER_LEFT + 2, RENDER_CAR_COUNTER_TOP + 2, 18, 8, BLACK);
 
       if (gameState == GameState::PlayGame) {
-        arduboy.setRGBled(32, 0, 0);
+        arduboy.setRGBled(16, 0, 0);
       }
       else {
-        arduboy.setRGBled(0, 32, 0);
+        arduboy.setRGBled(0, 16, 0);
       }
 
     }
