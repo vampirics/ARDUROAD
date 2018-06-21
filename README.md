@@ -32,7 +32,7 @@ Key features:
 ## Bugs:
 
 - Sometimes you cannot pass other cars.  Can be solved by spacing the cars out a little more but need to resolve the 'bumping' of cars as this will significantly affect car movement.
-- Wheels not moving when A Button not pressed.
+- [Fixed] ~~Wheels not moving when A Button not pressed.~~
 - Cannot shift down a gear in manual mode.
 
 
