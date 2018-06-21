@@ -157,7 +157,7 @@ void playGame() {
 
   if (gameState == GameState::PlayGame || gameState == GameState::PlayGame_StartOfDay) {
     
-    if (arduboy.pressed(A_BUTTON) && speed > 0) { 
+    if (/*arduboy.pressed(A_BUTTON) && */speed > 0) { 
 
       if (arduboy.everyXFrames(2)) {
         mainCarFrame = !mainCarFrame;

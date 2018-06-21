@@ -20,11 +20,13 @@ class Level {
     Direction getTurnDirection();
     TimeOfDay getTimeOfDay();
     uint8_t getTimeOfDayImageIndex();
+    uint8_t getDay();
 
     void setHorizonX(int16_t val);
     void setHorizonY(uint8_t val);
     void setTurn(uint8_t length, Direction direction);
     void setTimeOfDay(TimeOfDay val);
+    void setDay(uint8_t val);
 
 
     // Methods ..
@@ -51,6 +53,7 @@ class Level {
     uint8_t _turnLengthMax = 30;
     TimeOfDay _timeOfDay = TimeOfDay::Dawn;
     uint16_t _time = 0;
+    uint8_t _day = 0;
 
 };
 
@@ -82,6 +85,10 @@ TimeOfDay Level::getTimeOfDay() {
   return _timeOfDay;
 }
 
+uint8_t Level::getDay() {
+  return _day;
+}
+
 void Level::setHorizonX(int16_t val) {
   _horizonX = val;
 }
@@ -92,6 +99,10 @@ void Level::setHorizonY(uint8_t val) {
 
 void Level::setTimeOfDay(TimeOfDay val) {
   _timeOfDay = val;
+}
+
+void Level::setDay(uint8_t val) {
+  _day = val;
 }
 
 void Level::setTurn(uint8_t length, Direction direction) {
@@ -209,7 +220,12 @@ bool Level::incTime() { // returns true if new day
     _timeOfDay++;
   }
 
-  return (_timeOfDay == TimeOfDay::Dawn && _time == 0);
+  if (_timeOfDay == TimeOfDay::Dawn && _time == 0) {
+    _day++;
+  }
+  else {
+    return false;
+  }
 
 }
 

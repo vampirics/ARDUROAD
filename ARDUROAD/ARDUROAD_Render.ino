@@ -300,47 +300,61 @@ void RenderScreen(uint8_t gear) {
       switch (player.getTransmissionType()) {
 
         case TransmissionType::Automatic:
-          {
-            switch (gear) {
+          
+          switch (gear) {
 
-              case 0:
-                Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoN, AutoMask, 0, 0);
-                break;
+            case 0:
+              Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoP, AutoMask, 0, 0);
+              break;
 
-              default:
-                Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoD, AutoMask, 0, 0);
-                break;
+            case 1:
+              Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoD, AutoMask, 0, 0);
+              Sprites::drawOverwrite(xPos + (drawOnLHS ? 17 : 13), yPos + 7, AutoD1, 0);
+              break;
 
-            }
+            case 2:
+              Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoD, AutoMask, 0, 0);
+              Sprites::drawOverwrite(xPos + (drawOnLHS ? 17 : 13), yPos + 7, AutoD2, 0);
+              break;
+
+            case 3:
+              Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoD, AutoMask, 0, 0);
+              Sprites::drawOverwrite(xPos + (drawOnLHS ? 17 : 13), yPos + 7, AutoD3, 0);
+              break;
+
+            case 4:
+              Sprites::drawExternalMask(xPos + (drawOnLHS ? 0 : -4), yPos + 2, AutoD, AutoMask, 0, 0);
+              Sprites::drawOverwrite(xPos + (drawOnLHS ? 17 : 13), yPos + 7, AutoD4, 0);
+              break;
 
           }
+
           break;
 
         case TransmissionType::Manual:
-          {
-            Sprites::drawPlusMask(xPos, yPos, gearbox, 0);
-
-            static const uint8_t gearLookup[] PROGMEM = { 2, 3, 4, 3, };
-                
-            switch (gear) {
-
-              case 0:
-                {
-                  const uint8_t index = (arduboy.getFrameCount(16) / 4);
-                  xPos += pgm_read_byte(&gearLookup[index]);
-                  yPos += 6;
-                }
-                break;
+          
+          static const uint8_t gearLookup[] PROGMEM = { 2, 3, 4, 3, };
+          Sprites::drawPlusMask(xPos, yPos, gearbox, 0);
               
-              case 1:                                      break;
-              case 2:                           yPos+= 11; break;
-              case 3:               xPos+= 6;              break;
-              case 4:               xPos+= 6;   yPos+= 11; break;
+          switch (gear) {
 
-            }
+            case 0:
+              {
+                const uint8_t index = (arduboy.getFrameCount(16) / 4);
+                xPos += pgm_read_byte(&gearLookup[index]);
+                yPos += 6;
+              }
+              break;
+            
+            case 1:                          break;
+            case 2:             yPos+= 11;   break;
+            case 3: xPos+= 6;                break;
+            case 4: xPos+= 6;   yPos+= 11;   break;
 
-            Sprites::drawPlusMask(xPos, yPos, gearbox_knob, 0);
           }
+
+          Sprites::drawPlusMask(xPos, yPos, gearbox_knob, 0);
+          
           break;
 
       }
@@ -369,10 +383,13 @@ void RenderScreen(uint8_t gear) {
 
   if (gameState == GameState::PlayGame_StartOfDay) {
 
-    Sprites::drawPlusMask(16, 15, StartOfDay, 0);
+    uint8_t day = level.getDay();
 
-    // font4x6.setCursor(18, 26);
-    // font4x6.print(F("Day 00 Target 050"));
+    Sprites::drawPlusMask(16, 15, StartOfDay, 0);
+    // Sprites::drawOverwrite(69, 25, font_images, 52 + (day / 10));
+    // Sprites::drawOverwrite(74, 25, font_images, 52 + (day % 10));
+    Sprites::drawOverwrite(69, 26, font_images, 52 + (day / 10));
+    Sprites::drawOverwrite(74, 27, font_images, 52 + (day % 10));
 
   }
 

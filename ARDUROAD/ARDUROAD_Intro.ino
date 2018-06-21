@@ -20,11 +20,9 @@ void splashScreen() {
 
   Sprites::drawOverwrite(0, 0, SplashScreen, 0);
 
-
   radioMusic();
 
- switch (radioStation)
- {
+  switch (radioStation) {
 
    case 0:
      Sprites::drawOverwrite(73, 6, RADIOOFF, 0);
@@ -44,24 +42,21 @@ void splashScreen() {
 
   arduboy.drawLine(73, 13, 113, 13, WHITE);
 
-  if (!fadeInEffect.isComplete())
-  {
+  if (!fadeInEffect.isComplete()) {
 
     fadeInEffect.draw(arduboy);
     fadeInEffect.update();
 
   }
 
-  if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0)
-  {
+  if (arduboy.justPressed(LEFT_BUTTON) && radioStation > 0) {
     radioStation--;
     #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
     #endif
   }
 
-  if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2)
-  {
+  if (arduboy.justPressed(RIGHT_BUTTON) && radioStation < 2) {
     radioStation++;
     #ifdef USE_ARDUBOYTONES
     sound.tone(NOTE_C3,50, NOTE_D2,50, NOTE_E1,50);
@@ -73,36 +68,41 @@ void splashScreen() {
 
 }
 
-void radioMusic() 
-{
-  if(previousRadioStation != radioStation)
-  {
-    if (radioStation == 1)
-    {
-      #ifdef USE_ATMLIB
-      ATM.play(music1);
-      #endif
-      #ifdef USE_ARDUBOYTONES
-      sound.tones(song2small); 
-      #endif
-    }
-    if (radioStation == 2)
-    {
-      #ifdef USE_ATMLIB
-      ATM.play(music2);
-      #endif
-      #ifdef USE_ARDUBOYTONES
-      sound.tones(song2); 
-      #endif
+void radioMusic() {
+
+  if (previousRadioStation != radioStation) {
+
+    switch (radioStation) {
+
+      case 0:
+        #ifdef USE_ATMLIB
+        ATM.stop();
+        #endif  
+        break;
+
+      case 1:
+        #ifdef USE_ATMLIB
+        ATM.play(music1);
+        #endif
+        #ifdef USE_ARDUBOYTONES
+        sound.tones(song2small); 
+        #endif
+        break;
+
+      case 2:
+        #ifdef USE_ATMLIB
+        ATM.play(music2);
+        #endif
+        #ifdef USE_ARDUBOYTONES
+        sound.tones(song2); 
+        #endif
+        break;
 
     }
-    if (radioStation == 0)
-    {
-      #ifdef USE_ATMLIB
-      ATM.stop();
-      #endif
-    }
+
     previousRadioStation = radioStation;
+
   }
+
 }
 
