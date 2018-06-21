@@ -19,10 +19,10 @@ Key features:
 - Detect cars bumping into each other and player.
 - Prevent cars 'moving through' each other using bump detection.
 - Slow player car when bumping into other cars.
-- [Done] [s]Allow car to move onto edge of road which will decrease speed.[/s]
-- [Done] [s]Test whether extending ArduboyBase will save memory.  Font4x6 might require some additional library references to work.[/s]
+- [Done] ~~Allow car to move onto edge of road which will decrease speed.
+- [Done] ~~Test whether extending ArduboyBase will save memory.  Font4x6 might require some additional library references to work.
 - Test whether drawCompressed() or other compression library for rendering logos and initial splash screen will save memory.
-- [Done] [s]Add automatic control to HUD.  Will draw gears or auto shift based on player.isAutomatic();[/s]
+- [Done] ~~Add automatic control to HUD.  Will draw gears or auto shift based on player.isAutomatic();
 
 ## Enhancements:
 
