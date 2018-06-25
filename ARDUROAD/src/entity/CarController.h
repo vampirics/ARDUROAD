@@ -241,6 +241,14 @@ Serial.print(" ");
           SQ7x8 newY = otherCar->incY((speed / 2) - otherCar->getYDelta());
           SQ7x8 playerY = player->getY();
 
+          if ((oldY < playerY) && (newY >= playerY)) {
+            player->decCarsPassed();
+          }
+
+          if ((oldY >= playerY) && (newY < playerY)) {
+            player->incCarsPassed();
+          }
+
         }
 
 
