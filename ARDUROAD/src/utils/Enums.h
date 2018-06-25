@@ -9,6 +9,19 @@
 #define LAUNCH_SLOWER_SPEED  0.5
 #define LAUNCH_FASTER_SPEED  1.65
 
+#define FRAME_DELAY_MAX 30 
+#define FRAME_DELAY_MIN 10 
+#define FRAME_DELAY_INC 2
+
+#define FRAME_DELAY_GEAR_1_END   30
+#define FRAME_DELAY_GEAR_1_START 25 
+#define FRAME_DELAY_GEAR_2_END   24
+#define FRAME_DELAY_GEAR_2_START 20 
+#define FRAME_DELAY_GEAR_3_END   19
+#define FRAME_DELAY_GEAR_3_START 15 
+#define FRAME_DELAY_GEAR_4_END   14
+#define FRAME_DELAY_GEAR_4_START 10 
+
 static const uint8_t HORIZON_COL_COUNT            = 7;
 static const uint8_t HORIZON_ROW_COUNT            = 5;
 static const uint8_t HORIZON_OFFSET               = 8;
@@ -49,12 +62,16 @@ static const uint8_t PLAYER_WIDTH                 = 44;
 static const uint8_t PLAYER_WIDTH_HALF            = PLAYER_WIDTH / 2;
 static const uint8_t PLAYER_NO_MOVEMENT           = 255;
 static const uint8_t PLAYER_MAX_SPEED_ON_EDGE     = 20;
+static const uint8_t PLAYER_HEIGHT                = 25;
 
+static const uint8_t COLLISION_HEIGHT             = 15;
+
+static const uint8_t OTHER_CAR_WIDTH              = 38;
+static const uint8_t OTHER_CAR_HEIGHT             = 22;
 static const int8_t OTHER_CAR_X_MIN               = -37;
 static const int8_t OTHER_CAR_X_MAX               = 37;
 static const int8_t OTHER_CAR_Y_MIN               = -50;
 static const int8_t OTHER_CAR_Y_MAX               = 100;
-static const uint8_t OTHER_CAR_MAX_WIDTH          = 20;
 static const uint8_t OTHER_CAR_TURN_LENGTH_MAX    = 30;
 
 static const int8_t LANE_WIDTH                    = 25;

@@ -37,6 +37,7 @@ class OtherCar : public Base {
     uint8_t getYDisplay();
     int8_t incY(SQ7x8 val);
     uint8_t decTurnLength();
+    Rect getRect();
 
   private:
 
@@ -124,6 +125,10 @@ void OtherCar::decX() {
 
 uint8_t OtherCar::decTurnLength() {
   return --_turnLength;
+}
+
+Rect OtherCar::getRect() {
+  return Rect { _x, _y.getInteger() + OTHER_CAR_HEIGHT - COLLISION_HEIGHT, OTHER_CAR_WIDTH, COLLISION_HEIGHT };
 }
 
 ImageSize OtherCar::getImageSize() {

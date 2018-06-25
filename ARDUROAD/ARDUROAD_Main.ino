@@ -45,7 +45,7 @@ void playGame() {
 
   if (arduboy.isFrameCount(3, 0)) {
 
-    carController.updatePositions(&player, speed);
+    carController.updatePositions(&arduboy, &player, speed);
 
   }
 
@@ -211,11 +211,6 @@ void playGame() {
             clutchCounter = TRANS_MANUAL_COUNTDOWN;
           }
 
-          if (arduboy.pressed(B_BUTTON) && arduboy.justPressed(DOWN_BUTTON) && !arduboy.pressed(A_BUTTON)) {
-            if (player.decSpeed()) horizonIncrement = 0;
-            clutchCounter = TRANS_MANUAL_COUNTDOWN;
-          }
-
           if (speed > 0 && arduboy.pressed(A_BUTTON) && !arduboy.pressed(B_BUTTON)) {
             if (player.incSpeed(false)) horizonIncrement = 0;
             clutchCounter = TRANS_MANUAL_COUNTDOWN;
@@ -229,6 +224,11 @@ void playGame() {
 
       }
 
+      if (arduboy.pressed(B_BUTTON) && arduboy.justPressed(DOWN_BUTTON) && !arduboy.pressed(A_BUTTON)) {
+        if (player.decSpeed()) horizonIncrement = 0;
+        clutchCounter = TRANS_MANUAL_COUNTDOWN;
+      }
+      
       if (clutchCounter > 0)  {
         clutchCounter--;
       }

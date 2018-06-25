@@ -45,6 +45,7 @@ class Player : public Base {
     bool decSpeed();
     void reset();
     bool onRoadsEdge();
+    Rect getRect();
 //    boolean decelerate();
 
   private:
@@ -191,18 +192,9 @@ void Player::reset() {
   _yDelta = 0;
 }
 
-#define FRAME_DELAY_MAX 30 
-#define FRAME_DELAY_MIN 10 
-#define FRAME_DELAY_INC 2
-
-#define FRAME_DELAY_GEAR_1_END   30
-#define FRAME_DELAY_GEAR_1_START 25 
-#define FRAME_DELAY_GEAR_2_END   24
-#define FRAME_DELAY_GEAR_2_START 20 
-#define FRAME_DELAY_GEAR_3_END   19
-#define FRAME_DELAY_GEAR_3_START 15 
-#define FRAME_DELAY_GEAR_4_END   14
-#define FRAME_DELAY_GEAR_4_START 10 
+Rect Player::getRect() {
+  return Rect { _x, _y.getInteger() + PLAYER_HEIGHT - COLLISION_HEIGHT, PLAYER_WIDTH, COLLISION_HEIGHT };
+}
 
 bool Player::decSpeed() {
 
