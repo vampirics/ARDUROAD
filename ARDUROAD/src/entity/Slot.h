@@ -15,13 +15,13 @@ class Slot {
     uint8_t getChar1();
     uint8_t getChar2();
     uint16_t getOdometer();
-    uint16_t getCarsPassed();
+    uint16_t getDayCount();
 
     void setChar0(uint8_t val);
     void setChar1(uint8_t val);
     void setChar2(uint8_t val);
     void setOdometer(uint16_t val);
-    void setCarsPassed(uint16_t val);
+    void setDayCount(uint16_t val);
 
 
   private:
@@ -30,7 +30,7 @@ class Slot {
     uint8_t _char1;
     uint8_t _char2;
     uint16_t _odometer;
-    uint16_t _carsPassed;
+    uint16_t _dayCount;
 
 };
 
@@ -54,8 +54,8 @@ uint16_t Slot::getOdometer() {
   return _odometer;
 }
 
-uint16_t Slot::getCarsPassed() {
-  return _carsPassed;
+uint16_t Slot::getDayCount() {
+  return _dayCount;
 }
 
 void Slot::setChar0(uint8_t val) {
@@ -74,6 +74,6 @@ void Slot::setOdometer(uint16_t val) {
   _odometer = val;
 }
 
-void Slot::setCarsPassed(uint16_t val) {
-  _carsPassed = val;
+void Slot::setDayCount(uint16_t val) {
+  _dayCount = val;
 }

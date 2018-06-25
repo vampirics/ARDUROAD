@@ -140,7 +140,7 @@ void loop() {
 
     case GameState::SaveScore:
       highScore.reset();
-      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getOdometer(), player.getCarsPassed()));
+      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getOdometer(), level.getDayCount()));
       gameState = GameState::HighScore;
       fadeInEffect.reset(0, HEIGHT, 1);
       // break; Fall-through intentional.

@@ -8,7 +8,7 @@
 #define EEPROM_START_C1               EEPROM_START
 #define EEPROM_START_C2               EEPROM_START + 1
 #define EEPROM_TOP_START              EEPROM_START + 2
-#define EEPROM_ENTRY_SIZE             7
+#define EEPROM_ENTRY_SIZE             6
 
 class EEPROM_Utils {
 
@@ -18,7 +18,7 @@ class EEPROM_Utils {
         
     static void initEEPROM(bool forceClear);
     static void getSlot(uint8_t x, Slot *slot);
-    static uint8_t saveScore(uint16_t odometer, uint16_t carsPassed);
+    static uint8_t saveScore(uint16_t odometer, uint8_t dayCount);
     static void writeChars(uint8_t slotIndex, HighScore *highScore);
 
 };
@@ -42,8 +42,8 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
 
   if (forceClear || c1 != letter1 || c2 != letter2) { 
 
-    uint16_t odometer = 0;
-    const uint16_t carsPassed = 0;
+    const uint16_t odometer = 0;
+    const uint8_t dayCount = 0;
 
     EEPROM.update(EEPROM_START_C1, letter1);
     EEPROM.update(EEPROM_START_C2, letter2);
@@ -54,9 +54,8 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
       EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1, 0);
       EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2, 0);
 
-      odometer = 0; // (MAX_NUMBER_OF_SCORES - x) * 10;
       EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, odometer);
-      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, carsPassed);
+      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, dayCount);
 
     }
 
@@ -78,9 +77,9 @@ void EEPROM_Utils::getSlot(uint8_t x, Slot *slot) {
   EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, odometer);
   slot->setOdometer(odometer);
 
-  uint16_t carsPassed = 0;
-  EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, carsPassed);
-  slot->setCarsPassed(carsPassed);
+  uint8_t dayCount = 0;
+  EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, dayCount);
+  slot->setDayCount(dayCount);
 
 }
 
@@ -88,7 +87,7 @@ void EEPROM_Utils::getSlot(uint8_t x, Slot *slot) {
 /* -----------------------------------------------------------------------------
  *   Save score and return index.  255 not good enough! 
  */
-uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
+uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint8_t dayCount) {
 
   uint8_t idx = DO_NOT_EDIT_SLOT;
 
@@ -117,7 +116,7 @@ uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
       EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1, slot.getChar1());
       EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2, slot.getChar2());
       EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, slot.getOdometer());
-      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, slot.getCarsPassed());
+      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 5, slot.getDayCount());
 
     }
 
@@ -125,7 +124,7 @@ uint8_t EEPROM_Utils::saveScore(uint16_t odometer, uint16_t carsPassed) {
     EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 1, 0);
     EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 2, 0);
     EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 3, odometer);
-    EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 5, carsPassed);
+    EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 5, dayCount);
 
   }
 

@@ -383,7 +383,7 @@ void RenderScreen(uint8_t gear) {
 
   if (gameState == GameState::PlayGame_StartOfDay) {
 
-    uint8_t day = level.getDay();
+    uint8_t day = level.getDayCount();
 
     Sprites::drawPlusMask(16, 15, StartOfDay, 0);
     Sprites::drawOverwrite(69, 25, font_images, 52 + (day / 10));

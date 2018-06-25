@@ -36,11 +36,11 @@ void HighScore() {
     }
 
 
-    // Cars Passed ..
+    // Day count ..
 
     {
       uint8_t digits[3] = {};
-      extractDigits(digits, slot.getCarsPassed());
+      extractDigits(digits, slot.getDayCount());
       
       for (uint8_t i = 0, x2 = xOffset + 70; i < 3; ++i, x2 -= 5) {
         Sprites::drawOverwrite(x2, yOffset, font_images, (digits[i] + 52));

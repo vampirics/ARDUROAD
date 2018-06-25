@@ -26,7 +26,6 @@ class HighScore {
     void setSlotNumber(uint8_t val);
     void setCharIndex(uint8_t val);
     void setChar(uint8_t idx, uint8_t val);
-    void setWave(uint8_t val);
 
 
     // Methods ..
