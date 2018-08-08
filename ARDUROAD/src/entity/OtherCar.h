@@ -15,7 +15,7 @@ class OtherCar : public Base {
 
     // Properties ..
 
-    bool isActive();
+    bool isActive() override;
     uint8_t getTurnLength();
     Direction getXDelta();
     SQ7x8 getYDelta();
@@ -38,6 +38,7 @@ class OtherCar : public Base {
     int8_t incY(SQ7x8 val);
     uint8_t decTurnLength();
     Rect getRect();
+    // Rect getRect(int8_t xOffset, int8_t yOffset);
 
   private:
 
@@ -130,6 +131,10 @@ uint8_t OtherCar::decTurnLength() {
 Rect OtherCar::getRect() {
   return Rect { _x, _y.getInteger() + OTHER_CAR_HEIGHT - COLLISION_HEIGHT, OTHER_CAR_WIDTH, COLLISION_HEIGHT };
 }
+
+// Rect OtherCar::getRect(int8_t xOffset, int8_t yOffset) {
+//   return Rect { _x + xOffset, _y.getInteger() + PLAYER_HEIGHT - COLLISION_HEIGHT + yOffset, PLAYER_WIDTH, COLLISION_HEIGHT };
+// }
 
 ImageSize OtherCar::getImageSize() {
 

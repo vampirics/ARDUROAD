@@ -86,3 +86,60 @@ void copySwap(T & first, T & second) {
   second = temp;
 
 }
+
+
+
+// enum class CollisionDirection : uint8_t {
+//   None = 0,
+//   Up = 1,  
+//   Down = 2,
+//   Left = 4,
+//   Right = 8,
+// };
+
+// constexpr CollisionDirection operator |(const CollisionDirection &left, const CollisionDirection &right) {
+//   return static_cast<CollisionDirection>(static_cast<uint8_t>(left) | static_cast<uint8_t>(right));
+// }
+
+// constexpr CollisionDirection operator &(const CollisionDirection &left, const CollisionDirection &right) {
+//   return static_cast<CollisionDirection>(static_cast<uint8_t>(left) & static_cast<uint8_t>(right));
+// }
+
+
+// /* -----------------------------------------------------------------------------------------------------------------------------
+//  *  Determine on which sides two Rects may have collided.
+//  *       
+//  *  Note that the returned directions are relative to Rect1.       
+//  */
+// CollisionDirection collide(Rect rect1, Rect rect2) {
+
+//   CollisionDirection direction = CollisionDirection::None;
+ 
+//   if (!(rect2.x                >= rect1.x + rect1.width  ||
+//         rect2.x + rect2.width  <= rect1.x                ||
+//         rect2.y                >= rect1.y + rect1.height ||
+//         rect2.y + rect2.height <= rect1.y)) {
+
+//     if ((rect1.x < rect2.x) && (rect1.x + rect1.width > rect2.x))    direction = direction | CollisionDirection::Right;     // Rect 2 is to the right of Rect 1?
+//     if ((rect2.x < rect1.x) && (rect2.x + rect2.width > rect1.x))    direction = direction | CollisionDirection::Left;      // Rect 2 is to the left of Rect 1?
+//     if ((rect2.y < rect1.y) && (rect2.y + rect2.height > rect1.y))   direction = direction | CollisionDirection::Up;        // Rect 2 is above Rect 1?
+//     if ((rect1.y < rect2.y) && (rect1.y + rect1.height > rect2.y))   direction = direction | CollisionDirection::Down;      // Rect 2 is below Rect 1?
+
+//   }
+
+//   return direction;
+
+// }
+
+
+// /* -----------------------------------------------------------------------------------------------------------------------------
+//  *  Determine if the Rect1 has collided with Rect2 in the nominated direction.
+//  *       
+//  *  Note that the direction is relative to Rect1.       
+//  */
+// bool collide(Rect rect1, Rect rect2, CollisionDirection testDirection) {
+  
+//   return ((collide(rect1, rect2) & testDirection) == testDirection);
+  
+// }
+

@@ -5,6 +5,7 @@
 #define _USE_ATMLIB
 #define USE_ARDUBOYTONES
 #define _THICK_LINES
+#define SAVE_MEMORY
 
 #define LAUNCH_SLOWER_SPEED  0.5
 #define LAUNCH_FASTER_SPEED  1.65

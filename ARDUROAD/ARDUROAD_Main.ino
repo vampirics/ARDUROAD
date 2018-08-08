@@ -43,6 +43,7 @@ void playGame() {
 
   // Update positions of other cars ..
 
+  carController.sortCars();
   if (arduboy.isFrameCount(3, 0)) {
 
     carController.updatePositions(&arduboy, &player, speed);
@@ -97,6 +98,8 @@ void playGame() {
 
           }
 
+          Serial.println("Launch car top");
+
         }
 
       }
@@ -143,6 +146,8 @@ void playGame() {
           }
 
           otherCar->setX(random(randMin, randMax + 1));
+
+          Serial.println("Launch car bottom");
 
         }
 

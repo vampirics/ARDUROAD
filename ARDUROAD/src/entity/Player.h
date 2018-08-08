@@ -13,6 +13,7 @@ class Player : public Base {
 
     // Properties ..
 
+    bool isActive() override;
     int8_t getXCentered();
     int8_t getXOffset();
     uint16_t getCarsPassedInit();
@@ -46,6 +47,7 @@ class Player : public Base {
     void reset();
     bool onRoadsEdge();
     Rect getRect();
+    // Rect getRect(int8_t xOffset, int8_t yOffset);
 //    boolean decelerate();
 
   private:
@@ -64,6 +66,10 @@ class Player : public Base {
 
 //--------------------------------------------------------------------------------------------------------------------------
 // Properties ..
+
+bool Player::isActive() {
+  return true;
+}
 
 int8_t Player::getXOffset() {
   return _xOffset;
@@ -195,6 +201,10 @@ void Player::reset() {
 Rect Player::getRect() {
   return Rect { _x, _y.getInteger() + PLAYER_HEIGHT - COLLISION_HEIGHT, PLAYER_WIDTH, COLLISION_HEIGHT };
 }
+
+// Rect Player::getRect(int8_t xOffset, int8_t yOffset) {
+//   return Rect { _x + xOffset, _y.getInteger() + PLAYER_HEIGHT - COLLISION_HEIGHT + yOffset, PLAYER_WIDTH, COLLISION_HEIGHT };
+// }
 
 bool Player::decSpeed() {
 

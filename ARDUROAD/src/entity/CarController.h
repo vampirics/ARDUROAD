@@ -117,193 +117,187 @@ void CarController::sortCars() {
 
 void CarController::updatePositions(Arduboy2Ext *arduboy, Player *player, uint8_t speed) {
 
-  int8_t i = 0;
-  if (speed <= 2) { i = NUMBER_OF_CARS_INC_PLAYER; }
 
-Serial.println(".");
-Serial.println(".");
 Serial.print("Speed: ");
 Serial.print(speed);
 Serial.print(", Sort Order: ");
 for (uint8_t x = 0 ; x < NUMBER_OF_CARS_INC_PLAYER; x++) {
-Serial.print(_order[x]);
-Serial.print(" ");
+
+  Base *baseCar = _allCars[_order[x]];
+  Serial.print(baseCar->getId());
+  if (baseCar->isActive()) {
+    Serial.print("*");
+  }
+  Serial.print(" ");
+
 }
+
+
+
+// ----------------------------------------------------------
+
+  int8_t testCarIdx = 0;
+  bool dec = false;
+
+  if (speed > 2) {
+    testCarIdx = NUMBER_OF_CARS_INC_PLAYER - 1;
+    dec = true;
+  }
+
+Serial.print(", dec: ");
+Serial.print(dec);
 Serial.println(" ");
 
-  do {
 
-Serial.print("OC: ");
-Serial.print(i);
-Serial.print(" -> ");
-Serial.print(_order[i]);
+  while ((testCarIdx >= 0 && dec) || (testCarIdx <= NUMBER_OF_CARS_INC_PLAYER - 1 && !dec)) {
 
-    Base *baseCar = _allCars[_order[i]];
-
-Serial.print(", id=");
-Serial.print(baseCar->getId());
-Serial.print(" ");
-
-    if (baseCar->getId() != 0) {
-
-      OtherCar *otherCar = (OtherCar *)baseCar;
-
-      if (otherCar->isActive()) {
-Serial.println("");
-        Rect otherCarRect = otherCar->getRect();
-        bool collision = false;
-
-        int8_t j = 0;
-
-        if (speed <= 2) j = NUMBER_OF_CARS_INC_PLAYER;
-
-        do {
-Serial.print("..");
-Serial.print(j);
-Serial.print(" -> ");
-Serial.print(_order[j]);
-Serial.print(" ");
-
-          Rect testRect = { 0, 0, 0, 0 };
-          Base *baseCarTest = _allCars[_order[j]];
-
-          if (baseCarTest->getId() != otherCar->getId()) {
-            Serial.print("ignore same car");
-          }
-          else {
-              
-            if (baseCarTest->getId() == 0) {
-
-              testRect = player->getRect();
-
-            }
-
-            if (baseCarTest->getId() != otherCar->getId()) {
-
-              OtherCar *otherCarTest = (OtherCar *)baseCarTest;
-              testRect = otherCarTest->getRect();
-
-            }
-
-  Serial.print(" OCRect {");
-  Serial.print(otherCarRect.x);
-  Serial.print(",");
-  Serial.print(otherCarRect.y);
-  Serial.print(",");
-  Serial.print(otherCarRect.width);
-  Serial.print(",");
-  Serial.print(otherCarRect.height);
-  Serial.print("} ");
-  Serial.print(" OTRect {");
-  Serial.print(testRect.x);
-  Serial.print(",");
-  Serial.print(testRect.y);
-  Serial.print(",");
-  Serial.print(testRect.width);
-  Serial.print(",");
-  Serial.print(testRect.height);
-  Serial.print("} ");
-  Serial.print((arduboy->collide(otherCarRect, testRect) ? "Collision" : " No Collision"));
+    Base *testCar = _allCars[_order[testCarIdx]];
 
 
-            if (testRect.x > 0) {
 
-              if (arduboy->collide(otherCarRect, testRect)) {
+    // If this is not the player's car ..
 
-                collision = true;
-                break;
+    if (testCar->isActive() && testCar->getId() != 0) {
 
-              }
+      OtherCar *otherTestCar = (OtherCar *)testCar;
 
-            }
+      Serial.print("testCarIdx: ");
+      Serial.print(testCarIdx);
+      Serial.print(" = ");
+      Serial.print(otherTestCar->getId());
 
-          }
+      Serial.print(" - test cars ");
 
-          if (speed <= 2) {
-            Serial.print(" incJ");
-            j++;
-            if (j == i || j == 0) { Serial.print(" break"); break; }
-          }
-          else {
-            Serial.print(" decJ");
-            j--;
-            if (j == -1) { Serial.print(" break"); break; };
-          }
 
-        }
-        while (true);
 
-        if (!collision) {
+        // Loop the remaining cars ..
 
-          // Update Y position ..
+//        int8_t yIncrement = (speed / 2) - otherTestCar->getYDelta().getInteger();
+        //Rect testCarRect = testCar->getRect(0, 0);
+  // Serial.print(" testCarRect {");
+  // Serial.print(testCarRect.x);
+  // Serial.print(",");
+  // Serial.print(testCarRect.y);
+  // Serial.print(",");
+  // Serial.print(testCarRect.width);
+  // Serial.print(",");
+  // Serial.print(testCarRect.height);
+  // Serial.print("} ");
+        //testCarRect = testCar->getRect(0, yIncrement);
+  // Serial.print(" testCarRect {");
+  // Serial.print(testCarRect.x);
+  // Serial.print(",");
+  // Serial.print(testCarRect.y);
+  // Serial.print(",");
+  // Serial.print(testCarRect.width);
+  // Serial.print(",");
+  // Serial.print(testCarRect.height);
+  // Serial.println("} ");
 
-          SQ7x8 oldY = otherCar->getY();
-          SQ7x8 newY = otherCar->incY((speed / 2) - otherCar->getYDelta());
-          SQ7x8 playerY = player->getY();
+        int8_t nextCarIdx = testCarIdx + (dec ? 1 : -1);
 
-          if ((oldY < playerY) && (newY >= playerY)) {
-            player->decCarsPassed();
-          }
+        while ((nextCarIdx >= 0 && !dec) || (nextCarIdx <= NUMBER_OF_CARS_INC_PLAYER - 1 && dec)) {
+        
+           Base *nextCar = _allCars[_order[nextCarIdx]];
 
-          if ((oldY >= playerY) && (newY < playerY)) {
-            player->incCarsPassed();
-          }
+           if (nextCar->isActive()) {
+
+
+            //Rect nextCarRect = nextCar->getRect();
+
+
+              Serial.print("(");
+              Serial.print(nextCarIdx);
+              Serial.print(") ");
+              Serial.print(nextCar->getId());
+              Serial.print(", ");
+
+            
+
+
+           }
+
+          nextCarIdx = nextCarIdx + (dec ? 1 : -1);
 
         }
 
+        Serial.println(" ");
 
 
-        // Update X position ..
 
-        uint8_t turnLength = otherCar->getTurnLength();
 
-        if (turnLength == 0) {
 
-          otherCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
-          otherCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
+
+
+
+
+      // Move the car ..
+
+//      if (!collision) {
+
+        // Update Y position ..
+
+        SQ7x8 oldY = otherTestCar->getY();
+        SQ7x8 newY = otherTestCar->incY((speed / 2) - otherTestCar->getYDelta());
+        SQ7x8 playerY = player->getY();
+
+        if ((oldY < playerY) && (newY >= playerY)) {
+          player->decCarsPassed();
         }
-        else {
 
-          switch (otherCar->getXDelta()) {
-
-            case Direction::Left:
-              otherCar->decX();
-              break;
-
-            case Direction::Right:
-              otherCar->incX();
-              break;
-
-            default:
-              break;
-
-          }
-
+        if ((oldY >= playerY) && (newY < playerY)) {
+          player->incCarsPassed();
         }
+
+//      }
+
+
+
+      // Update X position ..
+
+      uint8_t turnLength = otherTestCar->getTurnLength();
+
+      if (turnLength == 0) {
+
+        otherTestCar->setXDelta(static_cast<Direction>(random(static_cast<int8_t>(Direction::Left), static_cast<int8_t>(Direction::Right) + 1)));
+        otherTestCar->setTurnLength(random(0, OTHER_CAR_TURN_LENGTH_MAX + 1));
 
       }
       else {
-        Serial.print(" not active.");
+
+        switch (otherTestCar->getXDelta()) {
+
+          case Direction::Left:
+            otherTestCar->decX();
+            break;
+
+          case Direction::Right:
+            otherTestCar->incX();
+            break;
+
+          default:
+            break;
+
+        }
+
       }
 
+
+
+
     }
     else {
-        Serial.print(" ignore player car.");
+      Serial.println(" Players car.");
     }
 
-    if (speed > 2) {
-      i++;
-      if (i == NUMBER_OF_CARS_INC_PLAYER) break;
-    }
-    else {
-      i--; 
-      if (i == -1) break;
-    }
-Serial.println("");
+    testCarIdx = testCarIdx + (dec ? -1 : 1);
+    Serial.println(testCarIdx);
 
   }
-  while (true);
+
+
+  Serial.println("------------------------------------------------------");
 
 }
 

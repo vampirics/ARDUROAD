@@ -168,7 +168,7 @@ void RenderScreen(uint8_t gear) {
 
   // Render other cars ..
 
-  carController.sortCars();
+  //carController.sortCars();
 
   for (uint8_t i = 0; i < NUMBER_OF_CARS_INC_PLAYER; i++) {
 

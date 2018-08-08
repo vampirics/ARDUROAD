@@ -17,9 +17,13 @@ class Base {
     int8_t getX();
     uint8_t getId();
     SQ7x8 getY();
-
+    virtual bool isActive();
+    
     void setX(int8_t val);
     void setY(SQ7x8 val);
+
+    // virtual Rect getRect();
+    // virtual Rect getRect(int8_t xOffset, int8_t yOffset);
 
   protected:
 
